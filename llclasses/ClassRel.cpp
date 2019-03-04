@@ -107,12 +107,11 @@ RelationPtr ClassList::addClass(
                 << "\n File " << filename
                 << "\n  and " << crel_ptr->filename;
         }
-        if ( ! filename.empty() && crel_ptr->filename.empty())
-        {
+        if (definition) {
+            crel_ptr->definition = true;
+            crel_ptr->type = type;
+            crel_ptr->modifier = classModifier;
             crel_ptr->filename = filename;
-        }
-        if ( ! package.empty() && crel_ptr->package.empty())
-        {
             crel_ptr->package = package;
         }
     }

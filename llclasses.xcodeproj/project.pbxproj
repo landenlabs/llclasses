@@ -7,7 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B9A8A93B2203EB3D00F41B05 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9A8A93A2203EB3D00F41B05 /* main.cpp */; };
+		B95FB8762215150E00C89780 /* PublishText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B95FB8742215150E00C89780 /* PublishText.cpp */; };
+		B9A8A93B2203EB3D00F41B05 /* llclasses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */; };
+		B9AD72B9220745D900F30B18 /* ParseJava.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72B8220745D900F30B18 /* ParseJava.cpp */; };
+		B9AD72C022074AF800F30B18 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72BE22074AF800F30B18 /* Parser.cpp */; };
+		B9AD72C122074AF800F30B18 /* DirectoryFiles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72BF22074AF800F30B18 /* DirectoryFiles.cpp */; };
+		B9AD72C52207504300F30B18 /* Presenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72C42207504300F30B18 /* Presenter.cpp */; };
+		B9AD72C8220754EE00F30B18 /* ClassRel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72C6220754EE00F30B18 /* ClassRel.cpp */; };
+		B9AD72CB2207565C00F30B18 /* PublishViz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72C92207565C00F30B18 /* PublishViz.cpp */; };
+		B9AD72CC2207565C00F30B18 /* PublishHtml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72CA2207565C00F30B18 /* PublishHtml.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +31,27 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B92218E622106E1F00C896CA /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		B95FB8742215150E00C89780 /* PublishText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PublishText.cpp; sourceTree = "<group>"; };
 		B9A8A9372203EB3D00F41B05 /* llclasses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = llclasses; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9A8A93A2203EB3D00F41B05 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = llclasses.cpp; sourceTree = "<group>"; };
+		B9AD72B8220745D900F30B18 /* ParseJava.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseJava.cpp; sourceTree = "<group>"; };
+		B9AD72BA220745F100F30B18 /* ParseJava.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseJava.h; sourceTree = "<group>"; };
+		B9AD72BB220747E000F30B18 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		B9AD72BC22074AF800F30B18 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
+		B9AD72BD22074AF800F30B18 /* DirectoryFiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryFiles.h; sourceTree = "<group>"; };
+		B9AD72BE22074AF800F30B18 /* Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
+		B9AD72BF22074AF800F30B18 /* DirectoryFiles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectoryFiles.cpp; sourceTree = "<group>"; };
+		B9AD72C222074B6E00F30B18 /* llclasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = llclasses.h; sourceTree = "<group>"; };
+		B9AD72C32207504300F30B18 /* Presenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Presenter.h; sourceTree = "<group>"; };
+		B9AD72C42207504300F30B18 /* Presenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Presenter.cpp; sourceTree = "<group>"; };
+		B9AD72C6220754EE00F30B18 /* ClassRel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClassRel.cpp; sourceTree = "<group>"; };
+		B9AD72C7220754EE00F30B18 /* ClassRel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassRel.h; sourceTree = "<group>"; };
+		B9AD72C92207565C00F30B18 /* PublishViz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PublishViz.cpp; sourceTree = "<group>"; };
+		B9AD72CA2207565C00F30B18 /* PublishHtml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PublishHtml.cpp; sourceTree = "<group>"; };
+		B9AD72CD220761FF00F30B18 /* SwapStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwapStream.h; sourceTree = "<group>"; };
+		B9D933A02221DE7B0048AEE6 /* Publish.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Publish.h; path = utils/Publish.h; sourceTree = "<group>"; };
+		B9E99905222C130A00DFC6CF /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +65,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B97E7ED72221872400125FAC /* publishers */ = {
+			isa = PBXGroup;
+			children = (
+				B9AD72C92207565C00F30B18 /* PublishViz.cpp */,
+				B9AD72CA2207565C00F30B18 /* PublishHtml.cpp */,
+				B95FB8742215150E00C89780 /* PublishText.cpp */,
+			);
+			path = publishers;
+			sourceTree = "<group>";
+		};
+		B97E7ED82221874900125FAC /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				B92218E622106E1F00C896CA /* Log.h */,
+				B9AD72BB220747E000F30B18 /* utils.h */,
+				B9AD72BD22074AF800F30B18 /* DirectoryFiles.h */,
+				B9AD72BF22074AF800F30B18 /* DirectoryFiles.cpp */,
+				B9AD72CD220761FF00F30B18 /* SwapStream.h */,
+				B9E99905222C130A00DFC6CF /* Colors.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		B97E7ED92221877500125FAC /* parsers */ = {
+			isa = PBXGroup;
+			children = (
+				B9AD72BA220745F100F30B18 /* ParseJava.h */,
+				B9AD72B8220745D900F30B18 /* ParseJava.cpp */,
+			);
+			path = parsers;
+			sourceTree = "<group>";
+		};
 		B9A8A92E2203EB3D00F41B05 = {
 			isa = PBXGroup;
 			children = (
@@ -57,7 +116,18 @@
 		B9A8A9392203EB3D00F41B05 /* llclasses */ = {
 			isa = PBXGroup;
 			children = (
-				B9A8A93A2203EB3D00F41B05 /* main.cpp */,
+				B97E7ED92221877500125FAC /* parsers */,
+				B97E7ED82221874900125FAC /* utils */,
+				B97E7ED72221872400125FAC /* publishers */,
+				B9AD72C6220754EE00F30B18 /* ClassRel.cpp */,
+				B9AD72C7220754EE00F30B18 /* ClassRel.h */,
+				B9AD72C42207504300F30B18 /* Presenter.cpp */,
+				B9AD72C32207504300F30B18 /* Presenter.h */,
+				B9D933A02221DE7B0048AEE6 /* Publish.h */,
+				B9AD72C222074B6E00F30B18 /* llclasses.h */,
+				B9AD72BE22074AF800F30B18 /* Parser.cpp */,
+				B9AD72BC22074AF800F30B18 /* Parser.h */,
+				B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */,
 			);
 			path = llclasses;
 			sourceTree = "<group>";
@@ -118,7 +188,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9A8A93B2203EB3D00F41B05 /* main.cpp in Sources */,
+				B9AD72C8220754EE00F30B18 /* ClassRel.cpp in Sources */,
+				B9AD72B9220745D900F30B18 /* ParseJava.cpp in Sources */,
+				B9A8A93B2203EB3D00F41B05 /* llclasses.cpp in Sources */,
+				B9AD72C52207504300F30B18 /* Presenter.cpp in Sources */,
+				B9AD72CC2207565C00F30B18 /* PublishHtml.cpp in Sources */,
+				B9AD72C022074AF800F30B18 /* Parser.cpp in Sources */,
+				B9AD72C122074AF800F30B18 /* DirectoryFiles.cpp in Sources */,
+				B9AD72CB2207565C00F30B18 /* PublishViz.cpp in Sources */,
+				B95FB8762215150E00C89780 /* PublishText.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

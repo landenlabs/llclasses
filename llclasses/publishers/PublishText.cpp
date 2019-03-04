@@ -203,39 +203,24 @@ void PublishText::displayDependencies() const
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
         crel_ptr = iter->second;
-        if (crel_ptr->parents.empty())  // Find Super class (no parent)
+        if (crel_ptr->parents.empty() && presenter.canShowChildren(crel_ptr))  // Find Super class (no parent)
         {
-            // Have super class - now display subclasses.
-            /*
-            if (cset == Presenter::JAVA_CHAR)
-            {
-                cout << "d.add(" << presenter.sNodeNum;
-                string name = crel_ptr->name;
-                cout << "," << 0 << ",'" <<  replaceAll(name, "<", "&lt;")
-                << "','" << crel_ptr->filename << "');\n";
-                
-                displayChildren(presenter.sNodeNum++, fileWidth, crel_ptr, NULL);
-            }
-            else
-             */
-            {
-                size_t fnOffset = min(crel_ptr->filename.length(), baseLen);
-                const char* fname = crel_ptr->filename.c_str() + fnOffset;
-                fputs(doc_classesBLine[cset].c_str(), stdout);
-                printf("%*.*s%s %*.*s %s %s %s",
-                       (unsigned)fileWidth, (unsigned)fileWidth,
-                       fname,
-                       doc_classesChild[cset].c_str(),
-                       -(int)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str(),
-                       crel_ptr->name.c_str(),
-                       crel_ptr->generic.c_str(),
-                       crel_ptr->meta.c_str()
-                       );
-                presenter.displayInterfaces(crel_ptr);
-                fputs(doc_classesELine[cset].c_str(), stdout);
-                Indent indent;
-                displayChildren(indent, fileWidth, baseLen, modWidth, crel_ptr);
-            }
+            size_t fnOffset = min(crel_ptr->filename.length(), baseLen);
+            const char* fname = crel_ptr->filename.c_str() + fnOffset;
+            fputs(doc_classesBLine[cset].c_str(), stdout);
+            printf("%*.*s%s %*.*s %s %s %s",
+                   (unsigned)fileWidth, (unsigned)fileWidth,
+                   fname,
+                   doc_classesChild[cset].c_str(),
+                   -(int)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str(),
+                   crel_ptr->name.c_str(),
+                   crel_ptr->generic.c_str(),
+                   crel_ptr->meta.c_str()
+                   );
+            presenter.displayInterfaces(crel_ptr);
+            fputs(doc_classesELine[cset].c_str(), stdout);
+            Indent indent;
+            displayChildren(indent, fileWidth, baseLen, modWidth, crel_ptr);
         }
     }
 }

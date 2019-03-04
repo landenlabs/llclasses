@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------------
 //
-//  SwapStream.cpp      5/8/2019        DALang
-//
-//  Swap iostream, example cout with a file.
+// File: SwapStream.cpp
+// Author: Dennis Lang
+// Desc: Swap iostream, example cout with a file.
 //
 //-------------------------------------------------------------------------------------------------
 //

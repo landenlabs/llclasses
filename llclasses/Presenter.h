@@ -54,6 +54,12 @@ class Presenter
 {
 public:
     int init(int argc, const char * argv[], const char* version);
+    
+    //  Return true if current Presentation settings allow item to be shown.
+    //  See -A allClasses
+    bool canShow(const RelationPtr relPtr);
+    bool canShowChildren(const RelationPtr relPtr);
+    
     Parser parser;
     unique_ptr<Publish> publishPtr;
     
@@ -69,6 +75,7 @@ public:
     bool vizSplit      = false;
     bool needHeader    = true;
     bool allClasses    = false;
+    bool showInterfaces= false;
     bool importPackage = false;
     bool tabularList   = false;
     bool fullPath      = false;

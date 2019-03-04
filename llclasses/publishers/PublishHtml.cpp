@@ -236,7 +236,7 @@ static void outputHtmlTableList(const ClassList& clist, Presenter& presenter)
     {
         const RelationPtr crel_ptr = iter->second;
         
-        if (presenter.allClasses || crel_ptr->modifier.find("public") != string::npos) {
+        if (presenter.canShow(crel_ptr)) {
             cout << "<tr>"
                 << " <td>" << crel_ptr->package
                 << " <td>" << crel_ptr->type
@@ -259,7 +259,7 @@ size_t PublishHtml::displayChildren(
         unsigned parentNum,
         size_t width,
         const RelationPtr parentPtr,
-        const RelationPtr pparentPtr) const
+        const string& basepath) const
 {
     size_t nodeCnt = 0;
     RelationPtr child_ptr;
@@ -273,13 +273,34 @@ size_t PublishHtml::displayChildren(
             if (child_ptr != NULL)
             {
                 string chilNname = child_ptr->name;
+                if ((child_ptr->definition && presenter.canShow(child_ptr))
+                    || presenter.canShowChildren(child_ptr))
                 {
                     cout << "d.add(" << presenter.sNodeNum;
-                    cout << "," << parentNum << ",'" << replaceAll(chilNname, "<", "&lt;")
-                    << "','" << child_ptr->filename << "');\n";
+                    cout << "," << parentNum << ",'" << replaceAll(chilNname, "<", "&lt;");
+                    if ( ! child_ptr->modifier.empty() && child_ptr->modifier != "public")
+                        cout << " (" << child_ptr->modifier << ")";
+                    if (child_ptr->type != "class")
+                        cout << " [" << child_ptr->type << "]";
+                    if (child_ptr->definition)
+                    {
+                        if (basepath.empty()) {
+                            cout << "','" << child_ptr->filename;
+                        } else {
+                            cout << "',p+'" << replaceAll(child_ptr->filename, basepath, "");
+                        }
+                    } else {
+                        cout << " { Imported }";
+                        if (basepath.empty()) {
+                            cout << "','" << chilNname;
+                        } else {
+                            cout << "',i+'" << chilNname;
+                        }
+                    }
+                    cout << "');\n";
                 }
                 nodeCnt++;
-                nodeCnt += displayChildren(presenter.sNodeNum++, width, child_ptr, parentPtr);
+                nodeCnt += displayChildren(presenter.sNodeNum++, width, child_ptr, basepath);
             }
         }
     }
@@ -298,6 +319,19 @@ void PublishHtml::present() const {
     presenter.applyReplacements(htmlHead);
     presenter.applyReplacements(bodyBegin);
     presenter.applyReplacements(bodyEnd);
+    
+    /*
+    string basepath;
+    ClassList::const_iterator iter;
+    for (iter = clist.begin(); iter != clist.end(); iter++)
+    {
+        RelationPtr crel_ptr = iter->second;
+        // fileWidth = max(fileWidth, crel_ptr->filename.length());
+        // nameWidth = max(nameWidth, crel_ptr->name.length());
+        // modWidth = max(modWidth, crel_ptr->modifier.length());
+        basepath = equalSubStr(basepath, crel_ptr->filename);
+    }
+     */
     
     if (presenter.tabularList)
     {
@@ -329,7 +363,7 @@ void PublishHtml::present() const {
             " \n"
             "<h1> " << title1 << " </h1> \n"
             " \n"
-            "<h2>" << title2 << "/h2> \n"
+            "<h2>" << title2 << "</h2> \n"
             "<div class=dtree style='margin:20px; font-size:110%; box-shadow: 10px 10px 5px #888888; padding:10px; display:inline-block; background:#f0f0f0;'> \n"
             "<p> \n"
             "<span style='border:2px ridge #404040 ; border-radius:20px; padding:5px; background:#e0e0e0;'> \n"
@@ -393,6 +427,7 @@ void PublishHtml::displayDependencies() const
     size_t fileWidth = 14;
     size_t nameWidth = 14;
     size_t modWidth  = 6;   // public
+    string basepath;
     
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
@@ -402,26 +437,58 @@ void PublishHtml::displayDependencies() const
         fileWidth = max(fileWidth, crel_ptr->filename.length());
         nameWidth = max(nameWidth, crel_ptr->name.length());
         modWidth = max(modWidth, crel_ptr->modifier.length());
-        // sortedList.insert(std::make_pair(count_children(crel_ptr, NULL), crel_ptr));
+        basepath = equalSubStr(basepath, crel_ptr->filename);
     }
     
     SwapStream swapStream(cout);
+
+    if (presenter.cset == Presenter::JAVA_CHAR &&  basepath.length() > 10)
+    {
+        cout << "\np='" <<  basepath << "';"; // p=base path of file
+        cout << "\ni='" <<  basepath << "';\n"; // i=imported (not part of this file)
+    } else {
+        basepath.clear();
+    }
     
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
         crel_ptr = iter->second;
+        // if (crel_ptr->definition == false)
+        //    continue;
         
         if (crel_ptr->parents.empty())  // Find Super class (no parent)
         {
             // Have super class - now display subclasses.
             if (presenter.cset == Presenter::JAVA_CHAR)
             {
-                cout << "d.add(" << presenter.sNodeNum;
-                string name = crel_ptr->name;
-                cout << "," << 0 << ",'" <<  replaceAll(name, "<", "&lt;")
-                     << "','" << crel_ptr->filename << "');\n";
-                
-                displayChildren(presenter.sNodeNum++, fileWidth, crel_ptr, NULL);
+                if (presenter.canShowChildren(crel_ptr))
+                {
+                    cout << "d.add(" << presenter.sNodeNum;
+                    string name = crel_ptr->name;
+                    cout << "," << 0 << ",'" << replaceAll(name, "<", "&lt;");
+                    if ( ! crel_ptr->modifier.empty() && crel_ptr->modifier != "public")
+                        cout << " (" << crel_ptr->modifier << ")";
+                    if (crel_ptr->type != "class")
+                        cout << " [" << crel_ptr->type << "]";
+                    
+                    if (crel_ptr->definition)
+                    {
+                        if (basepath.empty()) {
+                            cout  << "','" << crel_ptr->filename;
+                        } else {
+                            cout  << "',p+'" << replaceAll(crel_ptr->filename, basepath, "");
+                        }
+                    } else {
+                        cout << " { Imported }";
+                        if (basepath.empty()) {
+                            cout  << "','" << name;
+                        } else {
+                            cout  << "',i+'" << name;
+                        }
+                    }
+                    cout << "');\n";
+                    displayChildren(presenter.sNodeNum++, fileWidth, crel_ptr, basepath);
+                }
             }
             else
             {

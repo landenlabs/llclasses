@@ -137,7 +137,7 @@ private:
     void outputHtmlTitle3() const;
     
     size_t displayChildren(unsigned parentNum,  size_t width,
-            const RelationPtr parentPtr, const RelationPtr pparentPtr) const;
+            const RelationPtr parentPtr, const string& basepath) const;
 };
 
 

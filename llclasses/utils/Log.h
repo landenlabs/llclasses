@@ -57,7 +57,7 @@ public:
     inline static Log warning()
     {
         Log warning(cerr);
-        warning.out() << "033[01;32m Warning ";
+        warning.out() << "\033[01;32m Warning ";
         return warning;
     }
     

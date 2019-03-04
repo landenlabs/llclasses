@@ -1,41 +1,86 @@
+//-------------------------------------------------------------------------------------------------
 //
-//  colors.h
-//  llclasses
+// File: Colors.h
+// Author: Dennis Lang
+// Desc: Terminal colors
 //
-//  Created by Dennis Lang on 3/3/19.
-//  Copyright © 2019 Dennis Lang. All rights reserved.
+//-------------------------------------------------------------------------------------------------
 //
+// Author: Dennis Lang - 2019
+// http://landenlabs.com
+//
+// This file is part of llclasses project.
+//
+// ----- License ----
+//
+// Copyright (c) 2019 Dennis Lang
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is furnished to do
+// so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #pragma once
 
 #include <string>
+#include "utils.h"
 using namespace std;
 
 class Colors
 {
+public:
 #ifdef HAVE_WIN
-    const char RED[] =    "\033[01;31m";
-    const char GREEN[] =  "\033[01;32m";
-    const char YELLOW[] = "\033[01;33m";
-    const char BLUE[] =   "\033[01;34m";
-    const char PINK[] =   "\033[01;35m";
-    const char LBLUE[] =  "\033[01;36m";
-    const char WHITE[] =  "\033[01;37m";
-    const char OFF[] =    "\033[00m";
+    #define RED    ""
+    #define GREEN  ""
+    #define YELLOW ""
+    #define BLUE   ""
+    #define PINK   ""
+    #define LBLUE  ""
+    #define WHITE  ""
+    #define OFF    ""
 #else
-    const char RED[] =    "";
-    const char GREEN[] =  "";
-    const char YELLOW[] = "";
-    const char BLUE[] =   "";
-    const char PINK[] =   "";
-    const char LBLUE[] =  "";
-    const char WHITE[] =  "";
-    const char OFF[] =    "";
+    #define RED    "\033[01;31m"
+    #define GREEN  "\033[01;32m"
+    #define YELLOW "\033[01;33m"
+    #define BLUE   "\033[01;34m"
+    #define PINK   "\033[01;35m"
+    #define LBLUE  "\033[01;36m"
+    #define WHITE  "\033[01;37m"
+    #define OFF    "\033[00m"
 #endif
     
-    string colorize(const char* inStr)
+    static string colorize(const char* inStr)
     {
         string str(inStr);
-        return replaceRE(inStr, "_y_([^ ]+)", YELLOW "\1"  OFF);
+        
+        // _x_  where x lowercase, colorize following word
+        replaceRE(str, "_y_([^ =]+)", YELLOW "$1" OFF);
+        replaceRE(str, "_r_([^ =]+)",    RED "$1" OFF);
+        replaceRE(str, "_g_([^ =]+)",  GREEN "$1" OFF);
+        replaceRE(str, "_p_([^ =]+)",   PINK "$1" OFF);
+        replaceRE(str, "_lb_([^ =]+)", LBLUE "$1" OFF);
+        replaceRE(str, "_w_([^ =]+)",  WHITE "$1" OFF);
+        
+        // _X_  where X uppercase, colorize until _X_
+        replaceRE(str, "_Y_", YELLOW);
+        replaceRE(str, "_R_", RED);
+        replaceRE(str, "_G_", GREEN);
+        replaceRE(str, "_P_", PINK);
+        replaceRE(str, "_LB_", LBLUE);
+        replaceRE(str, "_W_", WHITE);
+        replaceRE(str, "_X_", OFF);
+        return str;
     }
 };

@@ -50,8 +50,10 @@
 #include "ClassRel.h"
 #include "utils.h"
 #include "SwapStream.h"
+#include "Colors.h"
 
 static const string sPackageTag("package");
+
 
 // -------------------------------------------------------------------------------------------------
 void loadfile(const char* filename, Publish& publish, SetData setPtr)
@@ -87,48 +89,51 @@ int Presenter::init(int argc, const char * argv[], const char* version)
     {
         cerr << "\n" << argv[0] << " ("
              << version << ")\n"
-             << "\nDes: Generate Java class dependence tree (" __DATE__ ")"
-                "\nUse: Javatree [-+ntgxshjz] header_files...\n"
+             <<  Colors::colorize(
+                "\nDes: _P_Generate class dependence tree_X_ (" __DATE__ ")"
+                "\nBy:  _W_LanDen Labs  www.landenlabs.com _X_"
+                "\nUse: llclasses [-+ntgxshjz] header_files...\n"
                 "\nSwitches (*=default)(-=off, +=on):"
-                "\n  n  ; Show alphabetic class name list"
-                "\n* t  ; Show class dependency tree"
+                "\n  _y_n  ; Show alphabetic class name list"
+                "\n* _y_t  ; Show class dependency tree"
                 "\n"
-                "\nOutput format (single choice):"
-                "\n* g  ; Use graphics for tree connections"
-                "\n  x  ; Use (+|-) for tree connections"
-                "\n  s  ; Use spaces for tree connections"
-                "\n  h  ; Html tree connections (needs images 0.png, 1.png, 2.png, n.png)"
-                "\n  j  ; Java tree connections (needs dtree www.destroydrop.com/javascript/tree/)"
-                "\n  z  ; GraphViz (see https://graphviz.gitlab.io/)"
+                "\n_P_Output format (single choice):_X_"
+                "\n* _y_g  ; Use graphics for tree connections"
+                "\n  _y_x  ; Use (+|-) for tree connections"
+                "\n  _y_s  ; Use spaces for tree connections"
+                "\n  _y_h  ; Html tree connections (needs images 0.png, 1.png, 2.png, n.png)"
+                "\n  _y_j  ; Java tree connections (needs dtree www.destroydrop.com/javascript/tree/)"
+                "\n  _y_z  ; GraphViz (see https://graphviz.gitlab.io/)"
                 "\n"
-                "\n  With -j to customize java 1=header, 2=body begin, 3=body end"
+                "\n  With -_y_j to customize java _y_1=header, _y_2=body begin, _y_3=body end"
                 "\n     Specify file which contains html text to insert in output"
-                "\n  -1=head.html -2=bodybegin.html -3=bodyend.html"
+                "\n  -_y_1=head.html -_y_2=bodybegin.html -_y_3=bodyend.html"
                 "\n     Optional replacement words applied to html sections"
-                "\n  -0=x1,foo1 -0=x2,foo2 -0=x3,foo3"
+                "\n  -_y_0=x1,foo1 -_y_0=x2,foo2 -_y_0=x3,foo3"
                 "\n"
-                "\nModifiers:"
-                "\n  Z               ; Split GraphViz by tree, use with -O"
-                "\n  N =nodesPerFile ; Split by nodes per file, use with -O"
-                "\n  O =outpath      ; Save output in file"
-                "\n  T =tabular      ; Tabular html "
-                "\n  V =filePattern  ; Ignore files"
-                "\n  A =allClasses   ; Defaults to public"
-                "\n  F =full path    ; Defaults to relative"
-                "\n  L =Title        ; Set optional title"
+                "\n_P_Modifiers:_X_"
+                "\n  _y_Z               ; Split GraphViz by tree, use with -O"
+                "\n  _y_N =nodesPerFile ; Split by nodes per file, use with -O"
+                "\n  _y_O =outpath      ; Save output in file"
+                "\n  _y_T =tabular      ; Tabular html "
+                "\n  _y_V =filePattern  ; Ignore files"
+                "\n  _y_A =allClasses   ; Include Protected and Private classes"
+                "\n  _y_I =interfaces   ; Include Interfaces in report"
+          //      "\n  _y_F =full path    ; Defaults to relative"
+                "\n  _y_L =Title        ; Set optional title"
                 "\n"
-                "\nExamples (assumes java source code in directory src):"
-                "\n  javatree -t +n  src\\*.java  ; *.java prevent recursion"
-                "\n  javatree -x  src > javaTree.txt"
-                "\n  javatree -h  src > javaTree.html"
-                "\n  javatree -h -T src > javaTable.html"
-                "\n  javatree -j  src > javaTreeWithJs.html"
-                "\n  javatree -j -1=head.html -2=bodybegin.html -3=bodyend.html src > jtrees.html"
+                "\n_P_Examples (assumes java source code in directory src):_X_"
+                "\n  llclasses -t +n  src\\*.java  ; *.java prevent recursion"
+                "\n  llclasses -x  src > llclasses.txt"
+                "\n  llclasses -h  src > llclasses.html"
+                "\n  llclasses -h -T src > javaTable.html"
+                "\n  llclasses -j  src > llclassesWithJs.html"
+                "\n  llclasses -j -1=head.html -2=bodybegin.html -3=bodyend.html src > jtrees.html"
                 "\n"
                 "\n  -V is case sensitive "
-                "\n  javatree -z -Z -O=.\\viz\\ -V=*Test* -V=*Exception* src >directgraph.dot"
-                "\n  javatree -z -N=10 -O=.\\viz\\ -V=*Test* -V=*Exception* src >directgraph.dot"
-                "\n";
+                "\n  llclasses -z -Z -O=.\\viz\\ -V=*Test* -V=*Exception* src >directgraph.dot"
+                "\n  llclasses -z -N=10 -O=.\\viz\\ -V=*Test* -V=*Exception* src >directgraph.dot"
+                "\n");
     }
     else
     {
@@ -179,6 +184,7 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                         // Modifiers
                     case 'A': allClasses = true;        break;
                     case 'F': fullPath = true;          break;
+                    case 'I': showInterfaces = true;    break;
                     case 'T': tabularList = true;
                         publishPtr = make_unique<PublishHtml>(clist, *this);
                         break;
@@ -218,6 +224,26 @@ int Presenter::init(int argc, const char * argv[], const char* version)
     }
     
     return returnVal;   // Return parsed class count, else -1
+}
+
+// -------------------------------------------------------------------------------------------------
+bool Presenter::canShow(const RelationPtr relPtr)
+{
+    if (relPtr->type == "class")
+        return (allClasses || relPtr->modifier.find("public") != string::npos);
+    else
+        return showInterfaces;
+}
+
+// -------------------------------------------------------------------------------------------------
+bool Presenter::canShowChildren(const RelationPtr relPtr)
+{
+    for (const RelationPtr child : relPtr->children)
+    {
+        if (canShowChildren(child))
+            return true;
+    }
+    return canShow(relPtr);
 }
 
 // -------------------------------------------------------------------------------------------------
