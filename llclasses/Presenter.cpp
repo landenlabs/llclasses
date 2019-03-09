@@ -116,7 +116,8 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                 "\n  _y_N =nodesPerFile ; Split by nodes per file, use with -O"
                 "\n  _y_O =outpath      ; Save output in file"
                 "\n  _y_T =tabular      ; Tabular html "
-                "\n  _y_V =filePattern  ; Ignore files"
+                "\n  _y_V =filePattern  ; Ignore file path pattern, ex *Test*"
+                "\n  _y_v =classPattern ; Ignore class pattern, ex [Tt]est[0-9]"
                 "\n  _y_A =allClasses   ; Include Protected and Private classes"
                 "\n  _y_I =interfaces   ; Include Interfaces in report"
           //      "\n  _y_F =full path    ; Defaults to relative"
@@ -125,8 +126,8 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                 "\n_P_Examples (assumes java source code in directory src):_X_"
                 "\n  llclasses -t +n  src\\*.java  ; *.java prevent recursion"
                 "\n  llclasses -x  src > llclasses.txt"
-                "\n  llclasses -h  src > llclasses.html"
-                "\n  llclasses -h -T src > javaTable.html"
+                "\n  llclasses -h  dir1 dir2 foo*.java  > llclasses.html"
+                "\n  llclasses -h -I -T \"-v=*Test*\" src > javaTable.html"
                 "\n  llclasses -j  src > llclassesWithJs.html"
                 "\n  llclasses -j -1=head.html -2=bodybegin.html -3=bodyend.html src > jtrees.html"
                 "\n"
@@ -195,10 +196,26 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                     case 'O':   // -O=<outPath>
                         outPath = argv[argn]+3;
                         break;
-                    case 'V':  // -V=<pattern>   ignore list of patterns
+                    case 'v':  // -v=<pattern>   ignore list of patterns
+                        {
                         string str = argv[argn]+3;
                         replaceAll(str, "*", ".*");
-                        parser.ignorePatterns.push_back(regex(str));
+                        clist.ignoreClassPatterns.push_back(regex(str));
+                        }
+                        break;
+                    case 'V':  // -V=<path_RegEx_pattern>   ignore list of patterns
+                        {
+                        string str = argv[argn]+3;
+                        replaceAll(str, "*", ".*");
+                        parser.ignorePathPatterns.push_back(regex(str));
+                        }
+                        break;
+                    case 'i':  // -i=<pattern>   include list of patterns
+                        {
+                        string str = argv[argn]+3;
+                        replaceAll(str, "*", ".*");
+                        clist.includeClassPatterns.push_back(regex(str));
+                        }
                         break;
                 }
             }

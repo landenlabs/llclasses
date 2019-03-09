@@ -291,41 +291,43 @@ int ParseJava::parseJava(const string& filename, ClassList& clist, const Present
             // Add class definition
             RelationPtr crel_ptr =
                 clist.addClass(classOrInterface, name, trim(modifiers), filename, package, true);
-            crel_ptr->meta = meta;
-            crel_ptr->generic = generic;
-            
-            // Add all parent (extend) classes
-            if (extends.length() > 0) {
-                extends = trim(replaceAll(extends, " extends ", emptyStr));
-                Split extendList(extends, ",", FindSplit);
-                for (string extendItem : extendList) {
-                    extendItem = trim(removeTemplate(extendItem));
-                    clist.addParent(crel_ptr, extendItem, filename, package);
+            if (crel_ptr != NULL) {
+                crel_ptr->meta = meta;
+                crel_ptr->generic = generic;
+                
+                // Add all parent (extend) classes
+                if (extends.length() > 0) {
+                    extends = trim(replaceAll(extends, " extends ", emptyStr));
+                    Split extendList(extends, ",", FindSplit);
+                    for (string extendItem : extendList) {
+                        extendItem = trim(removeTemplate(extendItem));
+                        clist.addParent(crel_ptr, extendItem, filename, package);
+                    }
                 }
-            }
-            
-            // Add all interfaces
-            if (implements.length() > 0) {
-                implements = trim(replaceAll(implements, " implements ", emptyStr));
-                Split implementsList(implements, ",", FindSplit);
-                for (string implementsItem : implementsList) {
-                    implementsItem = trim(removeTemplate(implementsItem));
-                    RelationPtr cImpl =
-                        clist.addClass("interface", implementsItem, "", filename, package, false);
-                    crel_ptr->addInterface(cImpl);
+                
+                // Add all interfaces
+                if (implements.length() > 0) {
+                    implements = trim(replaceAll(implements, " implements ", emptyStr));
+                    Split implementsList(implements, ",", FindSplit);
+                    for (string implementsItem : implementsList) {
+                        implementsItem = trim(removeTemplate(implementsItem));
+                        RelationPtr cImpl =
+                            clist.addClass("interface", implementsItem, "", filename, package, false);
+                        crel_ptr->addInterface(cImpl);
+                    }
                 }
-            }
 
-            classNames.push_back(name); // Used for nested (inner classes)
-            
-            if (presenter.verbose) {
-                cout << line << endl;
-                cout << "  Modifiers       =" << modifiers << endl;
-                cout << "  classOrInterface=" << classOrInterface << endl;
-                cout << "  name            =" << name << endl;
-                cout << "  generic         =" << generic << endl;
-                cout << "  extends         =" << extends << endl;
-                cout << "  implements      =" << implements << endl;
+                classNames.push_back(name); // Used for nested (inner classes)
+                
+                if (presenter.verbose) {
+                    cout << line << endl;
+                    cout << "  Modifiers       =" << modifiers << endl;
+                    cout << "  classOrInterface=" << classOrInterface << endl;
+                    cout << "  name            =" << name << endl;
+                    cout << "  generic         =" << generic << endl;
+                    cout << "  extends         =" << extends << endl;
+                    cout << "  implements      =" << implements << endl;
+                }
             }
         } else {
             

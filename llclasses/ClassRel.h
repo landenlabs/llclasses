@@ -122,5 +122,8 @@ public:
         const string& package);
     
     void release();
+    
+    PatternList ignoreClassPatterns;        // -v <class_regex_pattern> [-v <>]...
+    PatternList includeClassPatterns;       // -i <class_regex_pattern> [-i <>]...
 };
 

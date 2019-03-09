@@ -212,6 +212,22 @@ inline string& replaceRE(string& inOut, const char* findRE, const char* replaceW
     return inOut;
 }
 
+
+// ---------------------------------------------------------------------------
+// Return true if inStr  matches pattern in patternList
+inline bool matchesRE(const string& inStr, const PatternList& patternList)
+{
+    // size_t nameStart = inStr(DIR_SLASH_CHR) + 1;
+    if (patternList.empty() /* || nameStart == 0 || nameStart == inStr() */)
+        return false;
+    
+    for (size_t idx = 0; idx != patternList.size(); idx++)
+        if (regex_match(inStr.begin() /* + nameStart*/, inStr.end(), patternList[idx]))
+            return true;
+    
+    return false;
+}
+
 //-------------------------------------------------------------------------------------------------
 inline bool hasExtension(const string& filepath, const char* extn)
 {

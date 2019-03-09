@@ -42,7 +42,8 @@ class Presenter;
 class Parser
 {
 public:
-    PatternList ignorePatterns;
-    
+    PatternList ignorePathPatterns;         // -V <path_regex_pattern> [-V <>]...
+    PatternList includePathPatterns;        // -I <path_regex_pattern> [-V <>]...
+
     size_t findClasses(const string& dirname, ClassList& clist, const Presenter&);
 };

@@ -40,22 +40,8 @@
 #include "Parser.h"
 #include "ParseJava.h"
 #include "utils.h"
+#include "Log.h"
 
-
-// ---------------------------------------------------------------------------
-// Return true if inPath (filename part) matches pattern in patternList
-static bool fileMatches(const string& inPath, const PatternList& patternList)
-{
-    size_t nameStart = inPath.rfind(DIR_SLASH_CHR) + 1;
-    if (patternList.empty() || nameStart == 0 || nameStart == inPath.length())
-        return false;
-    
-    for (size_t idx = 0; idx != patternList.size(); idx++)
-        if (regex_match(inPath.begin() + nameStart, inPath.end(), patternList[idx]))
-            return true;
-    
-    return false;
-}
 
 // ---------------------------------------------------------------------------
 size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presenter& presenter)
@@ -69,7 +55,7 @@ size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presen
         directory.fullName(fullname);
         if (directory.is_directory()) {
             fileCount += findClasses(fullname, clist, presenter);
-        } else if (fullname.length() > 0 && !fileMatches(fullname, ignorePatterns)) {
+        } else if (fullname.length() > 0 && !matchesRE(fullname, ignorePathPatterns)) {
             if (getExtension(ext, fullname).length() > 1) {
                 toLower(ext, ext);
                 
@@ -80,6 +66,8 @@ size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presen
                     fileCount++;
                 }
             }
+        } else {
+             Log::warning().out() << "Ignoring file:" << fullname;
         }
     }
     return fileCount;

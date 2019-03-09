@@ -50,6 +50,7 @@
 #include "SwapStream.h"
 #include "utils.h"
 
+
 string dtree_css = "dtree.css";
 string dtree_js = "dtree.js";
 static char HTML_HEAD[] =
@@ -85,7 +86,7 @@ static void outputHtmlPrefix1()
 }
 
 // -------------------------------------------------------------------------------------------------
-void PublishHtml::outputHtmlMetaHeader2() const
+void PublishHtml::outputHtmlMetaHeader2(const char* auxStyle) const
 {
     if  (htmlHead.empty())
     {
@@ -94,11 +95,19 @@ void PublishHtml::outputHtmlMetaHeader2() const
         cout <<
             "    <link rel=StyleSheet href=" << dtree_css << " type=text/css /> \n"
             "    <script type=text/javascript src=" << dtree_js << " ></script>  \n";
+        cout << ((auxStyle != NULL) ? auxStyle : "");
         cout <<
             "</head> \n";
     }
     else
     {
+        if (auxStyle != NULL)
+        {
+            size_t pos = htmlHead.rfind("</head>");
+            if (pos != string::npos) {
+                htmlHead.insert(pos, auxStyle);
+            }
+        }
         cout << htmlHead;
     }
 }
@@ -118,8 +127,7 @@ void PublishHtml::outputHtmlTitle3() const
 //   1 = L shape
 //   2 = Side T
 //   n = empty
-static void outputEmbeddedImages() {
-    cout <<
+static const char* outputEmbeddedImages =
     "<style>\n"
     "img.img0 {\n"
     "content: url(data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAk0lEQVR4nL3UsQqDMBSF4XuTTDdj19L3f67StWOg0lzjosMpmDYe6Vn+QfkgItHWWpOd3a4XKaVIzlnuj+fea7DQezhNLygNHtkXUD9Kg+PrgiklKA/GCKXB6g6lQV8hPws8si6oIUB5UBVKg/PsUBqs7wqlwe0i6lxIY+Dp3zDGAKXB7aQDJ/7zj21moqpiZj+DC+HEMjOdUS71AAAAAElFTkSuQmCC);\n"
@@ -142,12 +150,10 @@ static void outputEmbeddedImages() {
     "height: 32px;\n"
     "}\n"
     "</style>\n";
-}
+
 
 // -------------------------------------------------------------------------------------------------
-static void outputHtmlTableStyle()
-{
-    cout <<
+static const char* outputHtmlTableStyle =
     "<style type = 'text/css'>\n"
     "#gradient-style\n"
     "{\n"
@@ -187,9 +193,8 @@ static void outputHtmlTableStyle()
     "   background: #d0dafd url('img/gradhover.png') repeat-x;\n"
     "   color: #339;\n"
     "}\n"
-    "</style>\n";
-    
-    cout <<
+    "</style>\n"
+
     "<link rel='stylesheet' type='text/css' href='http://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css'> \n"
     "<script type='text/javascript' language='javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script> \n"
     "<script type='text/javascript' charset='utf8' src='http://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script> \n"
@@ -204,7 +209,7 @@ static void outputHtmlTableStyle()
     "  }); \n"
     "}); \n"
     "</script> \n";
-}
+
 
 // ------------------------------------------------------------------------------------------------
 static void outputHtmlTableList(const ClassList& clist, Presenter& presenter)
@@ -213,37 +218,61 @@ static void outputHtmlTableList(const ClassList& clist, Presenter& presenter)
     time(&nowTime);
     
     cout <<
-    "<table id='gradient-style' summary='display' ellspacing='0' width='100%'  >\n"
-    "<thead>\n"
-    "<tr>\n"
-    "<th scope='col'>Package</th> \n"
-    "<th scope='col'>Type</th> \n"
-    "<th scope='col'>FullName</th> \n"
-    "<th scope='col'>Name</th> \n"
-    "<th scope='col'>Modifiers</th> \n"
-    "<th scope='col'>Filename</th> \n"
-    "</tr>\n"
-    "</thead>\n"
-    "<tfoot>\n"
-    "<tr>\n"
-    "<td colspan='5'><a href=\"http://landenlabs.com\"> llclasses  by Dennis Lang </a></td><td>" << ctime(&nowTime) << "</td> \n"
-    "</tr> \n"
-    "</tfoot> \n"
-    "<tbody>\n";
+        "<table id='gradient-style' summary='display' ellspacing='0' width='100%'  >\n"
+        "<thead>\n"
+        "<tr>\n"
+        "<th scope='col'>Package</th> \n";
+    
+    if (presenter.showInterfaces)
+       cout << "<th scope='col'>Type</th> \n";
+    
+    cout <<
+//    "<th scope='col'>FullName</th> \n"
+        "<th scope='col'>Name</th> \n"
+        "<th scope='col'>Modifiers</th> \n"
+        "<th scope='col'>Filename</th> \n"
+        "</tr>\n"
+        "</thead>\n"
+        "<tfoot>\n"
+        "<tr>\n"
+        "<td colspan='5'><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a></td><td>"
+        << dateTimeToString(now(), "%d-%h-%Y")
+        << "</td> \n"
+        "</tr> \n"
+        "</tfoot> \n"
+        "<tbody>\n";
     
     ClassList::const_iterator iter;
+    RelationPtr crel_ptr;
+    string basepath;
+    
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
-        const RelationPtr crel_ptr = iter->second;
+        crel_ptr = iter->second;
+        basepath = equalSubStr(basepath, crel_ptr->filename);
+    }
+    
+    size_t pathOffset = basepath.rfind(DIR_SLASH_CHR)+1;
+    for (iter = clist.begin(); iter != clist.end(); iter++)
+    {
+        crel_ptr = iter->second;
         
         if (presenter.canShow(crel_ptr)) {
+            string name = crel_ptr->name;
+            if (name.length() > 20)
+                replaceAll(name, ".", ".<br>");
+            
             cout << "<tr>"
-                << " <td>" << crel_ptr->package
-                << " <td>" << crel_ptr->type
-                << " <td>" << crel_ptr->name    // fullClassName
-                << " <td>" << crel_ptr->name
+                << " <td>" << crel_ptr->package;
+            
+            if (presenter.showInterfaces)
+                cout << " <td>" << crel_ptr->type;
+            
+            cout
+       //         << " <td>" << crel_ptr->name    // fullClassName
+                << " <td>" << name
                 << " <td>" << crel_ptr->modifier
-                << " <td>" << crel_ptr->filename
+                << " <td>" << (crel_ptr->filename.c_str() + pathOffset)
                 << endl;
         }
     }
@@ -312,7 +341,7 @@ size_t PublishHtml::displayChildren(
 void PublishHtml::present() const {
     
     const string& title1 = getIt(presenter.titles, 0, "Class List");
-    string dataStr = dateTimeToString(now(), "%Y-%m-%d %H:%M:%S");
+    string dataStr = dateTimeToString(now(), "%d-%h-%Y");
     const string& title2 = getIt(presenter.titles, 1, dataStr);
     const string& title3 = getIt(presenter.titles, 2, "title1");
     
@@ -336,11 +365,17 @@ void PublishHtml::present() const {
     if (presenter.tabularList)
     {
         outputHtmlPrefix1();
-        outputHtmlMetaHeader2();
-        outputHtmlTableStyle();
-        outputHtmlTitle3();
+        outputHtmlMetaHeader2(outputHtmlTableStyle);
+    
+        // outputHtmlTitle3();
         cout <<
-        "</head>\n"
+        "<body id='top'> \n"
+        "<a href=javascript:window.history.back();> Back </a> \n"
+        "<p> \n"
+        " \n"
+        "<p><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
+        "  Created on:" << dateTimeToString(now(), "%d-%h-%Y ")
+        << "<p>\n"
         "<h2>Tabular List of " << title1 << "</h2>"
         "<body>\n";
         outputHtmlTableList(clist, presenter);
@@ -352,7 +387,7 @@ void PublishHtml::present() const {
     else if (presenter.cset == Presenter::JAVA_CHAR)
     {
         outputHtmlPrefix1();
-        outputHtmlMetaHeader2();
+        outputHtmlMetaHeader2(NULL);
  
         if (bodyBegin.empty())
         {
@@ -394,8 +429,8 @@ void PublishHtml::present() const {
         {
             cout <<
             "</div>  \n"
-            "<p><a href=\"http://landenlabs.com\"> llclasses  by Dennis Lang </a>\n"
-            "  Created on:" << dateTimeToString(now(), "%Y-%m-%d ")
+            "<p><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
+            "  Created on:" << dateTimeToString(now(), "%d-%h-%Y ")
             << "\n"
             "</body> \n"
             "</html> \n"
@@ -417,7 +452,7 @@ void PublishHtml::displayDependencies() const
     switch (presenter.cset) {
         case Presenter::HTML_CHAR:
             fputs("<html>\n", stdout);
-            outputEmbeddedImages();
+            fputs(outputEmbeddedImages, stdout);
             fputs("<body>\n<table>\n", stdout);
             break;
     }

@@ -33,6 +33,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ClassRel.h"
+#include "utils.h"
 #include "log.h"
 
 static const RelationPtr RELATION_NULL = NULL;
@@ -71,6 +72,16 @@ RelationPtr ClassList::addClass(
      const string& package,
      bool definition)
 {
+    if (matchesRE(className, ignoreClassPatterns))
+    {
+        Log::warning().out() << "Ignoring class:" << className;
+        return NULL;
+    }
+    if (!includeClassPatterns.empty() && !matchesRE(className, includeClassPatterns))
+    {
+        return NULL;
+    }
+    
     // multimap, get range of matches.
     pair<ClassList::iterator, ClassList::iterator> iter = equal_range(className);
     RelationPtr crel_ptr = NULL;
@@ -129,9 +140,11 @@ void ClassList::addParent(
 {
     static const string empty;
     RelationPtr pSuper = addClass("class", parents_name, empty, filename, package, false);
-    
-    pChild->addParent(pSuper);
-    pSuper->addChild(pChild);
+    if (pSuper != NULL)
+    {
+        pChild->addParent(pSuper);
+        pSuper->addChild(pChild);
+    }
 }
 
 // ---------------------------------------------------------------------------

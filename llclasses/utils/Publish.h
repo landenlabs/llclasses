@@ -133,7 +133,7 @@ public:
     }
     
 private:
-    void outputHtmlMetaHeader2() const;
+    void outputHtmlMetaHeader2(const char* auxStyle) const;
     void outputHtmlTitle3() const;
     
     size_t displayChildren(unsigned parentNum,  size_t width,
