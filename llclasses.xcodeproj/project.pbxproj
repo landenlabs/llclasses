@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B95FB8762215150E00C89780 /* PublishText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B95FB8742215150E00C89780 /* PublishText.cpp */; };
+		B96D750E223563930027048E /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B96D750C223563930027048E /* Log.cpp */; };
 		B9A8A93B2203EB3D00F41B05 /* llclasses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */; };
 		B9AD72B9220745D900F30B18 /* ParseJava.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72B8220745D900F30B18 /* ParseJava.cpp */; };
 		B9AD72C022074AF800F30B18 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72BE22074AF800F30B18 /* Parser.cpp */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		B92218E622106E1F00C896CA /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		B95FB8742215150E00C89780 /* PublishText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PublishText.cpp; sourceTree = "<group>"; };
+		B96D750C223563930027048E /* Log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
 		B9A8A9372203EB3D00F41B05 /* llclasses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = llclasses; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = llclasses.cpp; sourceTree = "<group>"; };
 		B9AD72B8220745D900F30B18 /* ParseJava.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseJava.cpp; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				B9AD72BF22074AF800F30B18 /* DirectoryFiles.cpp */,
 				B9AD72CD220761FF00F30B18 /* SwapStream.h */,
 				B9E99905222C130A00DFC6CF /* Colors.h */,
+				B96D750C223563930027048E /* Log.cpp */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 				B9AD72C52207504300F30B18 /* Presenter.cpp in Sources */,
 				B9AD72CC2207565C00F30B18 /* PublishHtml.cpp in Sources */,
 				B9AD72C022074AF800F30B18 /* Parser.cpp in Sources */,
+				B96D750E223563930027048E /* Log.cpp in Sources */,
 				B9AD72C122074AF800F30B18 /* DirectoryFiles.cpp in Sources */,
 				B9AD72CB2207565C00F30B18 /* PublishViz.cpp in Sources */,
 				B95FB8762215150E00C89780 /* PublishText.cpp in Sources */,

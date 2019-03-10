@@ -216,8 +216,23 @@ static string& removeTemplate(string& inOut)
 }
 
 //-------------------------------------------------------------------------------------------------
-// Parse java source code and extract class definitions
+// Parse java source code and extract class or import relationships
 int ParseJava::parseJava(const string& filename, ClassList& clist, const Presenter& presenter) {
+    
+    if (presenter.parseImports >= 0)
+    {
+        return parseJavaImports(filename, clist, presenter);
+    }
+    else
+    {
+        return parseJavaClasses(filename, clist, presenter);
+    }
+}
+
+//-------------------------------------------------------------------------------------------------
+// Parse java source code and extract class definitions
+int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const Presenter& presenter)
+{
     // Java class definition syntax.
     //
     // [@MetaDescriptions]
@@ -319,7 +334,7 @@ int ParseJava::parseJava(const string& filename, ClassList& clist, const Present
 
                 classNames.push_back(name); // Used for nested (inner classes)
                 
-                if (presenter.verbose) {
+                if (presenter.logLevel >= LOG_ADDING_CLASSES) {
                     cout << line << endl;
                     cout << "  Modifiers       =" << modifiers << endl;
                     cout << "  classOrInterface=" << classOrInterface << endl;
@@ -350,6 +365,110 @@ int ParseJava::parseJava(const string& filename, ClassList& clist, const Present
     }
 
     classNames.clear(); // Should be empty already.
+    
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Remove trailing parts, return true if empty.
+static bool removeParts(string& inOutStr, size_t parts, const char* find=".")
+{
+    if (parts > 0) {
+        size_t dotPos = inOutStr.length();
+        while (parts-- > 0 && (dotPos = inOutStr.rfind(find, dotPos-1)) > 0);
+        if (dotPos > 0)
+            inOutStr.erase(dotPos);
+        else if (dotPos == 0)
+            return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Parse java source code and extract imported packages
+int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const Presenter& presenter)
+{
+    
+    // import static com.google.common.base.Preconditions.checkNotNull;
+    // import static com.google.common.collect.ImmutableList.toImmutableList;
+    // import static com.google.common.collect.ImmutableSet.toImmutableSet;
+    //
+    // import com.google.auto.common.MoreTypes;
+    // import com.google.auto.value.AutoValue;
+    // import com.google.common.base.Equivalence;
+    // import com.google.common.base.Joiner;
+    
+    string line;
+    string buffer;
+    static regex javePackageRE("package ([A-Za-z0-9_.]+);");
+    static regex javeImportRE("import (static |)([A-Za-z][A-Za-z0-9_.*]*);");
+    smatch match;
+    string package = "none";
+    ifstream in(filename);
+    RelationPtr crel_ptr = NULL;
+    
+    while (getJavaLine(in, line, buffer)) {
+        replaceAll(line, ", ", ",");
+        if (regex_match(line, match, javePackageRE, regex_constants::match_default))
+        {
+            assert(crel_ptr == NULL);
+            package = match[1];
+            if (removeParts(package, presenter.parseImports)) {
+                continue;
+            }
+            crel_ptr =
+                clist.addClass("class", package, "", filename, package, true);
+        }
+        else if (regex_match(line, match, javeImportRE, regex_constants::match_default))
+        {
+            assert(crel_ptr != NULL);
+            string modifiers = match[1];            // static
+            string name = match[2];
+
+            if (removeParts(name, presenter.parseImports)) {
+                continue;
+            }
+            
+            replaceAll(name, ".*", "");
+            if (false) {
+                clist.addParent(crel_ptr, name, filename, package);
+            } else {
+                RelationPtr child_ptr =
+                     clist.addClass("class", name, modifiers, filename, name, false);
+                // child_ptr->addParent(crel_ptr);
+                // crel_ptr->addChild(child_ptr);
+                if (child_ptr != NULL) {
+                    clist.addParent(child_ptr, package, filename, package);
+                }
+            }
+            
+            if (presenter.logLevel >= LOG_ADDING_CLASSES) {
+                cout << line;
+                cout << "\n  Modifiers =" << modifiers;
+                cout << "\n  name      =" << name;
+                cout << "\n  #children =" << crel_ptr->children.size();
+                cout << "\n  #parents  =" << crel_ptr->parents.size();
+                cout << "\n";
+            }
+        }
+    }
+    
+     if (presenter.logLevel >= LOG_CLASS_LIST) {
+         ClassList::const_iterator iter;
+         RelationPtr crel_ptr;
+         
+         cout << "\n ---- Class List ---- \n";
+         for (iter = clist.begin(); iter != clist.end(); iter++)
+         {
+             crel_ptr = iter->second;
+             cout << "\nname    =" << crel_ptr->name;
+             cout << "\nparents =" << crel_ptr->parents.size() << " " << crel_ptr->parents;
+             cout << "\nchildren=" << crel_ptr->children.size() << " " << crel_ptr->children;
+             cout << "\nfile    =" << crel_ptr->filename;
+             cout << "\ndefined =" << crel_ptr->definition;
+             cout << "\n";
+         }
+     }
     
     return 0;
 }

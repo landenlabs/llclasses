@@ -48,6 +48,9 @@ class ParseJava
 public:
     int parseJava(const string& inFilename, ClassList& outClist, const Presenter&);
 
+    int parseJavaClasses(const string& inFilename, ClassList& outClist, const Presenter&);
+    int parseJavaImports(const string& inFilename, ClassList& outClist, const Presenter&);
+    
 private:
     vector<string> classNames;
 };

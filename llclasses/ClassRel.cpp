@@ -45,19 +45,22 @@ void ClassRelations::addRelationTo(RelationList& list, const RelationPtr relPtr)
     if (oldPtr == RELATION_NULL)
         list.insert(relPtr);
     else if (oldPtr->filename != relPtr->filename)
-        Log::warning().out()  << "Duplicate " << relPtr->name << " files:"
+        Log::warning(LOG_DUPLCATE).out()  << "Duplicate " << relPtr->name << " files:"
             << oldPtr->filename  << " and " << relPtr->filename;
 }
 
 //-------------------------------------------------------------------------------------------------
 RelationPtr ClassRelations::find(RelationList& list, const RelationPtr findPtr)
 {
+    return list.find(findPtr) == list.end() ? RELATION_NULL : findPtr;
+    /*
     for (auto item : list)
     {
         if (item == findPtr)
             return item;
     }
     return RELATION_NULL;
+    */
 }
 
 // =================================================================================================
@@ -74,7 +77,7 @@ RelationPtr ClassList::addClass(
 {
     if (matchesRE(className, ignoreClassPatterns))
     {
-        Log::warning().out() << "Ignoring class:" << className;
+        Log::warning(LOG_IGNORE).out() << "Ignoring class:" << className;
         return NULL;
     }
     if (!includeClassPatterns.empty() && !matchesRE(className, includeClassPatterns))
@@ -113,7 +116,7 @@ RelationPtr ClassList::addClass(
     {
         if ( definition && crel_ptr->definition)
         {
-            Log::warning().out()
+            Log::warning(LOG_DUPLCATE).out()
                 << "Duplicate class=" << className
                 << "\n File " << filename
                 << "\n  and " << crel_ptr->filename;

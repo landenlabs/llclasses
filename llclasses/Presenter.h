@@ -46,7 +46,8 @@
 
 
 
-
+#define LOG_CLASS_LIST 3        // See -l
+#define LOG_ADDING_CLASSES 4    // See -l
 
 // =================================================================================================
 // Contoller - Present class tree files (nodes)
@@ -57,8 +58,9 @@ public:
     
     //  Return true if current Presentation settings allow item to be shown.
     //  See -A allClasses
-    bool canShow(const RelationPtr relPtr);
-    bool canShowChildren(const RelationPtr relPtr);
+    bool canShow(const RelationPtr relPtr) const;
+    bool canShowChildren(const RelationPtr relPtr) const;
+    void hasShown(const RelationPtr relPtr) const;
     
     Parser parser;
     unique_ptr<Publish> publishPtr;
@@ -69,17 +71,18 @@ public:
     friend PublishHtml;
 
 
-    bool show_names    = false;
-    bool show_tree     = true;
-    bool print         = false;
-    bool vizSplit      = false;
+    bool show_names    = false;     // -n
+    bool show_tree     = true;      // -t
+    bool print         = false;     // Not implemented
+    bool vizSplit      = false;     // -Z
     bool needHeader    = true;
-    bool allClasses    = false;
-    bool showInterfaces= false;
-    bool importPackage = false;
-    bool tabularList   = false;
-    bool fullPath      = false;
-    bool verbose       = false;
+    bool allClasses    = false;     // -A
+    bool showInterfaces= false;     // -I
+    bool importPackage = false;     // Not implemented
+    bool tabularList   = false;     // -T
+    bool fullPath      = false;     // -F
+    unsigned logLevel   = 0;        // -l Log level 
+    long parseImports  = -1;        // -M=<level>,  Parse imports instead of classes
     
     StringList titles;
     StringList replacements;    // List of find,replacewith word pairs separted by comma
@@ -111,3 +114,12 @@ protected:
 };
 
 
+inline ostream& operator<<(ostream& os, const RelationList& list)
+{
+    for (RelationList::const_iterator iter = list.begin(); iter != list.end(); iter++)
+    {
+        RelationPtr child_ptr = *iter;
+        os << " " << child_ptr->name;
+    }
+    return os;
+}

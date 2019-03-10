@@ -51,6 +51,7 @@
 #include "utils.h"
 #include "SwapStream.h"
 #include "Colors.h"
+#include "Log.h"
 
 static const string sPackageTag("package");
 
@@ -119,7 +120,10 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                 "\n  _y_V =filePattern  ; Ignore file path pattern, ex *Test*"
                 "\n  _y_v =classPattern ; Ignore class pattern, ex [Tt]est[0-9]"
                 "\n  _y_A =allClasses   ; Include Protected and Private classes"
+                "\n  _y_M =level        ; Parse imports instead of Classes"
+                "\n                       level 0=full import, 1=drop last file"
                 "\n  _y_I =interfaces   ; Include Interfaces in report"
+                "\n  _y_i =classPattern ; Include class pattern, opposite of -v"
           //      "\n  _y_F =full path    ; Defaults to relative"
                 "\n  _y_L =Title        ; Set optional title"
                 "\n"
@@ -144,24 +148,37 @@ int Presenter::init(int argc, const char * argv[], const char* version)
             if (*argv[argn] == '-' || *argv[argn] == '+')
             {
                 bool polarity = (*argv[argn] == '+');
-                
+                size_t argLen = strlen(argv[argn]);
                 switch (argv[argn][1])
                 {
-                    case '0':
-                        replacements.push_back(argv[argn] + 3);
+                    case '0':   // -0=replacementStrings
+                        if (argLen > 3)
+                            replacements.push_back(argv[argn] + 3);
                         break;
-                    case '1':
-                        loadfile(argv[argn] + 3, *publishPtr, &PublishHtml::SetHead);
+                    case '1':   // -1=headerfile
+                        if (argLen > 3)
+                            loadfile(argv[argn] + 3, *publishPtr, &PublishHtml::SetHead);
                         break;
                     case '2':
-                        loadfile(argv[argn] + 3, *publishPtr, &PublishHtml::SetBodyBegin);
+                        if (argLen > 3)
+                            loadfile(argv[argn] + 3, *publishPtr, &PublishHtml::SetBodyBegin);
                         break;
                     case '3':
-                        loadfile(argv[argn] + 3, *publishPtr, &PublishHtml::SetBodyEnd);
+                        if (argLen > 3)
+                            loadfile(argv[argn] + 3, *publishPtr, &PublishHtml::SetBodyEnd);
+                        break;
+                        
+                    case 'l':
+                        if (argLen > 3)
+                            logLevel = (int)strtol(argv[argn] + 3, NULL, 10);
+                        else
+                            logLevel++;  // Increase log level
+                        Log::W_LEVEL = logLevel;
                         break;
                         
                     case 'L':   // Set Title (label)
-                        titles.push_back(argv[argn] + 3);
+                        if (argLen > 3)
+                            titles.push_back(argv[argn] + 3);
                         break;
                         
                         // Base options
@@ -186,32 +203,41 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                     case 'A': allClasses = true;        break;
                     case 'F': fullPath = true;          break;
                     case 'I': showInterfaces = true;    break;
+                    case 'M': allClasses = true;
+                        if (argLen > 3)
+                            parseImports = (int)strtol(argv[argn] + 3, NULL, 10);
+                        else
+                            parseImports = 0;
+                        break;
+                        
                     case 'T': tabularList = true;
                         publishPtr = make_unique<PublishHtml>(clist, *this);
                         break;
                     case 'Z': vizSplit = true;          break;
                     case 'N':
-                        nodesPerFile = (int)strtol(argv[argn] + 3, 0, 10);
+                        if (argLen > 3)
+                            nodesPerFile = (int)strtol(argv[argn] + 3, 0, 10);
                         break;
                     case 'O':   // -O=<outPath>
-                        outPath = argv[argn]+3;
+                        if (argLen > 3)
+                            outPath = argv[argn]+3;
                         break;
-                    case 'v':  // -v=<pattern>   ignore list of patterns
-                        {
+                    case 'v':  // -v=<pattern>   ignore list of class patterns
+                        if (argLen > 3) {
                         string str = argv[argn]+3;
                         replaceAll(str, "*", ".*");
                         clist.ignoreClassPatterns.push_back(regex(str));
                         }
                         break;
-                    case 'V':  // -V=<path_RegEx_pattern>   ignore list of patterns
-                        {
+                    case 'V':  // -V=<path_RegEx_pattern>   ignore list of path patterns
+                        if (argLen > 3) {
                         string str = argv[argn]+3;
                         replaceAll(str, "*", ".*");
                         parser.ignorePathPatterns.push_back(regex(str));
                         }
                         break;
-                    case 'i':  // -i=<pattern>   include list of patterns
-                        {
+                    case 'i':  // -i=<pattern>   include list of class patterns
+                        if (argLen > 3) {
                         string str = argv[argn]+3;
                         replaceAll(str, "*", ".*");
                         clist.includeClassPatterns.push_back(regex(str));
@@ -243,9 +269,13 @@ int Presenter::init(int argc, const char * argv[], const char* version)
     return returnVal;   // Return parsed class count, else -1
 }
 
+const unsigned SHOWN = 1;
 // -------------------------------------------------------------------------------------------------
-bool Presenter::canShow(const RelationPtr relPtr)
+bool Presenter::canShow(const RelationPtr relPtr) const
 {
+    if ((relPtr->flags & SHOWN) == SHOWN)
+        return false;
+    
     if (relPtr->type == "class")
         return (allClasses || relPtr->modifier.find("public") != string::npos);
     else
@@ -253,14 +283,25 @@ bool Presenter::canShow(const RelationPtr relPtr)
 }
 
 // -------------------------------------------------------------------------------------------------
-bool Presenter::canShowChildren(const RelationPtr relPtr)
+bool Presenter::canShowChildren(const RelationPtr relPtr) const
 {
-    for (const RelationPtr child : relPtr->children)
+    if ((relPtr->flags & SHOWN) == SHOWN)
+        return false;
+    
+    for (const RelationPtr childPtr : relPtr->children)
     {
-        if (canShowChildren(child))
+        if (relPtr == childPtr)
+            return true;
+        if (canShowChildren(childPtr))
             return true;
     }
     return canShow(relPtr);
+}
+
+// -------------------------------------------------------------------------------------------------
+void Presenter::hasShown(const RelationPtr relPtr) const
+{
+    relPtr->flags |= SHOWN;
 }
 
 // -------------------------------------------------------------------------------------------------

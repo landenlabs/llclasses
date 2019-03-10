@@ -37,36 +37,73 @@
 #include <iostream>
 using namespace std;
 
+#include "Colors.h"
+
+
+#define LOG_BAD_FILE 0  // Always log
+#define LOG_DUPLCATE 1
+#define LOG_IGNORE 2
+
 
 //  Manage logging message, warnings and errors
 class Log
 {
+protected:
     ostream& m_out;
+    bool m_active;
     
 public:
-    Log(ostream& out) : m_out(out) {}
+    Log(ostream& out) : m_out(out), m_active(true) {}
+    Log(ostream& out, bool active) : m_out(out), m_active(active) {
+        if (!active) {
+            m_out.setstate(std::ios_base::badbit);
+        }
+    }
+    Log(Log&& other) : m_out(other.m_out), m_active(other.m_active) {
+        // move constructore
+        other.m_active = false;
+    }
     ~Log()
     {
-        m_out << "\033[00m " << endl;
+        if (m_active) {
+            m_out << "\033[00m " << endl;
+        }
+        m_out.clear();
     }
+
+
+    static const unsigned int OFF_LEVEL = 0;
+    static unsigned int W_LEVEL;
+    static unsigned int E_LEVEL;
     
-    ostream& out() { return m_out; }
+    virtual ostream& out() { return m_out; }
+    // static Log none();
     
     // Example warning message, EOL is automatically added.
     //   Log::warning().out()  << "Duplicate " << stuff << " more stuff";
-    inline static Log warning()
+    inline static Log warning(unsigned wLevel)
     {
+        if (wLevel > W_LEVEL)
+            return Log(cerr, false);
+        
         Log warning(cerr);
-        warning.out() << "\033[01;32m Warning ";
+        const char* color = (wLevel < 2) ? GREEN : PINK;
+        warning.out() << color << " Warning ";
         return warning;
     }
     
+    
     // Example warning message, EOL is automatically added.
     //   Log::error().out()  << "Duplicate " << stuff << " more stuff";
-    inline static Log error()
+    inline static Log error(unsigned eLevel)
     {
+        if (eLevel > E_LEVEL)
+            return Log(cerr, false);
+        
         Log error(cerr);
-        error.out() << "\033[01;31m Error ";
+        error.out() << RED " Error ";
         return error;
     }
 };
+
+

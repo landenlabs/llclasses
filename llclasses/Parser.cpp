@@ -59,16 +59,21 @@ size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presen
             if (getExtension(ext, fullname).length() > 1) {
                 toLower(ext, ext);
                 
-                // TODO - have file types register by extension
-                if (ext == ".java") {
-                    ParseJava parseJava;
-                    parseJava.parseJava(fullname.c_str(), clist, presenter);
-                    fileCount++;
+                if (DirectoryFiles::isFile(fullname)) {
+                    // TODO - have file types register by extension
+                    if (ext == ".java") {
+                        ParseJava parseJava;
+                        parseJava.parseJava(fullname.c_str(), clist, presenter);
+                        fileCount++;
+                    }
+                } else {
+                    Log::error(LOG_BAD_FILE).out() << "Invalid file " << fullname;
                 }
             }
         } else {
-             Log::warning().out() << "Ignoring file:" << fullname;
+             Log::warning(LOG_IGNORE).out() << "Ignoring file:" << fullname;
         }
     }
+    
     return fileCount;
 }

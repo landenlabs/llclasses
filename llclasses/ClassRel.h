@@ -38,6 +38,9 @@
 #include <set>
 #include <map>
 
+// Debug
+#include <iostream>
+
 // -------------------------------------------------------------------------------------------------
 class ClassRelations;
 class ClassLinkage;
@@ -59,6 +62,8 @@ class ClassRelations
     string          generic;        // Java optional generic modifier
     string          meta;           // Java meta tags, @api, @deprecated, etc.
     bool            definition;     // false if declaration (use but not defined)
+    
+    mutable unsigned flags = 0;      // Used to prevent circular presentation.
     
     RelationList    interfaces;     // List of interfaces
     RelationList    parents;        // List of super classes (base derived from)
@@ -91,6 +96,13 @@ class ClassRelations
         { return find(parents, relPtr); }
     RelationPtr findChild(const RelationPtr relPtr)
         { return find(children, relPtr); }
+    
+    bool isCircular() {
+        return find(parents, this) != NULL;
+    }
+    bool isSuper() {
+        return parents.empty();
+    }
     
   protected:    
     void  addRelationTo(RelationList&, const RelationPtr);

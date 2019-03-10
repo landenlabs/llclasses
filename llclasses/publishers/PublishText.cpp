@@ -141,29 +141,32 @@ void PublishText::displayChildren(
     for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++)
     {
         crel_ptr = *iter;
-        string name =crel_ptr->name;
-        bool last = crel_ptr == *children.rbegin();
-        indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
-        
-        fputs(doc_classesBLine[cset].c_str(), stdout);
-        const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
-        printf("%*.*s%s",
-               (unsigned)fnWidth, (unsigned)fnWidth, fname,
-               doc_classesChild[cset].c_str()
-               );
-        printf(" %*.*s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str());
-        printIndent(indent);
-        printf(" %s", name.c_str());
-        
-        displayOtherParents(parentPtr, crel_ptr->parents);
-        presenter.displayInterfaces(crel_ptr);
-        fputs(doc_classesELine[cset].c_str(), stdout);
-        
-        indent.pop_back();
-        indent.push_back(!last ? more[cset] : none[cset]);
-        
-        displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
-        indent.pop_back();
+        if (presenter.canShowChildren(crel_ptr))
+        {
+            string name =crel_ptr->name;
+            bool last = crel_ptr == *children.rbegin();
+            indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
+            
+            fputs(doc_classesBLine[cset].c_str(), stdout);
+            const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
+            printf("%*.*s%s",
+                   (unsigned)fnWidth, (unsigned)fnWidth, fname,
+                   doc_classesChild[cset].c_str()
+                   );
+            printf(" %*.*s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str());
+            printIndent(indent);
+            printf(" %s", name.c_str());
+            
+            displayOtherParents(parentPtr, crel_ptr->parents);
+            presenter.displayInterfaces(crel_ptr);
+            fputs(doc_classesELine[cset].c_str(), stdout);
+            
+            indent.pop_back();
+            indent.push_back(!last ? more[cset] : none[cset]);
+            
+            displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
+            indent.pop_back();
+        }
     }
 }
 
@@ -185,6 +188,8 @@ void PublishText::displayDependencies() const
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
         crel_ptr = iter->second;
+        crel_ptr->flags = 0;
+        
         fileWidth = max(fileWidth, crel_ptr->filename.length());
         nameWidth = max(nameWidth, crel_ptr->name.length());
         modWidth = max(modWidth, crel_ptr->modifier.length());
@@ -192,19 +197,19 @@ void PublishText::displayDependencies() const
     }
     size_t baseLen = basepath.rfind(DIR_SLASH_STR) + 1;
     fileWidth -= baseLen;
-    
-    // if (cset != VIZ_CHAR)
-    {
-        fprintf(stdout, "Base path=%s\n", basepath.c_str());
-        fputs(doc_classes[cset].c_str(), stdout);
-    }
+
+    fprintf(stdout, "Base path=%s\n", basepath.c_str());
+    fputs(doc_classes[cset].c_str(), stdout);
+  
     SwapStream swapStream(cout);
     
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
         crel_ptr = iter->second;
-        if (crel_ptr->parents.empty() && presenter.canShowChildren(crel_ptr))  // Find Super class (no parent)
+        if ((crel_ptr->isSuper() || crel_ptr->isCircular())
+            && presenter.canShowChildren(crel_ptr))  // Find Super class (no parent)
         {
+            presenter.hasShown(crel_ptr);
             size_t fnOffset = min(crel_ptr->filename.length(), baseLen);
             const char* fname = crel_ptr->filename.c_str() + fnOffset;
             fputs(doc_classesBLine[cset].c_str(), stdout);
