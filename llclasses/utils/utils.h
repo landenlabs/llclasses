@@ -34,8 +34,11 @@
 
 #pragma once
 
+
 #include "llclasses.h"
 #include <map>
+#include <limits>
+
 
 
 // -------------------------------------------------------------------------------------------------
@@ -278,7 +281,13 @@ inline string dateTimeToString(const tm& t, const char* fmt) {
 
 inline tm now() {
     time_t now = time(0);
+#ifdef HAVE_WIN
+	tm now_tm;
+	localtime_s(&now_tm, &now);
+	return now_tm;
+#else
     return *localtime(&now);
+#endif
 }
 
 

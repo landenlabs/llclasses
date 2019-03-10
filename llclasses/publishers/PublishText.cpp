@@ -143,31 +143,31 @@ void PublishText::displayChildren(
         crel_ptr = *iter;
         if (presenter.canShowChildren(crel_ptr))
         {
-            string name =crel_ptr->name;
-            bool last = crel_ptr == *children.rbegin();
-            indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
-            
-            fputs(doc_classesBLine[cset].c_str(), stdout);
-            const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
-            printf("%*.*s%s",
-                   (unsigned)fnWidth, (unsigned)fnWidth, fname,
-                   doc_classesChild[cset].c_str()
-                   );
-            printf(" %*.*s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str());
-            printIndent(indent);
-            printf(" %s", name.c_str());
-            
-            displayOtherParents(parentPtr, crel_ptr->parents);
-            presenter.displayInterfaces(crel_ptr);
-            fputs(doc_classesELine[cset].c_str(), stdout);
-            
-            indent.pop_back();
-            indent.push_back(!last ? more[cset] : none[cset]);
-            
-            displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
-            indent.pop_back();
-        }
+        string name =crel_ptr->name;
+        bool last = crel_ptr == *children.rbegin();
+        indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
+        
+        fputs(doc_classesBLine[cset].c_str(), stdout);
+        const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
+        printf("%*.*s%s",
+               (unsigned)fnWidth, (unsigned)fnWidth, fname,
+               doc_classesChild[cset].c_str()
+               );
+        printf(" %*.*s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str());
+        printIndent(indent);
+        printf(" %s", name.c_str());
+        
+        displayOtherParents(parentPtr, crel_ptr->parents);
+        presenter.displayInterfaces(crel_ptr);
+        fputs(doc_classesELine[cset].c_str(), stdout);
+        
+        indent.pop_back();
+        indent.push_back(!last ? more[cset] : none[cset]);
+        
+        displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
+        indent.pop_back();
     }
+}
 }
 
 
@@ -197,9 +197,9 @@ void PublishText::displayDependencies() const
     }
     size_t baseLen = basepath.rfind(DIR_SLASH_STR) + 1;
     fileWidth -= baseLen;
-
-    fprintf(stdout, "Base path=%s\n", basepath.c_str());
-    fputs(doc_classes[cset].c_str(), stdout);
+    
+        fprintf(stdout, "Base path=%s\n", basepath.c_str());
+        fputs(doc_classes[cset].c_str(), stdout);
   
     SwapStream swapStream(cout);
     

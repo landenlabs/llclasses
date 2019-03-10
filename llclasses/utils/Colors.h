@@ -42,14 +42,14 @@ class Colors
 {
 public:
 #ifdef HAVE_WIN
-    #define RED    ""
-    #define GREEN  ""
-    #define YELLOW ""
-    #define BLUE   ""
-    #define PINK   ""
-    #define LBLUE  ""
-    #define WHITE  ""
-    #define OFF    ""
+	#define RED    "\033[01;31m"
+	#define GREEN  "\033[01;32m"
+	#define YELLOW "\033[01;33m"
+	#define BLUE   "\033[01;34m"
+	#define PINK   "\033[01;35m"
+	#define LBLUE  "\033[01;36m"
+	#define WHITE  "\033[01;37m"
+	#define OFF    "\033[00m"
 #else
     #define RED    "\033[01;31m"
     #define GREEN  "\033[01;32m"
