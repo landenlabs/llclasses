@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B95FB8762215150E00C89780 /* PublishText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B95FB8742215150E00C89780 /* PublishText.cpp */; };
 		B96D750E223563930027048E /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B96D750C223563930027048E /* Log.cpp */; };
+		B96D75112235C9F90027048E /* ParseCpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B96D750F2235C9F90027048E /* ParseCpp.cpp */; };
 		B9A8A93B2203EB3D00F41B05 /* llclasses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */; };
 		B9AD72B9220745D900F30B18 /* ParseJava.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72B8220745D900F30B18 /* ParseJava.cpp */; };
 		B9AD72C022074AF800F30B18 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9AD72BE22074AF800F30B18 /* Parser.cpp */; };
@@ -35,6 +36,9 @@
 		B92218E622106E1F00C896CA /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		B95FB8742215150E00C89780 /* PublishText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PublishText.cpp; sourceTree = "<group>"; };
 		B96D750C223563930027048E /* Log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		B96D750F2235C9F90027048E /* ParseCpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ParseCpp.cpp; sourceTree = "<group>"; };
+		B96D75102235C9F90027048E /* ParseCpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseCpp.h; sourceTree = "<group>"; };
+		B96D7512223757CA0027048E /* ParseCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseCode.h; sourceTree = "<group>"; };
 		B9A8A9372203EB3D00F41B05 /* llclasses */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = llclasses; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9A8A93A2203EB3D00F41B05 /* llclasses.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = llclasses.cpp; sourceTree = "<group>"; };
 		B9AD72B8220745D900F30B18 /* ParseJava.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParseJava.cpp; sourceTree = "<group>"; };
@@ -96,6 +100,9 @@
 			children = (
 				B9AD72BA220745F100F30B18 /* ParseJava.h */,
 				B9AD72B8220745D900F30B18 /* ParseJava.cpp */,
+				B96D750F2235C9F90027048E /* ParseCpp.cpp */,
+				B96D75102235C9F90027048E /* ParseCpp.h */,
+				B96D7512223757CA0027048E /* ParseCode.h */,
 			);
 			path = parsers;
 			sourceTree = "<group>";
@@ -195,6 +202,7 @@
 				B9AD72B9220745D900F30B18 /* ParseJava.cpp in Sources */,
 				B9A8A93B2203EB3D00F41B05 /* llclasses.cpp in Sources */,
 				B9AD72C52207504300F30B18 /* Presenter.cpp in Sources */,
+				B96D75112235C9F90027048E /* ParseCpp.cpp in Sources */,
 				B9AD72CC2207565C00F30B18 /* PublishHtml.cpp in Sources */,
 				B9AD72C022074AF800F30B18 /* Parser.cpp in Sources */,
 				B96D750E223563930027048E /* Log.cpp in Sources */,

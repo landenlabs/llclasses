@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------------
 //
-// File: ParseJava
+// File: ParseCode.h
 // Author: Dennis Lang
-// Desc: Parse Java
+// Desc: Parse code base class
 //
 //-------------------------------------------------------------------------------------------------
 //
@@ -34,19 +34,19 @@
 
 #pragma once
 
-#include "ParseCode.h"
+#include <string>
+#include <iostream>
+
+#include "llclasses.h"
+#include "ClassRel.h"
 
 class Presenter;
 
-// Parse Java source code and extract class information.
-class ParseJava : public ParseCode
+// Parse source code and extract class information.
+class ParseCode
 {
 public:
-    int parseCode(const string& inFilename, ClassList& outClist, const Presenter&);
-
-    int parseJavaClasses(const string& inFilename, ClassList& outClist, const Presenter&);
-    int parseJavaImports(const string& inFilename, ClassList& outClist, const Presenter&);
-    
-private:
-    vector<string> classNames;
+    virtual int parseCode(const string& inFilename, ClassList& outClist, const Presenter&) = 0;
 };
+
+

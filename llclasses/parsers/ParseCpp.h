@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------------
 //
-// File: ParseJava
+// File: ParseCpp
 // Author: Dennis Lang
-// Desc: Parse Java
+// Desc: Parse C++ code
 //
 //-------------------------------------------------------------------------------------------------
 //
@@ -34,19 +34,22 @@
 
 #pragma once
 
+#include <string>
 #include "ParseCode.h"
 
 class Presenter;
 
-// Parse Java source code and extract class information.
-class ParseJava : public ParseCode
+// Parse C++ source code and extract class information.
+class ParseCpp : public ParseCode
 {
 public:
     int parseCode(const string& inFilename, ClassList& outClist, const Presenter&);
-
-    int parseJavaClasses(const string& inFilename, ClassList& outClist, const Presenter&);
-    int parseJavaImports(const string& inFilename, ClassList& outClist, const Presenter&);
+    
+    int parseCppClasses(const string& inFilename, ClassList& outClist, const Presenter&);
+    int parseCppIncludes(const string& inFilename, ClassList& outClist, const Presenter&);
     
 private:
-    vector<string> classNames;
+    // vector<string> classNames;
 };
+
+

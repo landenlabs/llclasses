@@ -38,7 +38,8 @@
 #include "DirectoryFiles.h"
 
 #include "Parser.h"
-#include "ParseJava.h"
+#include "ParseJava.h"      // TODO - have parsers register
+#include "ParseCpp.h"       // TODO - have parsers register
 #include "utils.h"
 #include "Log.h"
 
@@ -63,7 +64,11 @@ size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presen
                     // TODO - have file types register by extension
                     if (ext == ".java") {
                         ParseJava parseJava;
-                        parseJava.parseJava(fullname.c_str(), clist, presenter);
+                        parseJava.parseCode(fullname.c_str(), clist, presenter);
+                        fileCount++;
+                    } else if (ext == ".h" || ext == "hpp") {
+                        ParseCpp parseCpp;
+                        parseCpp.parseCode(fullname.c_str(), clist, presenter);
                         fileCount++;
                     }
                 } else {

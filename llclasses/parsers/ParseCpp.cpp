@@ -1,17 +1,15 @@
 //-------------------------------------------------------------------------------------------------
 //
-//  parse-java      3-Feb-2019        Dennis Lang
+// File: ParseCpp
+// Author: Dennis Lang
+// Desc: Parse C++ code
 //
-//  Parse Java files and generate class names and class dependence tree.
-//
-//  Created by Dennis Lang on 3-Feb-2019
-//  Copyright © 2019 Dennis Lang. All rights reserved.
 //-------------------------------------------------------------------------------------------------
 //
 // Author: Dennis Lang - 2019
-// http://landenlabs.com/
+// http://landenlabs.com
 //
-// This file is part of llclass project.
+// This file is part of llclasses project.
 //
 // ----- License ----
 //
@@ -34,8 +32,9 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// 4291 - No matching operator delete found
-#pragma warning( disable : 4291 )
+
+#include "ParseCpp.h"
+
 
 
 #include <stdio.h>
@@ -65,10 +64,11 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
     const char Q1 = '\'';
     const char Q2 = '"';
     const char C1 = '/';
-    const char C2B = '*';    // comment block
-    const char C2L = '/';    // comment line
+    const char C2B = '*';       // comment block
+    const char C2L = '/';       // comment line
     const char ESC = '\\';
-
+    const char PP = '#';        // Preprocessor directive
+    
     unsigned eol = (unsigned)part.length();
     State prevState = none;
     
@@ -76,6 +76,9 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
         default:
         case eoc:
         case none:
+            if (part.length() > 0 && part[0] == PP)
+                idx = eol;
+            
             for (; idx < part.length()-1; idx++) {
                 char chr1 = part[idx];
                 if (chr1 == Q1) {
@@ -91,7 +94,7 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
                         idx = findEnd(line, part, idx+2, state);
                     } else if (chr2 == C2L) {
                         // if (state == comment || state == quote1 || state == quote2) {
-                            state = prevState;
+                        state = prevState;
                         // }
                         idx = eol;
                         break;
@@ -143,7 +146,7 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
                 if (chr1 == '*' && part[idx+1] == '/') {
                     state = prevState;
                     return idx+1;
-                } 
+                }
             }
             break;
     }
@@ -161,10 +164,10 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
 }
 
 //-------------------------------------------------------------------------------------------------
-static istream& getJavaLine(istream& in, string& line, string& buffer)
+static istream& getCppLine(istream& in, string& line, string& buffer)
 {
     State state = none;
-
+    
     line.clear();
     while (buffer.length()>0 || getline(in, buffer).good())
     {
@@ -179,7 +182,7 @@ static istream& getJavaLine(istream& in, string& line, string& buffer)
         }
         line += " ";    // EOL
     }
-
+    
     return in;
 }
 
@@ -217,102 +220,81 @@ static string& removeTemplate(string& inOut)
 
 //-------------------------------------------------------------------------------------------------
 // Parse java source code and extract class or import relationships
-int ParseJava::parseCode(const string& filename, ClassList& clist, const Presenter& presenter) {
+int ParseCpp::parseCode(const string& filename, ClassList& clist, const Presenter& presenter) {
     
     if (presenter.parseImports >= 0)
     {
-        return parseJavaImports(filename, clist, presenter);
+        return parseCppIncludes(filename, clist, presenter);
     }
     else
     {
-        return parseJavaClasses(filename, clist, presenter);
+        return parseCppClasses(filename, clist, presenter);
     }
 }
 
 //-------------------------------------------------------------------------------------------------
 // Parse java source code and extract class definitions
-int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const Presenter& presenter)
+int ParseCpp::parseCppClasses(const string& filename, ClassList& clist, const Presenter& presenter)
 {
-    // Java class definition syntax.
-    //
-    // [@MetaDescriptions]
-    // [modifiers] class ClassName
-    //             [<types [,types]...>]
-    //             [extends classDeclaraion]
-    //             [implements interface [,interface]]
-    //             {classBody};
-    // where modifiers are:
-    //   Annotation
-    //   public
-    //   protected
-    //   private
-    //   static
-    //   abstract
-    //   final
-    //   native
-    //   synchronized
-    //   transient
-    //   volatile
-    //   strictfp
-    
-    // Examples:
-    //
-    // private static final class CacheKey extends Master.Inner1 implements Cloneable.Inner2 {
-    // private static final class LoaderReference extends WeakReference<ClassLoader>
-    // private static final class CacheKey implements Cloneable {
-    // final class EntryIterator extends PrivateEntryIterator<Map.Entry<K,V>> {
-    // public final class Formatter implements Closeable, Flushable {
-    // static final class Entry<K,V> implements Map.Entry<K,V>
-    // public abstract class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
-    // public abstract class AbstractSet<E> extends AbstractCollection<E> implements Set<E> {
-    // static class MutablePair<F, S> {
-    // public abstract class UnselectableArrayAdapter<E> extends ArrayAdapter<E> {
-    // public class Garage<X extends Vehicle> {
-    // class BST<X extends Comparable<X>> {
-    // int totalFuel(List<? extends Vehicle> list) {
-    // private static abstract class EmptySpliterator<T, S extends Spliterator<T>, C> {
+    // Pattern     class_p(" class ([~/ ]* |) *`[A-Z][A-Za-z0-9_:]*` *( :|@{|;|)");
+    // Pattern     parents_p("[ :,]*(public|protected|private)  *`[A-Z][A-Za-z0-9_:]*`");
+    /*
+     https://www-01.ibm.com/support/docview.wss?uid=swg27002103&aid=1
+     
+     https://docs.microsoft.com/en-us/cpp/cpp/class-cpp?view=vs-2017
+     
+     [template-spec]
+     class [ms-decl-spec] [tag [: base-list ]]
+     {
+     member-list
+     } [declarators];
+     [ class ] tag declarators;
+     
+     
+     class foo {
+     };
+     
+     struct foo {
+     };
+     
+     <template typename TT>
+     virtual public class foo : public Base1, protected Base2, private Base3 {
+     };
+    */
     
     string line;
     string buffer;
-    static regex javePackageRE("package ([A-Za-z0-9_.]+);");
-    static regex javeClassRE("([^ ]*? |)([Aa-z][Aa-z ]*|)(class|interface) ([A-Za-z0-9_]+)( *<.*?>+|)( extends [A-Za-z0-9_.<>, ]+?|)( implements [A-Za-z0-9_.<>, ]+?|) *[{]");
+    static regex cppClassRE("(.+ |)class ([A-Za-z0-9_]+)( *: *[A-Za-z0-9_.<>, ]+|) *[{]");
     smatch match;
-    string package = "none";
     ifstream in(filename);
-
-    classNames.clear();
+    string package;
+    string outer;
+    string classOrInterface = "class";   // "class" or "struct"
+    string meta;
+    string modifiers;           // "public" ... "abstract", etc
+    string implements;          // implementa iname1, iname2
     
-    while (getJavaLine(in, line, buffer)) {
+    // classNames.clear();
+    
+    while (getCppLine(in, line, buffer)) {
         replaceAll(line, ", ", ",");
-        if (regex_match(line, match, javePackageRE, regex_constants::match_default)) {
-            package = match[1];
-        } else  if (regex_match(line, match, javeClassRE, regex_constants::match_default)) {
+        if (regex_match(line, match, cppClassRE, regex_constants::match_default)) {
             
-            string outer = join(classNames, ".", ".");
-            string meta = match[1];
-            string modifiers =  match[2];           // "public" ... "abstract", etc
-            string classOrInterface = match[3];     // "class" or "interface"
-            string name = outer + string(match[4]);
-            string generic = match[5];              //
-            string extends = match[6];              // extends alpha
-            string implements = match[7];           // implementa iname1, iname2
-   
-            if (meta.find("@") != 0)
-            {
-                modifiers = meta + " " + modifiers;
-                meta.clear();
-            }
-
+            // string outer = join(classNames, ".", ".");
+            string name = outer + string(match[2]);
+            string generic = match[1];              //
+            string extends = match[3];              // extends alpha
+            
             // Add class definition
             RelationPtr crel_ptr =
-                clist.addClass(classOrInterface, name, trim(modifiers), filename, package, true);
+            clist.addClass(classOrInterface, name, trim(modifiers), filename, package, true);
             if (crel_ptr != NULL) {
                 crel_ptr->meta = meta;
                 crel_ptr->generic = generic;
                 
                 // Add all parent (extend) classes
                 if (extends.length() > 0) {
-                    extends = trim(replaceAll(extends, " extends ", emptyStr));
+                    extends = trim(replaceRE(extends, " *: *(virtual |)(public|protected|private|)", ""));
                     Split extendList(extends, ",", FindSplit);
                     for (string extendItem : extendList) {
                         extendItem = trim(removeTemplate(extendItem));
@@ -320,19 +302,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
                     }
                 }
                 
-                // Add all interfaces
-                if (implements.length() > 0) {
-                    implements = trim(replaceAll(implements, " implements ", emptyStr));
-                    Split implementsList(implements, ",", FindSplit);
-                    for (string implementsItem : implementsList) {
-                        implementsItem = trim(removeTemplate(implementsItem));
-                        RelationPtr cImpl =
-                            clist.addClass("interface", implementsItem, "", filename, package, false);
-                        crel_ptr->addInterface(cImpl);
-                    }
-                }
-
-                classNames.push_back(name); // Used for nested (inner classes)
+                // classNames.push_back(name); // Used for nested (inner classes)
                 
                 if (presenter.logLevel >= LOG_ADDING_CLASSES) {
                     cout << line << endl;
@@ -346,6 +316,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
             }
         } else {
             
+            /*
             // Count nesting of braces, used for nested inner classes
             regex bracesRE ("[{}]");
             regex_iterator<string::iterator> rit ( line.begin(), line.end(), bracesRE );
@@ -361,10 +332,11 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
                 }
                 rit++;
             }
+             */
         }
     }
-
-    classNames.clear(); // Should be empty already.
+    
+    //classNames.clear(); // Should be empty already.
     
     return 0;
 }
@@ -386,28 +358,19 @@ static bool removeParts(string& inOutStr, size_t parts, const char* find=".")
 
 //--------------------------------------------------------------------------------------------------
 // Parse java source code and extract imported packages
-int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const Presenter& presenter)
+int ParseCpp::parseCppIncludes(const string& filename, ClassList& clist, const Presenter& presenter)
 {
-    
-    // import static com.google.common.base.Preconditions.checkNotNull;
-    // import static com.google.common.collect.ImmutableList.toImmutableList;
-    // import static com.google.common.collect.ImmutableSet.toImmutableSet;
-    //
-    // import com.google.auto.common.MoreTypes;
-    // import com.google.auto.value.AutoValue;
-    // import com.google.common.base.Equivalence;
-    // import com.google.common.base.Joiner;
     
     string line;
     string buffer;
     static regex javePackageRE("package ([A-Za-z0-9_.]+);");
-    static regex javeImportRE("import (static |)([A-Za-z][A-Za-z0-9_.*]*);");
+    static regex javeImportRE("include [<\"]([A-Za-z][A-Za-z0-9_.*]*)[>\"]");
     smatch match;
     string package = "none";
     ifstream in(filename);
     RelationPtr crel_ptr = NULL;
     
-    while (getJavaLine(in, line, buffer)) {
+    while (getCppLine(in, line, buffer)) {
         replaceAll(line, ", ", ",");
         if (regex_match(line, match, javePackageRE, regex_constants::match_default))
         {
@@ -417,14 +380,14 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
                 continue;
             }
             crel_ptr =
-                clist.addClass("class", package, "", filename, package, true);
+            clist.addClass("class", package, "", filename, package, true);
         }
         else if (regex_match(line, match, javeImportRE, regex_constants::match_default))
         {
             assert(crel_ptr != NULL);
-            string modifiers = match[1];            // static
-            string name = match[2];
-
+            string modifiers;
+            string name = match[1];
+            
             if (removeParts(name, presenter.parseImports)) {
                 continue;
             }
@@ -434,7 +397,7 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
                 clist.addParent(crel_ptr, name, filename, package);
             } else {
                 RelationPtr child_ptr =
-                     clist.addClass("class", name, modifiers, filename, name, false);
+                clist.addClass("class", name, modifiers, filename, name, false);
                 // child_ptr->addParent(crel_ptr);
                 // crel_ptr->addChild(child_ptr);
                 if (child_ptr != NULL) {
@@ -453,22 +416,22 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
         }
     }
     
-     if (presenter.logLevel >= LOG_CLASS_LIST) {
-         ClassList::const_iterator iter;
-         RelationPtr crel_ptr;
-         
-         cout << "\n ---- Class List ---- \n";
-         for (iter = clist.begin(); iter != clist.end(); iter++)
-         {
-             crel_ptr = iter->second;
-             cout << "\nname    =" << crel_ptr->name;
-             cout << "\nparents =" << crel_ptr->parents.size() << " " << crel_ptr->parents;
-             cout << "\nchildren=" << crel_ptr->children.size() << " " << crel_ptr->children;
-             cout << "\nfile    =" << crel_ptr->filename;
-             cout << "\ndefined =" << crel_ptr->definition;
-             cout << "\n";
-         }
-     }
+    if (presenter.logLevel >= LOG_CLASS_LIST) {
+        ClassList::const_iterator iter;
+        RelationPtr crel_ptr;
+        
+        cout << "\n ---- Class List ---- \n";
+        for (iter = clist.begin(); iter != clist.end(); iter++)
+        {
+            crel_ptr = iter->second;
+            cout << "\nname    =" << crel_ptr->name;
+            cout << "\nparents =" << crel_ptr->parents.size() << " " << crel_ptr->parents;
+            cout << "\nchildren=" << crel_ptr->children.size() << " " << crel_ptr->children;
+            cout << "\nfile    =" << crel_ptr->filename;
+            cout << "\ndefined =" << crel_ptr->definition;
+            cout << "\n";
+        }
+    }
     
     return 0;
 }
