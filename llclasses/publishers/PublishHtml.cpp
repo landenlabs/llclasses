@@ -452,7 +452,7 @@ void PublishHtml::displayDependencies() const
     switch (presenter.cset) {
         case Presenter::HTML_CHAR:
             fputs("<html>\n", stdout);
-            fputs(outputEmbeddedImages, stdout);
+           // fputs(outputEmbeddedImages, stdout);
             fputs("<body>\n<table>\n", stdout);
             break;
     }
@@ -477,13 +477,16 @@ void PublishHtml::displayDependencies() const
     
     SwapStream swapStream(cout);
 
-    if (presenter.cset == Presenter::JAVA_CHAR &&  basepath.length() > 10)
+    if (basepath.length() > 10)
     {
-        cout << "\np='" <<  basepath << "';"; // p=base path of file
-        cout << "\ni='" <<  basepath << "';\n"; // i=imported (not part of this file)
+        if (presenter.cset == Presenter::JAVA_CHAR) {
+            cout << "\np='" <<  basepath << "';"; // p=base path of file
+            cout << "\ni='" <<  basepath << "';\n"; // i=imported (not part of this file)
+        }
     } else {
         basepath.clear();
     }
+    fileWidth -= basepath.length();
     
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
@@ -491,54 +494,52 @@ void PublishHtml::displayDependencies() const
         // if (crel_ptr->definition == false)
         //    continue;
         
-        if (crel_ptr->parents.empty())  // Find Super class (no parent)
+        if (crel_ptr->isSuper() && presenter.canShowChildren(crel_ptr))
         {
             // Have super class - now display subclasses.
             if (presenter.cset == Presenter::JAVA_CHAR)
             {
-                if (presenter.canShowChildren(crel_ptr))
+                cout << "d.add(" << presenter.sNodeNum;
+                string name = crel_ptr->name;
+                cout << "," << 0 << ",'" << replaceAll(name, "<", "&lt;");
+                if ( ! crel_ptr->modifier.empty() && crel_ptr->modifier != "public")
+                    cout << " (" << crel_ptr->modifier << ")";
+                if (crel_ptr->type != "class")
+                    cout << " [" << crel_ptr->type << "]";
+                
+                if (crel_ptr->definition)
                 {
-                    cout << "d.add(" << presenter.sNodeNum;
-                    string name = crel_ptr->name;
-                    cout << "," << 0 << ",'" << replaceAll(name, "<", "&lt;");
-                    if ( ! crel_ptr->modifier.empty() && crel_ptr->modifier != "public")
-                        cout << " (" << crel_ptr->modifier << ")";
-                    if (crel_ptr->type != "class")
-                        cout << " [" << crel_ptr->type << "]";
-                    
-                    if (crel_ptr->definition)
-                    {
-                        if (basepath.empty()) {
-                            cout  << "','" << crel_ptr->filename;
-                        } else {
-                            cout  << "',p+'" << replaceAll(crel_ptr->filename, basepath, "");
-                        }
+                    if (basepath.empty()) {
+                        cout  << "','" << crel_ptr->filename;
                     } else {
-                        cout << " { Imported }";
-                        if (basepath.empty()) {
-                            cout  << "','" << name;
-                        } else {
-                            cout  << "',i+'" << name;
-                        }
+                        cout  << "',p+'" << replaceAll(crel_ptr->filename, basepath, "");
                     }
-                    cout << "');\n";
-                    displayChildren(presenter.sNodeNum++, fileWidth, crel_ptr, basepath);
+                } else {
+                    cout << " { Imported }";
+                    if (basepath.empty()) {
+                        cout  << "','" << name;
+                    } else {
+                        cout  << "',i+'" << name;
+                    }
                 }
+                cout << "');\n";
+                displayChildren(presenter.sNodeNum++, fileWidth, crel_ptr, basepath);
             }
             else
             {
+                string filename = crel_ptr->filename;
+                replaceAll(filename, basepath, "");
                 fputs("<tr><td>", stdout); // fputs(doc_classesBLine[presenter.cset], stdout);
-                printf("%*.*s%s %-20s %s ",
+                printf("%*.*s<td> %s <td> <b>%s</b> ",
                        (int)fileWidth, (int)fileWidth,
-                       crel_ptr->filename.c_str(),
-                       "<td>", // doc_classesChild[cset].c_str(),
+                       filename.c_str(),
                        crel_ptr->modifier.c_str(),
                        crel_ptr->name.c_str()
                        );
                 presenter.displayInterfaces(crel_ptr);
                 fputs("</tr>\n", stdout);   // fputs(doc_classesELine[presenter.cset], stdout);
                 Indent indent;
-                PublishText::displayChildren(indent, fileWidth, 0, modWidth, crel_ptr);
+                PublishText::displayChildren(indent, fileWidth, basepath.length(), modWidth, crel_ptr);
             }
         }
     }

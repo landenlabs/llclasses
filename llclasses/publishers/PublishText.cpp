@@ -55,10 +55,10 @@ static char tsplit[]  = "  \u2523";
 // <img class='img0'> <img src='n.png'>
 
 //                               graph     text    spaces   html
-static string none[]         = {"    ",    "    ", "    ", "<img class='imgN'>", ""};
-static string more[]         = { vline,    "   |", "    ", "<img class='img0'>", ""};
-static string more_and_me[]  = {tsplit,    "   +", "    ", "<img class='img2'>", ""};
-static string just_me[]      = {lcorner,   "   -", "    ", "<img class='img1'>", ""};
+static string none[]         = {"    ",    "    ", "    ", "    "  /* "<img class='imgN'>" */, ""};
+static string more[]         = { vline,    "   |", "    ",  vline  /* "<img class='img0'>" */, ""};
+static string more_and_me[]  = {tsplit,    "   +", "    ", tsplit  /* "<img class='img2'>" */, ""};
+static string just_me[]      = {lcorner,   "   -", "    ", lcorner /* "<img class='img1'>" */, ""};
 
 static string dc("\nClass Tree\n");
 static string cc(": ");
@@ -129,7 +129,7 @@ void PublishText::displayOtherParents(const RelationPtr parentPtr, const Relatio
 // -------------------------------------------------------------------------------------------------
 void PublishText::displayChildren(
         Indent& indent,
-        size_t fnWidth,
+        size_t fnWidth,     // Filename presentation width
         size_t fnOffset,
         size_t modWidth,
         const RelationPtr parentPtr) const
@@ -153,7 +153,8 @@ void PublishText::displayChildren(
                (unsigned)fnWidth, (unsigned)fnWidth, fname,
                doc_classesChild[cset].c_str()
                );
-        printf(" %*.*s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str());
+        printf(" %*.*s%s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str(),
+               doc_classesChild[cset].c_str());
         printIndent(indent);
         printf(" %s", name.c_str());
         

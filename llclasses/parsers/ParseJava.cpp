@@ -57,13 +57,16 @@
 
 static string emptyStr;
 // eoc=end-of-code semicolon or { or }
-enum State { none, quote1, quote2, comment, eoc };
+enum State { none, quote1, quote2, paren1, paren2, comment, eoc };
 
 //-------------------------------------------------------------------------------------------------
 static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
 {
     const char Q1 = '\'';
     const char Q2 = '"';
+    const char AT = '@';
+    const char P1 = '(';
+    const char P2 = ')';
     const char C1 = '/';
     const char C2B = '*';    // comment block
     const char C2L = '/';    // comment line
@@ -83,6 +86,10 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
                     idx = findEnd(line, part, idx+1, state);
                 } else if (chr1 == Q2) {
                     state = quote2;
+                    idx = findEnd(line, part, idx+1, state);
+                } else if (chr1 == AT && part.find(P1, idx+1) != string::npos) {
+                    // @meta({foo,bar})
+                    state = paren1;
                     idx = findEnd(line, part, idx+1, state);
                 } else if (chr1 == C1) {
                     char chr2 = part[idx+1];
@@ -137,6 +144,32 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
                 state = none;
             break;
             
+        case paren1: // Nested Paren ?
+            for (; idx < part.length()-1; idx++) {
+                char chr1 = part[idx];
+                if (chr1 == P1) {
+                    state = paren2;
+                    return findEnd(line, part, idx+1, state);
+                } else if (chr1 == ESC && part[idx+1] == P1) {
+                    idx++;
+                }
+            }
+            if (part[idx] == P1)
+                state = paren2;
+            break;
+            
+        case paren2: // Nested Paren ?
+            for (; idx < part.length(); idx++) {
+                char chr1 = part[idx];
+                if (chr1 == P2) {
+                    state = none;
+                    return idx;
+                } else if (chr1 == ESC && part[idx+1] == P2) {
+                    idx++;
+                }
+            }
+            break;
+            
         case comment:
             for (; idx < part.length()-1; idx++) {
                 char chr1 = part[idx];
@@ -172,7 +205,14 @@ static istream& getJavaLine(istream& in, string& line, string& buffer)
         for (idx = 0; idx < buffer.length() && state != eoc; idx++) {
             idx = findEnd(line, buffer, idx, state);
         }
+        
+#if 1
+        if (buffer.size() > 1 && buffer[0] == '@')
+            line.append(buffer);    // Keep Meta strings @foo({blah, blah})
+#endif
+        
         buffer.erase(0, idx);
+        
         if (!line.empty() && (state == eoc) ) {
             trim(line);
             return in;
@@ -271,6 +311,10 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
     // class BST<X extends Comparable<X>> {
     // int totalFuel(List<? extends Vehicle> list) {
     // private static abstract class EmptySpliterator<T, S extends Spliterator<T>, C> {
+    //
+    // @SuppressWarnings({"unused", "WeakerAccess", "FieldCanBeLocal"})
+    // public abstract class WxNotify {
+    //
     
     string line;
     string buffer;
