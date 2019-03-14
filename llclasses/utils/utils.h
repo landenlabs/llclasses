@@ -40,15 +40,6 @@
 #include <limits>
 
 
-
-// -------------------------------------------------------------------------------------------------
-inline void printIndent(const Indent& indent)
-{
-    for(string val : indent)
-        printf("%s", val.c_str());
-}
-
-
 // =================================================================================================
 // Split string into parts.
 class Split : public vector<string>

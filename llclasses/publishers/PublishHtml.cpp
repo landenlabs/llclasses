@@ -451,9 +451,31 @@ void PublishHtml::displayDependencies() const
     // fputs(doc_classes[cset], stdout);
     switch (presenter.cset) {
         case Presenter::HTML_CHAR:
-            fputs("<html>\n", stdout);
-           // fputs(outputEmbeddedImages, stdout);
-            fputs("<body>\n<table>\n", stdout);
+            fputs(
+                "<html>\n"
+                "<head>\n"
+                "<style>\n"
+                ".table-fixed thead th {\n"
+                "position: sticky;\n"
+                "position: -webkit-sticky;\n"
+                "top: 0;\n"
+                "z-index: 999;\n"
+                "background-color: #ccc;\n"
+                "color: #fff;\n"
+                "}\n"
+                "</style>\n"
+                "</head>\n"
+                "<body>\n"
+                "<table class='table-fixed'>\n"
+                "<thead>\n"
+                "<tr>\n"
+                "<th>File Path</th>\n"
+                "<th>Scope</th>\n"
+                "<th>Class</th>\n"
+                "</tr>\n"
+                "</thead>\n"
+                "<tbody>\n"
+                , stdout);
             break;
     }
     
@@ -530,8 +552,7 @@ void PublishHtml::displayDependencies() const
                 string filename = crel_ptr->filename;
                 replaceAll(filename, basepath, "");
                 fputs("<tr><td>", stdout); // fputs(doc_classesBLine[presenter.cset], stdout);
-                printf("%*.*s<td> %s <td> <b>%s</b> ",
-                       (int)fileWidth, (int)fileWidth,
+                printf("%s<td> %s <td> <b>%s</b> ",
                        filename.c_str(),
                        crel_ptr->modifier.c_str(),
                        crel_ptr->name.c_str()
@@ -547,11 +568,12 @@ void PublishHtml::displayDependencies() const
     // fputs(doc_end[cset], stdout);
     switch (presenter.cset) {
         case Presenter::HTML_CHAR:
-            fputs("</table>\n", stdout);
+            fputs("</tbody></table>\n", stdout);
+            fprintf(stdout, "<p><a href=\"http://landenlabs.com\"> Generatedy by llclasses - Dennis Lang </a>");
+            fprintf(stdout, " on %s\n",  dateTimeToString(now(), "%Y-%m-%d %H:%M:%S").c_str());
             fputs("</body>\n</html>\n", stdout);
             break;
     }
     
-    // fprintf(stdout, "<p><a href=\"http://landenlabs.com\"> llclasses  by Dennis Lang </a>\n");
-    // fprintf(stdout, "%s\n",  dateTimeToString(now(), "%Y-%m-%d %H:%M:%S").c_str());
+
 }

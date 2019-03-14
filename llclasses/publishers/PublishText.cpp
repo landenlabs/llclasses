@@ -55,7 +55,7 @@ static char tsplit[]  = "  \u2523";
 // <img class='img0'> <img src='n.png'>
 
 //                               graph     text    spaces   html
-static string none[]         = {"    ",    "    ", "    ", "    "  /* "<img class='imgN'>" */, ""};
+static string none[]         = {"    ",    "    ", "    ", "&nbsp;&nbsp;&nbsp;&nbsp;"  /* "<img class='imgN'>" */, ""};
 static string more[]         = { vline,    "   |", "    ",  vline  /* "<img class='img0'>" */, ""};
 static string more_and_me[]  = {tsplit,    "   +", "    ", tsplit  /* "<img class='img2'>" */, ""};
 static string just_me[]      = {lcorner,   "   -", "    ", lcorner /* "<img class='img1'>" */, ""};
@@ -143,32 +143,32 @@ void PublishText::displayChildren(
         crel_ptr = *iter;
         if (presenter.canShowChildren(crel_ptr))
         {
-        string name =crel_ptr->name;
-        bool last = crel_ptr == *children.rbegin();
-        indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
-        
-        fputs(doc_classesBLine[cset].c_str(), stdout);
-        const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
-        printf("%*.*s%s",
-               (unsigned)fnWidth, (unsigned)fnWidth, fname,
-               doc_classesChild[cset].c_str()
-               );
-        printf(" %*.*s%s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str(),
-               doc_classesChild[cset].c_str());
-        printIndent(indent);
-        printf(" %s", name.c_str());
-        
-        displayOtherParents(parentPtr, crel_ptr->parents);
-        presenter.displayInterfaces(crel_ptr);
-        fputs(doc_classesELine[cset].c_str(), stdout);
-        
-        indent.pop_back();
-        indent.push_back(!last ? more[cset] : none[cset]);
-        
-        displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
-        indent.pop_back();
+            string name =crel_ptr->name;
+            bool last = crel_ptr == *children.rbegin();
+            indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
+            
+            fputs(doc_classesBLine[cset].c_str(), stdout);
+            const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
+            printf("%*.*s%s",
+                   (unsigned)fnWidth, (unsigned)fnWidth, fname,
+                   doc_classesChild[cset].c_str()
+                   );
+            printf(" %*.*s%s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str(),
+                   doc_classesChild[cset].c_str());
+            printIndent(indent);
+            printf(" %s", name.c_str());
+            
+            displayOtherParents(parentPtr, crel_ptr->parents);
+            presenter.displayInterfaces(crel_ptr);
+            fputs(doc_classesELine[cset].c_str(), stdout);
+            
+            indent.pop_back();
+            indent.push_back(!last ? more[cset] : none[cset]);
+            
+            displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
+            indent.pop_back();
+        }
     }
-}
 }
 
 

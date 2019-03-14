@@ -52,7 +52,12 @@ public:
     virtual void displayDependencies() const = 0;
     virtual void displayNames() const = 0;
 
-    
+    inline static void printIndent(const Indent& indent)
+    {
+        for(string val : indent)
+            printf("%s", val.c_str());
+    }
+
 protected:
 };
 
