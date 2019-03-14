@@ -244,15 +244,6 @@ inline string& toLower(string& outStr, const string& inStr) {
 }
 
 // =================================================================================================
-/*
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <string>
-#include <iterator>
- */
-
 #include <sstream>
 
 //  dateTimeToString(now(), "%A %B, %d %Y %I:%M%p");

@@ -574,6 +574,4 @@ void PublishHtml::displayDependencies() const
             fputs("</body>\n</html>\n", stdout);
             break;
     }
-    
-
 }

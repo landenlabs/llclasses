@@ -2,7 +2,7 @@
 //
 // File: Log.h
 // Author: Dennis Lang
-// Desc: Log error and warning messages.
+// Desc: Log error and warning messages to console in color.
 //
 //-------------------------------------------------------------------------------------------------
 //
@@ -72,6 +72,7 @@ public:
     }
 
 
+    // Output log levels, message with level higher are ignored.
     static const unsigned int OFF_LEVEL = 0;
     static unsigned int W_LEVEL;
     static unsigned int E_LEVEL;
@@ -80,11 +81,11 @@ public:
     // static Log none();
     
     // Example warning message, EOL is automatically added.
-    //   Log::warning().out()  << "Duplicate " << stuff << " more stuff";
+    //   Log::warning(LOG_LEVEL).out()  << "Duplicate " << stuff << " more stuff";
     inline static Log warning(unsigned wLevel)
     {
         if (wLevel > W_LEVEL)
-            return Log(cerr, false);
+            return Log(cerr, false);    // Ignore log messages
         
         Log warning(cerr);
         const char* color = (wLevel < 2) ? GREEN : PINK;
@@ -94,11 +95,11 @@ public:
     
     
     // Example warning message, EOL is automatically added.
-    //   Log::error().out()  << "Duplicate " << stuff << " more stuff";
+    //   Log::error(LOG_BAD_FILE).out()  << "Duplicate " << stuff << " more stuff";
     inline static Log error(unsigned eLevel)
     {
         if (eLevel > E_LEVEL)
-            return Log(cerr, false);
+            return Log(cerr, false);    // Ignore log messages
         
         Log error(cerr);
         error.out() << RED " Error ";
