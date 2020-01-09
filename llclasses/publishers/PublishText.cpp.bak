@@ -55,10 +55,10 @@ static char tsplit[]  = "  \u2523";
 // <img class='img0'> <img src='n.png'>
 
 //                               graph     text    spaces   html
-static string none[]         = {"    ",    "    ", "    ", "&nbsp;&nbsp;&nbsp;&nbsp;"  /* "<img class='imgN'>" */, ""};
-static string more[]         = { vline,    "   |", "    ",  vline  /* "<img class='img0'>" */, ""};
-static string more_and_me[]  = {tsplit,    "   +", "    ", tsplit  /* "<img class='img2'>" */, ""};
-static string just_me[]      = {lcorner,   "   -", "    ", lcorner /* "<img class='img1'>" */, ""};
+static string none[]         = {"    ",    "    ", "    ", "<img class='imgN'>", ""};
+static string more[]         = { vline,    "   |", "    ", "<img class='img0'>", ""};
+static string more_and_me[]  = {tsplit,    "   +", "    ", "<img class='img2'>", ""};
+static string just_me[]      = {lcorner,   "   -", "    ", "<img class='img1'>", ""};
 
 static string dc("\nClass Tree\n");
 static string cc(": ");
@@ -129,7 +129,7 @@ void PublishText::displayOtherParents(const RelationPtr parentPtr, const Relatio
 // -------------------------------------------------------------------------------------------------
 void PublishText::displayChildren(
         Indent& indent,
-        size_t fnWidth,     // Filename presentation width
+        size_t fnWidth,
         size_t fnOffset,
         size_t modWidth,
         const RelationPtr parentPtr) const
@@ -141,36 +141,29 @@ void PublishText::displayChildren(
     for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++)
     {
         crel_ptr = *iter;
-        if (presenter.canShowChildren(crel_ptr))
-        {
-            presenter.hasShown(crel_ptr);   // Prevent circular display
-            
-            string name =crel_ptr->name;
-            bool last = crel_ptr == *children.rbegin();
-            indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
-            
-            fputs(doc_classesBLine[cset].c_str(), stdout);
-            const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
-            printf("%*.*s%s",
-                   (unsigned)fnWidth, (unsigned)fnWidth, fname,
-                   doc_classesChild[cset].c_str()
-                   );
-            printf(" %*.*s%s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str(),
-                   doc_classesChild[cset].c_str());
-            printIndent(indent);
-            printf(" %s", name.c_str());
-            
-            displayOtherParents(parentPtr, crel_ptr->parents);
-            presenter.displayInterfaces(crel_ptr);
-            fputs(doc_classesELine[cset].c_str(), stdout);
-            
-            indent.pop_back();
-            indent.push_back(!last ? more[cset] : none[cset]);
-            
-            // TODO - avoid circular children
-            displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
-            indent.pop_back();
-        }
+        string name =crel_ptr->name;
+        bool last = crel_ptr == *children.rbegin();
+        indent.push_back(!last ? more_and_me[cset] : just_me[cset]);
+        
+        fputs(doc_classesBLine[cset].c_str(), stdout);
+        const char* fname = crel_ptr->filename.c_str() + min(crel_ptr->filename.length(), fnOffset);
+        printf("%*.*s%s",
+               (unsigned)fnWidth, (unsigned)fnWidth, fname,
+               doc_classesChild[cset].c_str()
+               );
+        printf(" %*.*s", (unsigned)modWidth, (unsigned)modWidth, crel_ptr->modifier.c_str());
+        printIndent(indent);
+        printf(" %s", name.c_str());
+        
+        displayOtherParents(parentPtr, crel_ptr->parents);
+        presenter.displayInterfaces(crel_ptr);
+        fputs(doc_classesELine[cset].c_str(), stdout);
+        
+        indent.pop_back();
+        indent.push_back(!last ? more[cset] : none[cset]);
+        
+        displayChildren(indent, fnWidth, fnOffset, modWidth, crel_ptr);
+        indent.pop_back();
     }
 }
 
@@ -192,8 +185,6 @@ void PublishText::displayDependencies() const
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
         crel_ptr = iter->second;
-        crel_ptr->flags = 0;
-        
         fileWidth = max(fileWidth, crel_ptr->filename.length());
         nameWidth = max(nameWidth, crel_ptr->name.length());
         modWidth = max(modWidth, crel_ptr->modifier.length());
@@ -202,18 +193,18 @@ void PublishText::displayDependencies() const
     size_t baseLen = basepath.rfind(DIR_SLASH_STR) + 1;
     fileWidth -= baseLen;
     
+    // if (cset != VIZ_CHAR)
+    {
         fprintf(stdout, "Base path=%s\n", basepath.c_str());
         fputs(doc_classes[cset].c_str(), stdout);
-  
+    }
     SwapStream swapStream(cout);
     
     for (iter = clist.begin(); iter != clist.end(); iter++)
     {
         crel_ptr = iter->second;
-        if ((crel_ptr->isSuper() || crel_ptr->isCircular())
-            && presenter.canShowChildren(crel_ptr))  // Find Super class (no parent)
+        if (crel_ptr->parents.empty() && presenter.canShowChildren(crel_ptr))  // Find Super class (no parent)
         {
-            presenter.hasShown(crel_ptr);
             size_t fnOffset = min(crel_ptr->filename.length(), baseLen);
             const char* fname = crel_ptr->filename.c_str() + fnOffset;
             fputs(doc_classesBLine[cset].c_str(), stdout);

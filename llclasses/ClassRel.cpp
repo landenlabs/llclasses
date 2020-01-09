@@ -34,7 +34,7 @@
 
 #include "ClassRel.h"
 #include "utils.h"
-#include "log.h"
+#include "Log.h"
 
 static const RelationPtr RELATION_NULL = NULL;
 

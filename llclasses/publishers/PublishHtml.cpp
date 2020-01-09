@@ -305,6 +305,8 @@ size_t PublishHtml::displayChildren(
                 if ((child_ptr->definition && presenter.canShow(child_ptr))
                     || presenter.canShowChildren(child_ptr))
                 {
+                    presenter.hasShown(child_ptr);
+                    
                     cout << "d.add(" << presenter.sNodeNum;
                     cout << "," << parentNum << ",'" << replaceAll(chilNname, "<", "&lt;");
                     if ( ! child_ptr->modifier.empty() && child_ptr->modifier != "public")
@@ -518,6 +520,8 @@ void PublishHtml::displayDependencies() const
         
         if (crel_ptr->isSuper() && presenter.canShowChildren(crel_ptr))
         {
+            presenter.hasShown(crel_ptr);
+            
             // Have super class - now display subclasses.
             if (presenter.cset == Presenter::JAVA_CHAR)
             {

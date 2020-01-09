@@ -46,7 +46,7 @@ static const char sNL[] = "\\n";
 void PublishViz::outHeader() const
 {
     needHeader = false;
-    cout << "digraph " << graphName << " {\n"
+    cout << "digraph " << replaceAll(graphName, " ", "_") << " {\n"
     "bgcolor=transparent\n"
     "overlap=false;\n"
     "label=\"" << title << " Class Hierarchy - Dennis Lang & GraphViz\";\n"

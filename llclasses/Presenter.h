@@ -81,8 +81,8 @@ public:
     bool importPackage = false;     // Not implemented
     bool tabularList   = false;     // -T
     bool fullPath      = false;     // -F
-    unsigned logLevel   = 0;        // -l Log level 
-    long parseImports  = -1;        // -M=<level>,  Parse imports instead of classes
+    unsigned logLevel  = 0;         // -l Log level
+    int parseImports   = 0;         // -M=<level>,  Parse imports instead of classes
     
     StringList titles;
     StringList replacements;    // List of find,replacewith word pairs separted by comma

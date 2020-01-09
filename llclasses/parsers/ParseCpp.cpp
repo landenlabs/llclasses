@@ -222,7 +222,7 @@ static string& removeTemplate(string& inOut)
 // Parse java source code and extract class or import relationships
 int ParseCpp::parseCode(const string& filename, ClassList& clist, const Presenter& presenter) {
     
-    if (presenter.parseImports >= 0)
+    if (presenter.parseImports != 0)
     {
         return parseCppIncludes(filename, clist, presenter);
     }
@@ -282,23 +282,24 @@ int ParseCpp::parseCppClasses(const string& filename, ClassList& clist, const Pr
             
             // string outer = join(classNames, ".", ".");
             string name = outer + string(match[2]);
-            string generic = match[1];              //
-            string extends = match[3];              // extends alpha
+            string templateStr = match[1];
+            string parent = match[3];
+            modifiers = "public";       // TODO - handle modifiers correctly, find ctor and determine if its public
             
             // Add class definition
             RelationPtr crel_ptr =
             clist.addClass(classOrInterface, name, trim(modifiers), filename, package, true);
             if (crel_ptr != NULL) {
                 crel_ptr->meta = meta;
-                crel_ptr->generic = generic;
+                crel_ptr->generic = templateStr;
                 
                 // Add all parent (extend) classes
-                if (extends.length() > 0) {
-                    extends = trim(replaceRE(extends, " *: *(virtual |)(public|protected|private|)", ""));
-                    Split extendList(extends, ",", FindSplit);
-                    for (string extendItem : extendList) {
-                        extendItem = trim(removeTemplate(extendItem));
-                        clist.addParent(crel_ptr, extendItem, filename, package);
+                if (parent.length() > 0) {
+                    parent = trim(replaceRE(parent, " *: *(virtual |)(public|protected|private|)", ""));
+                    Split multipleParents(parent, ",", FindSplit);
+                    for (string parentItem : multipleParents) {
+                        parentItem = trim(removeTemplate(parentItem));
+                        clist.addParent(crel_ptr, parentItem, filename, package);
                     }
                 }
                 
@@ -309,8 +310,8 @@ int ParseCpp::parseCppClasses(const string& filename, ClassList& clist, const Pr
                     cout << "  Modifiers       =" << modifiers << endl;
                     cout << "  classOrInterface=" << classOrInterface << endl;
                     cout << "  name            =" << name << endl;
-                    cout << "  generic         =" << generic << endl;
-                    cout << "  extends         =" << extends << endl;
+                    cout << "  template        =" << templateStr << endl;
+                    cout << "  parent          =" << parent << endl;
                     cout << "  implements      =" << implements << endl;
                 }
             }

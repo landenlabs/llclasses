@@ -45,6 +45,7 @@
 #include <map>
 #include <algorithm>
 #include <regex>
+#include <memory>
 
 #include "Presenter.h"
 #include "ClassRel.h"
@@ -84,7 +85,7 @@ int Presenter::init(int argc, const char * argv[], const char* version)
 {
     unsigned fileCnt = 0;
     int returnVal = -1;
-    publishPtr = make_unique<PublishText>(clist, *this);    // Set default publisher
+    publishPtr = std::make_unique<PublishText>(clist, *this);    // Set default publisher
 
     if (argc == 1)
     {
@@ -121,11 +122,12 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                 "\n  _y_v =classPattern ; Ignore class pattern, ex [Tt]est[0-9]"
                 "\n  _y_A =allClasses   ; Include Protected and Private classes"
                 "\n  _y_M =level        ; Parse imports instead of Classes"
-                "\n                       level 0=full import, 1=drop last file"
+                "\n                       level +n=keep left n levels, -n=remove last n levels"
                 "\n  _y_I =interfaces   ; Include Interfaces in report"
                 "\n  _y_i =classPattern ; Include class pattern, opposite of -v"
           //      "\n  _y_F =full path    ; Defaults to relative"
                 "\n  _y_L =Title        ; Set optional title"
+                "\n  _V_l =logLevel     ; Log level (0=default), -l=2 show extra logging"
                 "\n"
                 "\n_P_Examples (assumes java source code in directory src):_X_"
                 "\n  llclasses -t +n  src\\*.java  ; *.java prevent recursion"
@@ -190,13 +192,13 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                     case 'x': cset = Presenter::TEXT_CHAR;      break;
                     case 's': cset = Presenter::SPACE_CHAR;     break;
                     case 'h': cset = Presenter::HTML_CHAR;
-                        publishPtr = make_unique<PublishHtml>(clist, *this);
+                        publishPtr = std::make_unique<PublishHtml>(clist, *this);
                         break;
                     case 'j': cset = Presenter::JAVA_CHAR;
-                         publishPtr = make_unique<PublishHtml>(clist, *this);
+                         publishPtr = std::make_unique<PublishHtml>(clist, *this);
                         break;
                     case 'z': cset = Presenter::VIZ_CHAR;
-                        publishPtr = make_unique<PublishViz>(clist, *this);
+                        publishPtr = std::make_unique<PublishViz>(clist, *this);
                         break;
                         
                         // Modifiers
@@ -207,11 +209,11 @@ int Presenter::init(int argc, const char * argv[], const char* version)
                         if (argLen > 3)
                             parseImports = (int)strtol(argv[argn] + 3, NULL, 10);
                         else
-                            parseImports = 0;
+                            parseImports = 1000;    // -M = keep entire import 
                         break;
                         
                     case 'T': tabularList = true;
-                        publishPtr = make_unique<PublishHtml>(clist, *this);
+                        publishPtr = std::make_unique<PublishHtml>(clist, *this);
                         break;
                     case 'Z': vizSplit = true;          break;
                     case 'N':

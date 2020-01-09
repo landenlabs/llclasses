@@ -66,7 +66,7 @@ size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presen
                         ParseJava parseJava;
                         parseJava.parseCode(fullname.c_str(), clist, presenter);
                         fileCount++;
-                    } else if (ext == ".h" || ext == "hpp") {
+                    } else if (ext == ".h" || ext == ".hpp") {
                         ParseCpp parseCpp;
                         parseCpp.parseCode(fullname.c_str(), clist, presenter);
                         fileCount++;
