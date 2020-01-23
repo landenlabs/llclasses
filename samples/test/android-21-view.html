@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <!--#include virtual='/core-head.html' -->
+
+  <link href='../../core/lite-style.css' rel='stylesheet' media='screen'>
+  <link href='../../core/print-style.css' rel='stylesheet' media='print'>
+  <meta name='keywords' content='Android,class,hierarchy,diagram,api 21'>
+  <meta name='description' content='Android class hierarchy and diagram API 21 view classes'>
+  <title>Android class hierarchy and diagram API 21 view classes</title>
+  <style>
+ 
+    body { 
+       background: url("bg21.jpg");
+    }
+</style>
+	  
+	<link rel=StyleSheet href=dtree.css type=text/css /> 
+	<script type=text/javascript src=dtree.js></script>  
+</head>           
+<body id='top'>            
+<a href=javascript:window.history.back();> Back </a>
+<p>
+ 
+<h1> Android class hierarchy </h1>
+
+<h2>Android (api 21) View package</h2>  
+<div class=dtree style="margin:20px; font-size:110%; box-shadow: 10px 10px 5px #888888; padding:10px; display:inline-block; background:#f0f0f0;">  
+	<p>
+	  <span style="border:2px ridge #404040 ; border-radius:20px; padding:5px; background:#e0e0e0;">
+	  <a href=javascript:d.openAll();> <font style="font-size:150%">open all</font></a> 
+	  </span>
+	  &nbsp;
+	  <span style="border:2px ridge #404040 ; border-radius:20px; padding:5px; background:#e0e0e0;">
+      <a href=javascript:d.closeAll();> <font style="font-size:150%">close all</font></a>
+	  </span>
+	</p>
+	<script type=text/javascript> 
+		<!--                
+		d = new dTree('d'); 
+       d.add(0, -1, 'android21-view');
+d.add(1,0,'AbsSavedState','http://developer.android.com/reference/packages.html?q=AbsSavedState');
+d.add(2,1,'View.BaseSavedState','http://developer.android.com/reference/packages.html?q=View.BaseSavedState');
+d.add(3,0,'AccelerateDecelerateInterpolator','http://developer.android.com/reference/packages.html?q=AccelerateDecelerateInterpolator');
+d.add(4,0,'AccelerateInterpolator','http://developer.android.com/reference/packages.html?q=AccelerateInterpolator');
+d.add(5,0,'AccessibilityInteractionClient','http://developer.android.com/reference/packages.html?q=AccessibilityInteractionClient');
+d.add(6,0,'AccessibilityIterators','http://developer.android.com/reference/packages.html?q=AccessibilityIterators');
+d.add(7,0,'AccessibilityIterators.AbstractTextSegmentIterator','http://developer.android.com/reference/packages.html?q=AccessibilityIterators.AbstractTextSegmentIterator');
+d.add(8,0,'AccessibilityManager','http://developer.android.com/reference/packages.html?q=AccessibilityManager');
+d.add(9,0,'AccessibilityManagerInternal','http://developer.android.com/reference/packages.html?q=AccessibilityManagerInternal');
+d.add(10,0,'AccessibilityNodeInfo','http://developer.android.com/reference/packages.html?q=AccessibilityNodeInfo');
+d.add(11,0,'AccessibilityNodeInfo.AccessibilityAction','http://developer.android.com/reference/packages.html?q=AccessibilityNodeInfo.AccessibilityAction');
+d.add(12,0,'AccessibilityNodeInfo.CollectionInfo','http://developer.android.com/reference/packages.html?q=AccessibilityNodeInfo.CollectionInfo');
+d.add(13,0,'AccessibilityNodeInfo.CollectionItemInfo','http://developer.android.com/reference/packages.html?q=AccessibilityNodeInfo.CollectionItemInfo');
+d.add(14,0,'AccessibilityNodeInfo.RangeInfo','http://developer.android.com/reference/packages.html?q=AccessibilityNodeInfo.RangeInfo');
+d.add(15,0,'AccessibilityNodeProvider','http://developer.android.com/reference/packages.html?q=AccessibilityNodeProvider');
+d.add(16,0,'AccessibilityRecord','http://developer.android.com/reference/packages.html?q=AccessibilityRecord');
+d.add(17,16,'AccessibilityEvent','http://developer.android.com/reference/packages.html?q=AccessibilityEvent');
+d.add(18,0,'AccessibilityWindowInfo','http://developer.android.com/reference/packages.html?q=AccessibilityWindowInfo');
+d.add(19,0,'ActionMode','http://developer.android.com/reference/packages.html?q=ActionMode');
+d.add(20,0,'ActionProvider','http://developer.android.com/reference/packages.html?q=ActionProvider');
+d.add(21,0,'Activity','http://developer.android.com/reference/packages.html?q=Activity');
+d.add(22,21,'BigCache','http://developer.android.com/reference/packages.html?q=BigCache');
+d.add(23,21,'BitmapDrawable','http://developer.android.com/reference/packages.html?q=BitmapDrawable');
+d.add(24,21,'Disabled','http://developer.android.com/reference/packages.html?q=Disabled');
+d.add(25,21,'DrawableBgMinSize','http://developer.android.com/reference/packages.html?q=DrawableBgMinSize');
+d.add(26,21,'GlobalFocusChange','http://developer.android.com/reference/packages.html?q=GlobalFocusChange');
+d.add(27,21,'Include','http://developer.android.com/reference/packages.html?q=Include');
+d.add(28,21,'Longpress','http://developer.android.com/reference/packages.html?q=Longpress');
+d.add(29,21,'MenuScenario','http://developer.android.com/reference/packages.html?q=MenuScenario');
+d.add(30,29,'MenuLayout','http://developer.android.com/reference/packages.html?q=MenuLayout');
+d.add(31,30,'MenuLayoutLandscape','http://developer.android.com/reference/packages.html?q=MenuLayoutLandscape');
+d.add(32,30,'MenuLayoutPortrait','http://developer.android.com/reference/packages.html?q=MenuLayoutPortrait');
+d.add(33,29,'MenuWith1Item','http://developer.android.com/reference/packages.html?q=MenuWith1Item');
+d.add(34,21,'Merge','http://developer.android.com/reference/packages.html?q=Merge');
+d.add(35,21,'MutateDrawable','http://developer.android.com/reference/packages.html?q=MutateDrawable');
+d.add(36,21,'PopupWindowVisibility','http://developer.android.com/reference/packages.html?q=PopupWindowVisibility');
+d.add(37,21,'PreDrawListener','http://developer.android.com/reference/packages.html?q=PreDrawListener');
+d.add(38,21,'RemoteViewsActivity','http://developer.android.com/reference/packages.html?q=RemoteViewsActivity');
+d.add(39,21,'RunQueue','http://developer.android.com/reference/packages.html?q=RunQueue');
+d.add(40,21,'StubbedView','http://developer.android.com/reference/packages.html?q=StubbedView');
+d.add(41,21,'ViewGroupChildren','http://developer.android.com/reference/packages.html?q=ViewGroupChildren');
+d.add(42,21,'Visibility','http://developer.android.com/reference/packages.html?q=Visibility');
+d.add(43,21,'VisibilityCallback','http://developer.android.com/reference/packages.html?q=VisibilityCallback');
+d.add(44,21,'ZeroSized','http://developer.android.com/reference/packages.html?q=ZeroSized');
+d.add(45,0,'AndroidRuntimeException','http://developer.android.com/reference/packages.html?q=AndroidRuntimeException');
+d.add(46,45,'KeyCharacterMap.UnavailableException','http://developer.android.com/reference/packages.html?q=KeyCharacterMap.UnavailableException');
+d.add(47,45,'ViewRootImpl.CalledFromWrongThreadException','http://developer.android.com/reference/packages.html?q=ViewRootImpl.CalledFromWrongThreadException');
+d.add(48,0,'Animation','http://developer.android.com/reference/packages.html?q=Animation');
+d.add(49,48,'AlphaAnimation','http://developer.android.com/reference/packages.html?q=AlphaAnimation');
+d.add(50,48,'AnimationSet','http://developer.android.com/reference/packages.html?q=AnimationSet');
+d.add(51,48,'ClipRectAnimation','http://developer.android.com/reference/packages.html?q=ClipRectAnimation');
+d.add(52,48,'RotateAnimation','http://developer.android.com/reference/packages.html?q=RotateAnimation');
+d.add(53,48,'ScaleAnimation','http://developer.android.com/reference/packages.html?q=ScaleAnimation');
+d.add(54,48,'TranslateAnimation','http://developer.android.com/reference/packages.html?q=TranslateAnimation');
+d.add(55,0,'AnimationUtils','http://developer.android.com/reference/packages.html?q=AnimationUtils');
+d.add(56,0,'Animator','http://developer.android.com/reference/packages.html?q=Animator');
+d.add(57,56,'RenderNodeAnimator','http://developer.android.com/reference/packages.html?q=RenderNodeAnimator');
+d.add(58,0,'AnticipateInterpolator','http://developer.android.com/reference/packages.html?q=AnticipateInterpolator');
+d.add(59,0,'AnticipateOvershootInterpolator','http://developer.android.com/reference/packages.html?q=AnticipateOvershootInterpolator');
+d.add(60,0,'AttachInfo_Accessor','http://developer.android.com/reference/packages.html?q=AttachInfo_Accessor');
+d.add(61,0,'BaseInputConnection','http://developer.android.com/reference/packages.html?q=BaseInputConnection');
+d.add(62,0,'BounceInterpolator','http://developer.android.com/reference/packages.html?q=BounceInterpolator');
+d.add(63,0,'Canvas','http://developer.android.com/reference/packages.html?q=Canvas');
+d.add(64,63,'HardwareCanvas','http://developer.android.com/reference/packages.html?q=HardwareCanvas');
+d.add(65,0,'CaptioningManager','http://developer.android.com/reference/packages.html?q=CaptioningManager');
+d.add(66,0,'CaptioningManager.CaptionStyle','http://developer.android.com/reference/packages.html?q=CaptioningManager.CaptionStyle');
+d.add(67,0,'CaptioningManager.CaptioningChangeListener','http://developer.android.com/reference/packages.html?q=CaptioningManager.CaptioningChangeListener');
+d.add(68,0,'Choreographer','http://developer.android.com/reference/packages.html?q=Choreographer');
+d.add(69,0,'Choreographer_Delegate','http://developer.android.com/reference/packages.html?q=Choreographer_Delegate');
+d.add(70,0,'CompletionInfo','http://developer.android.com/reference/packages.html?q=CompletionInfo');
+d.add(71,0,'ContextWrapper','http://developer.android.com/reference/packages.html?q=ContextWrapper');
+d.add(72,71,'ContextThemeWrapper','http://developer.android.com/reference/packages.html?q=ContextThemeWrapper');
+d.add(73,0,'CorrectionInfo','http://developer.android.com/reference/packages.html?q=CorrectionInfo');
+d.add(74,0,'CursorAnchorInfo','http://developer.android.com/reference/packages.html?q=CursorAnchorInfo');
+d.add(75,0,'CursorAnchorInfo.Builder','http://developer.android.com/reference/packages.html?q=CursorAnchorInfo.Builder');
+d.add(76,0,'CycleInterpolator','http://developer.android.com/reference/packages.html?q=CycleInterpolator');
+d.add(77,0,'DecelerateInterpolator','http://developer.android.com/reference/packages.html?q=DecelerateInterpolator');
+d.add(78,0,'Display','http://developer.android.com/reference/packages.html?q=Display');
+d.add(79,0,'DisplayAdjustments','http://developer.android.com/reference/packages.html?q=DisplayAdjustments');
+d.add(80,0,'DisplayEventReceiver','http://developer.android.com/reference/packages.html?q=DisplayEventReceiver');
+d.add(81,0,'DisplayInfo','http://developer.android.com/reference/packages.html?q=DisplayInfo');
+d.add(82,0,'Display_Delegate','http://developer.android.com/reference/packages.html?q=Display_Delegate');
+d.add(83,0,'DragEvent','http://developer.android.com/reference/packages.html?q=DragEvent');
+d.add(84,0,'EditorInfo','http://developer.android.com/reference/packages.html?q=EditorInfo');
+d.add(85,0,'ExtractedText','http://developer.android.com/reference/packages.html?q=ExtractedText');
+d.add(86,0,'ExtractedTextRequest','http://developer.android.com/reference/packages.html?q=ExtractedTextRequest');
+d.add(87,0,'FocusFinder','http://developer.android.com/reference/packages.html?q=FocusFinder');
+d.add(88,0,'FocusFinderHelper','http://developer.android.com/reference/packages.html?q=FocusFinderHelper');
+d.add(89,0,'FrameStats','http://developer.android.com/reference/packages.html?q=FrameStats');
+d.add(90,89,'WindowAnimationFrameStats','http://developer.android.com/reference/packages.html?q=WindowAnimationFrameStats');
+d.add(91,89,'WindowContentFrameStats','http://developer.android.com/reference/packages.html?q=WindowContentFrameStats');
+d.add(92,0,'GestureDetector','http://developer.android.com/reference/packages.html?q=GestureDetector');
+d.add(93,0,'GestureDetector.SimpleOnGestureListener','http://developer.android.com/reference/packages.html?q=GestureDetector.SimpleOnGestureListener');
+d.add(94,0,'GraphicBuffer','http://developer.android.com/reference/packages.html?q=GraphicBuffer');
+d.add(95,0,'Gravity','http://developer.android.com/reference/packages.html?q=Gravity');
+d.add(96,0,'GridLayoutAnimationController.AnimationParameters','http://developer.android.com/reference/packages.html?q=GridLayoutAnimationController.AnimationParameters');
+d.add(97,0,'HapticFeedbackConstants','http://developer.android.com/reference/packages.html?q=HapticFeedbackConstants');
+d.add(98,0,'HardwareRenderer','http://developer.android.com/reference/packages.html?q=HardwareRenderer');
+d.add(99,98,'ThreadedRenderer','http://developer.android.com/reference/packages.html?q=ThreadedRenderer');
+d.add(100,0,'IInputFilter.Stub','http://developer.android.com/reference/packages.html?q=IInputFilter.Stub');
+d.add(101,100,'InputFilter','http://developer.android.com/reference/packages.html?q=InputFilter');
+d.add(102,0,'IWindowManagerImpl','http://developer.android.com/reference/packages.html?q=IWindowManagerImpl');
+d.add(103,0,'InputBinding','http://developer.android.com/reference/packages.html?q=InputBinding');
+d.add(104,0,'InputChannel','http://developer.android.com/reference/packages.html?q=InputChannel');
+d.add(105,0,'InputConnectionWrapper','http://developer.android.com/reference/packages.html?q=InputConnectionWrapper');
+d.add(106,0,'InputDevice','http://developer.android.com/reference/packages.html?q=InputDevice');
+d.add(107,0,'InputDevice.MotionRange','http://developer.android.com/reference/packages.html?q=InputDevice.MotionRange');
+d.add(108,0,'InputEvent','http://developer.android.com/reference/packages.html?q=InputEvent');
+d.add(109,108,'KeyEvent','http://developer.android.com/reference/packages.html?q=KeyEvent');
+d.add(110,108,'MotionEvent','http://developer.android.com/reference/packages.html?q=MotionEvent');
+d.add(111,0,'InputEventConsistencyVerifier','http://developer.android.com/reference/packages.html?q=InputEventConsistencyVerifier');
+d.add(112,0,'InputEventReceiver','http://developer.android.com/reference/packages.html?q=InputEventReceiver');
+d.add(113,0,'InputEventSender','http://developer.android.com/reference/packages.html?q=InputEventSender');
+d.add(114,0,'InputMethodInfo','http://developer.android.com/reference/packages.html?q=InputMethodInfo');
+d.add(115,0,'InputMethodManager','http://developer.android.com/reference/packages.html?q=InputMethodManager');
+d.add(116,0,'InputMethodManager_Accessor','http://developer.android.com/reference/packages.html?q=InputMethodManager_Accessor');
+d.add(117,0,'InputMethodManager_Delegate','http://developer.android.com/reference/packages.html?q=InputMethodManager_Delegate');
+d.add(118,0,'InputMethodSubtype','http://developer.android.com/reference/packages.html?q=InputMethodSubtype');
+d.add(119,0,'InputMethodSubtype.InputMethodSubtypeBuilder','http://developer.android.com/reference/packages.html?q=InputMethodSubtype.InputMethodSubtypeBuilder');
+d.add(120,0,'InputMethodSubtypeArray','http://developer.android.com/reference/packages.html?q=InputMethodSubtypeArray');
+d.add(121,0,'InputQueue','http://developer.android.com/reference/packages.html?q=InputQueue');
+d.add(122,0,'KeyCharacterMap','http://developer.android.com/reference/packages.html?q=KeyCharacterMap');
+d.add(123,0,'KeyCharacterMap.FallbackAction','http://developer.android.com/reference/packages.html?q=KeyCharacterMap.FallbackAction');
+d.add(124,0,'KeyCharacterMap.KeyData','http://developer.android.com/reference/packages.html?q=KeyCharacterMap.KeyData');
+d.add(125,0,'KeyEvent.DispatcherState','http://developer.android.com/reference/packages.html?q=KeyEvent.DispatcherState');
+d.add(126,0,'LayoutAnimationController','http://developer.android.com/reference/packages.html?q=LayoutAnimationController');
+d.add(127,126,'GridLayoutAnimationController','http://developer.android.com/reference/packages.html?q=GridLayoutAnimationController');
+d.add(128,0,'LayoutAnimationController.AnimationParameters','http://developer.android.com/reference/packages.html?q=LayoutAnimationController.AnimationParameters');
+d.add(129,0,'LayoutInflater','http://developer.android.com/reference/packages.html?q=LayoutInflater');
+d.add(130,129,'BridgeInflater','http://developer.android.com/reference/packages.html?q=BridgeInflater');
+d.add(131,0,'LayoutInflater_Delegate','http://developer.android.com/reference/packages.html?q=LayoutInflater_Delegate');
+d.add(132,0,'LinearInterpolator','http://developer.android.com/reference/packages.html?q=LinearInterpolator');
+d.add(133,0,'LinearLayout','http://developer.android.com/reference/packages.html?q=LinearLayout');
+d.add(134,133,'PreDrawListener.MyLinearLayout','http://developer.android.com/reference/packages.html?q=PreDrawListener.MyLinearLayout');
+d.add(135,0,'ListActivity','http://developer.android.com/reference/packages.html?q=ListActivity');
+d.add(136,135,'ListContextMenu','http://developer.android.com/reference/packages.html?q=ListContextMenu');
+d.add(137,0,'MagnificationSpec','http://developer.android.com/reference/packages.html?q=MagnificationSpec');
+d.add(138,0,'MenuInflater','http://developer.android.com/reference/packages.html?q=MenuInflater');
+d.add(139,0,'MenuInflater_Delegate','http://developer.android.com/reference/packages.html?q=MenuInflater_Delegate');
+d.add(140,0,'MenuScenario.Params','http://developer.android.com/reference/packages.html?q=MenuScenario.Params');
+d.add(141,0,'MotionEvent.PointerCoords','http://developer.android.com/reference/packages.html?q=MotionEvent.PointerCoords');
+d.add(142,0,'MotionEvent.PointerProperties','http://developer.android.com/reference/packages.html?q=MotionEvent.PointerProperties');
+d.add(143,0,'OrientationEventListener','http://developer.android.com/reference/packages.html?q=OrientationEventListener');
+d.add(144,0,'OrientationListener','http://developer.android.com/reference/packages.html?q=OrientationListener');
+d.add(145,0,'OvershootInterpolator','http://developer.android.com/reference/packages.html?q=OvershootInterpolator');
+d.add(146,0,'PathInterpolator','http://developer.android.com/reference/packages.html?q=PathInterpolator');
+d.add(147,0,'PointerIcon','http://developer.android.com/reference/packages.html?q=PointerIcon');
+d.add(148,0,'RenderNode','http://developer.android.com/reference/packages.html?q=RenderNode');
+d.add(149,0,'RuntimeException','http://developer.android.com/reference/packages.html?q=RuntimeException');
+d.add(150,149,'Surface.OutOfResourcesException','http://developer.android.com/reference/packages.html?q=Surface.OutOfResourcesException');
+d.add(151,149,'SurfaceHolder.BadSurfaceTypeException','http://developer.android.com/reference/packages.html?q=SurfaceHolder.BadSurfaceTypeException');
+d.add(152,149,'WindowManager.BadTokenException','http://developer.android.com/reference/packages.html?q=WindowManager.BadTokenException');
+d.add(153,149,'WindowManager.InvalidDisplayException','http://developer.android.com/reference/packages.html?q=WindowManager.InvalidDisplayException');
+d.add(154,0,'ScaleGestureDetector','http://developer.android.com/reference/packages.html?q=ScaleGestureDetector');
+d.add(155,0,'ScaleGestureDetector.SimpleOnScaleGestureListener','http://developer.android.com/reference/packages.html?q=ScaleGestureDetector.SimpleOnScaleGestureListener');
+d.add(156,0,'SentenceSuggestionsInfo','http://developer.android.com/reference/packages.html?q=SentenceSuggestionsInfo');
+d.add(157,0,'SoundEffectConstants','http://developer.android.com/reference/packages.html?q=SoundEffectConstants');
+d.add(158,0,'SparseRectFArray','http://developer.android.com/reference/packages.html?q=SparseRectFArray');
+d.add(159,0,'SparseRectFArray.SparseRectFArrayBuilder','http://developer.android.com/reference/packages.html?q=SparseRectFArray.SparseRectFArrayBuilder');
+d.add(160,0,'SpellCheckerInfo','http://developer.android.com/reference/packages.html?q=SpellCheckerInfo');
+d.add(161,0,'SpellCheckerSession','http://developer.android.com/reference/packages.html?q=SpellCheckerSession');
+d.add(162,0,'SpellCheckerSubtype','http://developer.android.com/reference/packages.html?q=SpellCheckerSubtype');
+d.add(163,0,'SuggestionsInfo','http://developer.android.com/reference/packages.html?q=SuggestionsInfo');
+d.add(164,0,'Surface','http://developer.android.com/reference/packages.html?q=Surface');
+d.add(165,0,'SurfaceControl','http://developer.android.com/reference/packages.html?q=SurfaceControl');
+d.add(166,0,'SurfaceControl.PhysicalDisplayInfo','http://developer.android.com/reference/packages.html?q=SurfaceControl.PhysicalDisplayInfo');
+d.add(167,0,'SurfaceSession','http://developer.android.com/reference/packages.html?q=SurfaceSession');
+d.add(168,0,'TextInfo','http://developer.android.com/reference/packages.html?q=TextInfo');
+d.add(169,0,'TextServicesManager','http://developer.android.com/reference/packages.html?q=TextServicesManager');
+d.add(170,0,'TextView','http://developer.android.com/reference/packages.html?q=TextView');
+d.add(171,170,'VisibilityCallback.MonitoredTextView','http://developer.android.com/reference/packages.html?q=VisibilityCallback.MonitoredTextView');
+d.add(172,0,'TouchDelegate','http://developer.android.com/reference/packages.html?q=TouchDelegate');
+d.add(173,0,'Transformation','http://developer.android.com/reference/packages.html?q=Transformation');
+d.add(174,0,'VelocityTracker','http://developer.android.com/reference/packages.html?q=VelocityTracker');
+d.add(175,0,'VelocityTracker.Estimator','http://developer.android.com/reference/packages.html?q=VelocityTracker.Estimator');
+d.add(176,0,'View','http://developer.android.com/reference/packages.html?q=View');
+d.add(177,176,'GhostView','http://developer.android.com/reference/packages.html?q=GhostView');
+d.add(178,176,'MockView','http://developer.android.com/reference/packages.html?q=MockView');
+d.add(179,178,'SurfaceView','http://developer.android.com/reference/packages.html?q=SurfaceView');
+d.add(180,176,'TextureView','http://developer.android.com/reference/packages.html?q=TextureView');
+d.add(181,176,'ViewAttachView','http://developer.android.com/reference/packages.html?q=ViewAttachView');
+d.add(182,176,'ViewGroup','http://developer.android.com/reference/packages.html?q=ViewGroup');
+d.add(183,176,'ViewStub','http://developer.android.com/reference/packages.html?q=ViewStub');
+d.add(184,0,'View.AccessibilityDelegate','http://developer.android.com/reference/packages.html?q=View.AccessibilityDelegate');
+d.add(185,0,'View.DragShadowBuilder','http://developer.android.com/reference/packages.html?q=View.DragShadowBuilder');
+d.add(186,0,'View.MeasureSpec','http://developer.android.com/reference/packages.html?q=View.MeasureSpec');
+d.add(187,0,'ViewAnimationUtils','http://developer.android.com/reference/packages.html?q=ViewAnimationUtils');
+d.add(188,0,'ViewConfiguration','http://developer.android.com/reference/packages.html?q=ViewConfiguration');
+d.add(189,0,'ViewConfiguration_Accessor','http://developer.android.com/reference/packages.html?q=ViewConfiguration_Accessor');
+d.add(190,0,'ViewDebug','http://developer.android.com/reference/packages.html?q=ViewDebug');
+d.add(191,0,'ViewGroup.LayoutParams','http://developer.android.com/reference/packages.html?q=ViewGroup.LayoutParams');
+d.add(192,191,'ViewGroup.MarginLayoutParams','http://developer.android.com/reference/packages.html?q=ViewGroup.MarginLayoutParams');
+d.add(193,191,'WindowManager.LayoutParams','http://developer.android.com/reference/packages.html?q=WindowManager.LayoutParams');
+d.add(194,0,'ViewOutlineProvider','http://developer.android.com/reference/packages.html?q=ViewOutlineProvider');
+d.add(195,0,'ViewOverlay','http://developer.android.com/reference/packages.html?q=ViewOverlay');
+d.add(196,195,'ViewGroupOverlay','http://developer.android.com/reference/packages.html?q=ViewGroupOverlay');
+d.add(197,0,'ViewPropertyAnimator','http://developer.android.com/reference/packages.html?q=ViewPropertyAnimator');
+d.add(198,0,'ViewRootImpl','http://developer.android.com/reference/packages.html?q=ViewRootImpl');
+d.add(199,0,'ViewRootImpl_Delegate','http://developer.android.com/reference/packages.html?q=ViewRootImpl_Delegate');
+d.add(200,0,'ViewTreeObserver','http://developer.android.com/reference/packages.html?q=ViewTreeObserver');
+d.add(201,0,'ViewTreeObserver.InternalInsetsInfo','http://developer.android.com/reference/packages.html?q=ViewTreeObserver.InternalInsetsInfo');
+d.add(202,0,'View_Delegate','http://developer.android.com/reference/packages.html?q=View_Delegate');
+d.add(203,0,'Window','http://developer.android.com/reference/packages.html?q=Window');
+d.add(204,0,'WindowCallbackWrapper','http://developer.android.com/reference/packages.html?q=WindowCallbackWrapper');
+d.add(205,0,'WindowId','http://developer.android.com/reference/packages.html?q=WindowId');
+d.add(206,0,'WindowId.FocusObserver','http://developer.android.com/reference/packages.html?q=WindowId.FocusObserver');
+d.add(207,0,'WindowInfo','http://developer.android.com/reference/packages.html?q=WindowInfo');
+d.add(208,0,'WindowInsets','http://developer.android.com/reference/packages.html?q=WindowInsets');
+d.add(209,0,'WindowManagerGlobal','http://developer.android.com/reference/packages.html?q=WindowManagerGlobal');
+d.add(210,0,'WindowManagerGlobal_Delegate','http://developer.android.com/reference/packages.html?q=WindowManagerGlobal_Delegate');
+d.add(211,0,'WindowManagerImpl','http://developer.android.com/reference/packages.html?q=WindowManagerImpl');
+d.add(212,0,'WindowManagerInternal','http://developer.android.com/reference/packages.html?q=WindowManagerInternal');
+		document.write(d); 
+       d.openAll();
+		//--> 
+	</script> 
+</div>  
+<!--#include virtual=/core-footer.html -->
+
+</body> 
+</html> 
+

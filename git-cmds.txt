@@ -1,0 +1,20 @@
+
+git init
+git add -v llclasses/*
+git commit -m "first commit"
+git remote add origin https://landenlabs@github.com/landenlabs/llclasses.git
+git push -u origin master
+
+git rm -r llclasses/llclasses.dSYM
+git rm -r DerivedData
+git rm -r -f DerivedData
+git commit -m "remove junk"
+git push -u origin master
+
+git commit -m "Add color, add p and i variables to Java ouput"
+git push -u origin master
+
+git status
+
+git commit -a -m "updates"
+git push -u origin master

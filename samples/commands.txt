@@ -1,0 +1,9 @@
+
+
+cp /Users/ldennis/projects/projects-xcode/llclasses/llclasses/DerivedData/Build/Products/Debug/llclasses /usr/local/bin/
+
+llclasses "-L=This is a title" -j /Users/ldennis/Downloads/compile-testing-master/src/main/java//com/google/testing > ! lj2.html
+
+    
+zip -r llclass-02-27.zip llclasses dtree img
+
