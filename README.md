@@ -63,7 +63,7 @@ Examples (assumes java source code in directory src):
   llclasses -z -N=10 -O=.\viz\ -V=*Test* -V=*Exception* src >directgraph.dot
 </pre>
 
-![screen shot of help text on OSX console](ttps://github.com/landenlabs/llclasses/blob/master/llclasses-help.png)
+![screen shot of help text on OSX console](ttps://github.com/landenlabs/llclasses/master/llclasses-help.png)
 
 Details on website
 [http://landenlabs.com/code/llclasses/index.html]
