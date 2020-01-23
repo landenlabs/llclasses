@@ -64,7 +64,8 @@ Examples (assumes java source code in directory src):
 </pre>
 
 ![screen shot of help text on OSX console](http://landenlabs.com/code/llclasses/llclasses-help.png)
-![screen shot of help text on OSX console](https://github.com/landenlabs/llclasses/master/llclasses-help.png)
+
+## Links
 
 Details on website
 [http://landenlabs.com/code/llclasses/index.html]
