@@ -1,4 +1,3 @@
-
 # llclasses
 OSX / Linux / DOS  Object Oriented Code parser
 
@@ -7,8 +6,53 @@ Parse C++ or Java files and output class hierarchy relationship.
   [![Build status](https://travis-ci.org/landenlabs/llclasses.svg?branch=master)](https://travis-ci.org/landenlabs/llclasses)
   [![Known Vulnerabilities](https://snyk.io/test/github/landenlabs/llclasses/badge.svg)](https://snyk.io/test/github/landenlabs/llclasses)
 
-  
-**Help screen**
+LLClasses supports parsing both **Java** and **C++**. The code is structured with a set of parsers and publishers.  The frontend handles the runtime switches and iterates over directory files
+passing them to the **parsers** and **publishers**. 
+
+For further details visit home website which shows how llclasses can parse object oriented files.
+[http://landenlabs.com/code/llclasses/index.html]
+
+
+## Source code files:
+<pre>
+.
+├── ClassRel.cpp
+├── ClassRel.h
+├── Makefile
+├── Parser.cpp
+├── Parser.h
+├── Presenter.cpp
+├── Presenter.h
+├── build.csh
+├── llclasses.cpp
+├── llclasses.h
+├── parsers
+│   ├── ParseCode.h
+│   ├── ParseCpp.cpp
+│   ├── ParseCpp.h
+│   ├── ParseJava.cpp
+│   ├── ParseJava.cpp.bak
+│   ├── ParseJava.h
+│   └── ParseJava.h.bak
+├── publishers
+│   ├── PublishHtml.cpp
+│   ├── PublishText.cpp
+│   ├── PublishText.cpp.bak
+│   └── PublishViz.cpp
+└── utils
+    ├── Colors.h
+    ├── DirectoryFiles.cpp
+    ├── DirectoryFiles.h
+    ├── Log.cpp
+    ├── Log.h
+    ├── Publish.h
+    ├── SwapStream.h
+    └── utils.h
+
+3 directories, 29 files
+</pre>
+ 
+##  Help screen
 
 <pre>
 llclasses (v2.1)
@@ -62,8 +106,6 @@ Examples (assumes java source code in directory src):
   llclasses -z -Z -O=.\viz\ -V=*Test* -V=*Exception* src >directgraph.dot
   llclasses -z -N=10 -O=.\viz\ -V=*Test* -V=*Exception* src >directgraph.dot
 </pre>
-
-![screen shot of help text on OSX console](http://landenlabs.com/code/llclasses/llclasses-help.png)
 
 ![screen shot of help text on OSX console](https://raw.githubusercontent.com/landenlabs/llclasses/master/llclasses-help.png)
 
