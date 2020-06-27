@@ -126,9 +126,13 @@ Home website
 ## Sample reports
 
 [HTML report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-html.png)
+
 [Simple list](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-list.png)
+
 [Tabular report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-tabular.jpg)
+
 [Text report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-text.png)
+
 [Html tree report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-tree.png)
 
 ## License
