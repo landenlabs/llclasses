@@ -2,7 +2,7 @@
 //
 //  Publish      2-Feb-2019       Dennis Lang
 //
-//  Publish reports of parse classes. 
+//  Publish reports of parse classes.
 //
 //-------------------------------------------------------------------------------------------------
 //
@@ -36,24 +36,22 @@
 
 #include <fstream>
 #include "llclasses.hpp"
-#include "ClassRel.hpp"
+#include "classrel.hpp"
 
 // Forward reference
 class Presenter;
 
 // =================================================================================================
 // Abstract base class for Publishers
-class Publish
-{
+class Publish {
 public:
     virtual ~Publish() {}
-    
+
     virtual void present() const = 0;
     virtual void displayDependencies() const = 0;
     virtual void displayNames() const = 0;
 
-    inline static void printIndent(const Indent& indent)
-    {
+    inline static void printIndent(const Indent& indent) {
         for(string val : indent)
             printf("%s", val.c_str());
     }
@@ -63,8 +61,7 @@ protected:
 
 // =================================================================================================
 // Present in Viz node graph format
-class PublishText : public Publish
-{
+class PublishText : public Publish {
 public:
     PublishText(const ClassList& clist, Presenter& presenter) : clist(clist), presenter(presenter) {}
     void present() const override;
@@ -76,12 +73,12 @@ private:
 
 protected:
     void displayChildren(
-            Indent& indent,
-            size_t fnWidth,
-            size_t fnOffset,
-            size_t modWidth,
-            const RelationPtr parentPtr) const;
-    
+        Indent& indent,
+        size_t fnWidth,
+        size_t fnOffset,
+        size_t modWidth,
+        const RelationPtr parentPtr) const;
+
 protected:
     const ClassList& clist;
     Presenter& presenter;
@@ -89,21 +86,20 @@ protected:
 
 // =================================================================================================
 // Present in Viz node graph format
-class PublishViz : public PublishText
-{
+class PublishViz : public PublishText {
 public:
     PublishViz(const ClassList& clist, Presenter& presenter) : PublishText(clist, presenter) {}
-    
+
     void displayDependencies() const override;
 
 private:
     void outHeader() const;
     void outTrailer() const;
-    
+
     bool nextFile(ostream& out, size_t& nodeCnt, size_t nextNodeCnt) const;
     size_t displayChildren(unsigned parentNum,  size_t width,
-                           const RelationPtr parentPtr, const RelationPtr pparentPtr) const;
-    
+        const RelationPtr parentPtr, const RelationPtr pparentPtr) const;
+
     // Present stat variables
     mutable bool needHeader = true;
     mutable ofstream outStream;
@@ -113,20 +109,19 @@ private:
 
 // =================================================================================================
 // Present in HTML tabular formats
-class PublishHtml : public PublishText
-{
+class PublishHtml : public PublishText {
 public:
     PublishHtml(const ClassList& clist, Presenter& presenter) : PublishText(clist, presenter) {}
 
     void present() const override;
     void displayDependencies() const override;
-    
+
     // Alternate html components
     // Replacement words may be applied to these section before output.
     mutable string htmlHead;
     mutable string bodyBegin;
     mutable string bodyEnd;
-    
+
     void SetHead(const string& str) {
         htmlHead = str;
     }
@@ -136,13 +131,13 @@ public:
     void SetBodyEnd(const string& str) {
         bodyEnd = str;
     }
-    
+
 private:
     void outputHtmlMetaHeader2(const char* auxStyle) const;
     void outputHtmlTitle3() const;
-    
+
     size_t displayChildren(unsigned parentNum,  size_t width,
-            const RelationPtr parentPtr, const string& basepath) const;
+        const RelationPtr parentPtr, const string& basepath) const;
 };
 
 

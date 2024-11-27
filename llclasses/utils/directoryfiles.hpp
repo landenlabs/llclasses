@@ -1,11 +1,11 @@
 //-------------------------------------------------------------------------------------------------
 // File: Directory.hpp   Author: Dennis Lang
 //
-// Desc: This class is used to obtain the names of files in a directory.  
+// Desc: This class is used to obtain the names of files in a directory.
 //
 // Usage::
-//      Create a Directory_files object by providing the name of the directory 
-//      to use.  'next_file_name()' returns the next file name found in the 
+//      Create a Directory_files object by providing the name of the directory
+//      to use.  'next_file_name()' returns the next file name found in the
 //      directory, if any.  You MUST check for the existance of more files
 //      by using 'more_files()' between each call to "next_file_name()",
 //      it tells you if there are more files AND sequences you to the next
@@ -51,35 +51,34 @@
 #include "llclasses.hpp"
 
 #ifdef HAVE_WIN
-  #include <windows.h>
+    #include <windows.h>
 #else
-typedef unsigned int  DWORD;
-typedef struct dirent Dirent;
-typedef struct timespec Timespec;
+    typedef unsigned int  DWORD;
+    typedef struct dirent Dirent;
+    typedef struct timespec Timespec;
 
-#define _strtoi64 strtoll
+    #define _strtoi64 strtoll
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/dirent.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <limits.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #include <sys/dirent.h>
+    #include <dirent.h>
+    #include <unistd.h>
+    #include <limits.h>
 
-const DWORD FILE_ATTRIBUTE_DIRECTORY = S_IFDIR;
-const DWORD FILE_ATTRIBUTE_DEVICE = S_IFBLK;
-const DWORD FILE_ATTRIBUTE_NORMAL = S_IFREG;
+    const DWORD FILE_ATTRIBUTE_DIRECTORY = S_IFDIR;
+    const DWORD FILE_ATTRIBUTE_DEVICE = S_IFBLK;
+    const DWORD FILE_ATTRIBUTE_NORMAL = S_IFREG;
 
-const DWORD FILE_ATTRIBUTE_READ = S_IRUSR; // owner has read permission
-const DWORD FILE_ATTRIBUTE_WRIT = S_IWUSR; // has write permission
-const DWORD FILE_ATTRIBUTE_EXEC = S_IXUSR; // has execute permission
+    const DWORD FILE_ATTRIBUTE_READ = S_IRUSR; // owner has read permission
+    const DWORD FILE_ATTRIBUTE_WRIT = S_IWUSR; // has write permission
+    const DWORD FILE_ATTRIBUTE_EXEC = S_IXUSR; // has execute permission
 #endif
 
 class DirEntry;
 typedef void* HANDLE;
 
-class DirectoryFiles
-{
+class DirectoryFiles {
 public:
     DirectoryFiles(const string& dirName);
     ~DirectoryFiles();
@@ -101,16 +100,16 @@ public:
 
     // Close current directory
     void close();
-    
+
     static bool isFile(const string& filepath);
 
 private:
-    DirectoryFiles(const DirectoryFiles &);
-    DirectoryFiles &operator=(const DirectoryFiles &);
-    
+    DirectoryFiles(const DirectoryFiles&);
+    DirectoryFiles& operator=(const DirectoryFiles&);
+
 #ifdef HAVE_WIN
     WIN32_FIND_DATA my_dirent;      // Data structure describes the file found
-    
+
     HANDLE      my_dir_hnd;     // Search handle returned by FindFirstFile
     string      my_dirName;     // Directory name
 #else

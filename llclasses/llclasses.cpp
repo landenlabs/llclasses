@@ -40,45 +40,37 @@
 //
 const char version[] = "v2.1";
 
-<<<<<<< HEAD
-#include "Presenter.h"
-=======
-#include "Presenter.hpp"
->>>>>>> main
+#include "presenter.hpp"
 
 #ifdef HAVE_WIN
-#include <windows.h>
+    #include <windows.h>
 #endif
 
 // Forward declaration
 void init();
 
-int main(int argc, const char * argv[])
-{
-	init();
+int main(int argc, const char* argv[]) {
+    init();
     Presenter presenter;  // Parse files and present results.
     return presenter.init(argc, argv, version);
 }
 
 void init() {
 #ifdef HAVE_WIN
-	// Set output mode to handle virtual terminal sequences
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (hOut == INVALID_HANDLE_VALUE)
-	{
-		exit( GetLastError());
-	}
+    // Set output mode to handle virtual terminal sequences
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) {
+        exit( GetLastError());
+    }
 
-	DWORD dwMode = 0;
-	if (!GetConsoleMode(hOut, &dwMode))
-	{
-		exit( GetLastError());
-	}
+    DWORD dwMode = 0;
+    if (! GetConsoleMode(hOut, &dwMode)) {
+        exit( GetLastError());
+    }
 
-	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-	if (!SetConsoleMode(hOut, dwMode))
-	{
-		exit( GetLastError());
-	}
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    if (! SetConsoleMode(hOut, dwMode)) {
+        exit( GetLastError());
+    }
 #endif
 }

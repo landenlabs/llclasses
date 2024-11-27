@@ -40,8 +40,8 @@
 #include <memory>
 
 #include "llclasses.hpp"
-#include "Parser.hpp"
-#include "ClassRel.hpp"
+#include "parser.hpp"
+#include "classrel.hpp"
 #include "Publish.hpp"
 
 
@@ -51,21 +51,20 @@
 
 // =================================================================================================
 // Contoller - Present class tree files (nodes)
-class Presenter
-{
+class Presenter {
 public:
-    int init(int argc, const char * argv[], const char* version);
-    
+    int init(int argc, const char* argv[], const char* version);
+
     //  Return true if current Presentation settings allow item to be shown.
     //  See -A allClasses
     bool canShow(const RelationPtr relPtr) const;
     bool canShowChildren(const RelationPtr relPtr) const;
     void hasShown(const RelationPtr relPtr) const;
-    
+
     Parser parser;
     unique_ptr<Publish> publishPtr;
-    
-    
+
+
     friend PublishViz;
     friend PublishText;
     friend PublishHtml;
@@ -77,26 +76,26 @@ public:
     bool vizSplit      = false;     // -Z
     bool needHeader    = true;
     bool allClasses    = false;     // -A
-    bool showInterfaces= false;     // -I
+    bool showInterfaces = false;    // -I
     bool importPackage = false;     // Not implemented
     bool tabularList   = false;     // -T
     bool fullPath      = false;     // -F
     unsigned logLevel  = 0;         // -l Log level
     int parseImports   = 0;         // -M=<level>,  Parse imports instead of classes
-    
+
     StringList titles;
     StringList replacements;    // List of find,replacewith word pairs separted by comma
- 
-    
+
+
 protected:
     // Output format types.
-    enum {GRAPHICS_CHAR=0, TEXT_CHAR=1, SPACE_CHAR=2, HTML_CHAR=3, JAVA_CHAR=4, VIZ_CHAR=5 };
+    enum {GRAPHICS_CHAR = 0, TEXT_CHAR = 1, SPACE_CHAR = 2, HTML_CHAR = 3, JAVA_CHAR = 4, VIZ_CHAR = 5 };
     int  cset          = GRAPHICS_CHAR;
     int  nodesPerFile  = 0; // used by VIZ
-    
+
     string outPath;
     string codePath;
-   
+
     ClassList clist;
     mutable unsigned sNodeNum = 1;
 
@@ -104,7 +103,7 @@ protected:
     //
     size_t displayInterfaces(const RelationPtr parent_ptr, const char* label = " Interfaces:") const;
     void displayChildren(Indent& indent, size_t fnWidth, size_t fnOffset,
-                         size_t metaWidth, const RelationPtr parent_ptr) const;
+        size_t metaWidth, const RelationPtr parent_ptr) const;
     //size_t displayChildren(unsigned parentNum, size_t width,  const RelationPtr parent_ptr,
     //                        const RelationPtr pparent_ptr) const;
     size_t countChildren(const RelationPtr parent_ptr, const RelationPtr pparent_ptr) const;
@@ -114,10 +113,8 @@ protected:
 };
 
 
-inline ostream& operator<<(ostream& os, const RelationList& list)
-{
-    for (RelationList::const_iterator iter = list.begin(); iter != list.end(); iter++)
-    {
+inline ostream& operator<<(ostream& os, const RelationList& list) {
+    for (RelationList::const_iterator iter = list.begin(); iter != list.end(); iter++) {
         RelationPtr child_ptr = *iter;
         os << " " << child_ptr->name;
     }

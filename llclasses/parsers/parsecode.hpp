@@ -38,13 +38,12 @@
 #include <iostream>
 
 #include "llclasses.hpp"
-#include "ClassRel.hpp"
+#include "classrel.hpp"
 
 class Presenter;
 
 // Parse source code and extract class information.
-class ParseCode
-{
+class ParseCode {
 public:
     virtual int parseCode(const string& inFilename, ClassList& outClist, const Presenter&) = 0;
 };

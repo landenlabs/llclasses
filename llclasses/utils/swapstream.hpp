@@ -36,28 +36,24 @@
 
 // -------------------------------------------------------------------------------------------------
 // Swap active iostream internal buffers so you can redirect output
-class SwapStream
-{
+class SwapStream {
 public:
     SwapStream(ostream& inOriginal) :
         mOriginal(inOriginal),
         mOldBuffer(NULL)
     { }
 
-    ~SwapStream()
-    {
+    ~SwapStream() {
         restore();
     }
 
-    void restore()
-    {
+    void restore() {
         if (mOldBuffer)
             mOriginal.rdbuf(mOldBuffer);
         mOldBuffer = NULL;
     }
 
-    void swap(ostream& inRedirect)
-    {
+    void swap(ostream& inRedirect) {
         mOldBuffer = mOriginal.rdbuf(inRedirect.rdbuf());
     }
 

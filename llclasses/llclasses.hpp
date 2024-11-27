@@ -21,9 +21,9 @@ typedef vector<string> Indent;
 typedef vector<string> StringList;
 
 #ifdef HAVE_WIN
-static char DIR_SLASH_CHR      = '\\';
-static const string DIR_SLASH_STR = "\\";
+    static char DIR_SLASH_CHR      = '\\';
+    static const string DIR_SLASH_STR = "\\";
 #else
-static char DIR_SLASH_CHR      = '/';
-static const string DIR_SLASH_STR = "/";
+    static char DIR_SLASH_CHR      = '/';
+    static const string DIR_SLASH_STR = "/";
 #endif

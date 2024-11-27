@@ -40,41 +40,38 @@ using namespace std;
 
 //-------------------------------------------------------------------------------------------------
 // Replace using regular expression
-inline string& replaceRE(string& inOut, const char* findRE, const char* replaceWith)
-{
+inline string& replaceRE(string& inOut, const char* findRE, const char* replaceWith) {
     regex pattern(findRE);
     regex_constants::match_flag_type flags = regex_constants::match_default;
     inOut = regex_replace(inOut, pattern, replaceWith, flags);
     return inOut;
 }
 
-class Colors
-{
+class Colors {
 public:
 #ifdef HAVE_WIN
-	#define RED    "\033[01;31m"
-	#define GREEN  "\033[01;32m"
-	#define YELLOW "\033[01;33m"
-	#define BLUE   "\033[01;34m"
-	#define PINK   "\033[01;35m"
-	#define LBLUE  "\033[01;36m"
-	#define WHITE  "\033[01;37m"
-	#define OFF    "\033[00m"
+#define RED    "\033[01;31m"
+#define GREEN  "\033[01;32m"
+#define YELLOW "\033[01;33m"
+#define BLUE   "\033[01;34m"
+#define PINK   "\033[01;35m"
+#define LBLUE  "\033[01;36m"
+#define WHITE  "\033[01;37m"
+#define OFF    "\033[00m"
 #else
-    #define RED    "\033[01;31m"
-    #define GREEN  "\033[01;32m"
-    #define YELLOW "\033[01;33m"
-    #define BLUE   "\033[01;34m"
-    #define PINK   "\033[01;35m"
-    #define LBLUE  "\033[01;36m"
-    #define WHITE  "\033[01;37m"
-    #define OFF    "\033[00m"
+#define RED    "\033[01;31m"
+#define GREEN  "\033[01;32m"
+#define YELLOW "\033[01;33m"
+#define BLUE   "\033[01;34m"
+#define PINK   "\033[01;35m"
+#define LBLUE  "\033[01;36m"
+#define WHITE  "\033[01;37m"
+#define OFF    "\033[00m"
 #endif
-    
-    static string colorize(const char* inStr)
-    {
+
+    static string colorize(const char* inStr) {
         string str(inStr);
-        
+
         // _x_  where x lowercase, colorize following word
         replaceRE(str, "_y_(\\w+)", YELLOW "$1" OFF);
         replaceRE(str, "_r_(\\w+)",    RED "$1" OFF);
@@ -82,7 +79,7 @@ public:
         replaceRE(str, "_p_(\\w+)",   PINK "$1" OFF);
         replaceRE(str, "_lb_(\\w+)", LBLUE "$1" OFF);
         replaceRE(str, "_w_(\\w+)",  WHITE "$1" OFF);
-        
+
         // _X_  where X uppercase, colorize until _X_
         replaceRE(str, "_r_", YELLOW);
         replaceRE(str, "_R_", RED);
