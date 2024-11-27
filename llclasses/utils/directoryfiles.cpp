@@ -32,12 +32,12 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "DirectoryFiles.hpp"
+#include "directoryfiles.hpp"
 
 #include <iostream>
 
 #ifdef HAVE_WIN
-#include <windows.h>
+    #include <windows.h>
 #endif
 
 #include <stdio.h>
@@ -49,15 +49,13 @@ const string ANY("\\*");
 
 //-------------------------------------------------------------------------------------------------
 // Return true if attribute is a Directory
-inline static bool isDir(DWORD attr)
-{
+inline static bool isDir(DWORD attr) {
     return (attr != -1) && ((attr & FILE_ATTRIBUTE_DIRECTORY) != 0);
 }
 
 //-------------------------------------------------------------------------------------------------
 // Return 'clean' full path, remove extra slahes.
-static string& GetFullPath(string& fname)
-{
+static string& GetFullPath(string& fname) {
     char fullPath[MAX_PATH];
     DWORD len1 = GetFullPathName(fname.c_str(), ARRAYSIZE(fullPath), fullPath, NULL);
     fname = fullPath;
@@ -68,24 +66,20 @@ static string& GetFullPath(string& fname)
 
 DirectoryFiles::DirectoryFiles(const string& dirName) :
     my_dir_hnd(INVALID_HANDLE_VALUE),
-    my_dirName(dirName)
-{ 
+    my_dirName(dirName) {
 }
 
 //-------------------------------------------------------------------------------------------------
 
-DirectoryFiles::~DirectoryFiles()
-{
+DirectoryFiles::~DirectoryFiles() {
     if (my_dir_hnd != INVALID_HANDLE_VALUE)
         FindClose(my_dir_hnd);
 }
 
 //-------------------------------------------------------------------------------------------------
 
-void DirectoryFiles::close()
-{
-    if (my_dir_hnd != INVALID_HANDLE_VALUE)
-    {
+void DirectoryFiles::close() {
+    if (my_dir_hnd != INVALID_HANDLE_VALUE) {
         FindClose(my_dir_hnd);
         my_dir_hnd = INVALID_HANDLE_VALUE;
     }
@@ -93,21 +87,17 @@ void DirectoryFiles::close()
 
 //-------------------------------------------------------------------------------------------------
 
-bool DirectoryFiles::begin()
-{
+bool DirectoryFiles::begin() {
     close();
 
     string dir = my_dirName;
-    if (dir.empty())    
+    if (dir.empty())
         dir = ".\\";    // Default to current directory
-   
+
     DWORD attr = GetFileAttributes(dir.c_str());
-    if (isDir(attr))
-    {
+    if (isDir(attr)) {
         dir += ANY;
-    }
-    else // if (attr != INVALID_FILE_ATTRIBUTES)
-    {
+    } else { // if (attr != INVALID_FILE_ATTRIBUTES)
         GetFullPath(my_dirName);
         // Peel off one subdir from reference name.
         size_t pos = my_dirName.find_last_of(":/\\");
@@ -120,8 +110,7 @@ bool DirectoryFiles::begin()
 
     while (is_more
         && (isDir(my_dirent.dwFileAttributes)
-            && strspn(my_dirent.cFileName, ".") == strlen(my_dirent.cFileName) ))
-    {
+    && strspn(my_dirent.cFileName, ".") == strlen(my_dirent.cFileName) )) {
         is_more = (FindNextFile(my_dir_hnd, &my_dirent) != 0);
     }
 
@@ -130,22 +119,19 @@ bool DirectoryFiles::begin()
 
 //-------------------------------------------------------------------------------------------------
 
-bool DirectoryFiles::more()
-{
+bool DirectoryFiles::more() {
     if (my_dir_hnd == INVALID_HANDLE_VALUE)
         return begin();
 
     bool is_more = false;
-    if (my_dir_hnd != INVALID_HANDLE_VALUE)
-    {
+    if (my_dir_hnd != INVALID_HANDLE_VALUE) {
         // Determine if there any more files
         //   skip any dot-directories.
-        do
-        {
+        do {
             is_more = (FindNextFile(my_dir_hnd, &my_dirent) != 0);
         } while (is_more
             && (isDir(my_dirent.dwFileAttributes)
-            && strspn(my_dirent.cFileName, ".") == strlen(my_dirent.cFileName)));
+        && strspn(my_dirent.cFileName, ".") == strlen(my_dirent.cFileName)));
 
     }
 
@@ -154,23 +140,20 @@ bool DirectoryFiles::more()
 
 //-------------------------------------------------------------------------------------------------
 
-bool DirectoryFiles::is_directory() const
-{
-   return (my_dir_hnd != INVALID_HANDLE_VALUE && isDir(my_dirent.dwFileAttributes));
+bool DirectoryFiles::is_directory() const {
+    return (my_dir_hnd != INVALID_HANDLE_VALUE && isDir(my_dirent.dwFileAttributes));
 }
 
 //-------------------------------------------------------------------------------------------------
 
-const char* DirectoryFiles::name() const
-{
+const char* DirectoryFiles::name() const {
     return (my_dir_hnd != INVALID_HANDLE_VALUE) ?
-        my_dirent.cFileName : NULL; 
+        my_dirent.cFileName : NULL;
 }
 
 //-------------------------------------------------------------------------------------------------
 
-string& DirectoryFiles::fullName(string& fname) const
-{
+string& DirectoryFiles::fullName(string& fname) const {
     fname = my_dirName + DIR_SLASH_STR + name();
     return GetFullPath(fname);
 }
@@ -195,8 +178,7 @@ bool DirectoryFiles::isFile(const string& filepath) {
 
 DirectoryFiles::DirectoryFiles(const string& dirName) :
     my_pDir(NULL),
-    my_pDirEnt(NULL)
-{
+    my_pDirEnt(NULL) {
     realpath(dirName.c_str(), my_fullname);
     my_baseDir = my_fullname;
     my_pDir = opendir(my_baseDir.c_str());
@@ -206,61 +188,51 @@ DirectoryFiles::DirectoryFiles(const string& dirName) :
 
 //-------------------------------------------------------------------------------------------------
 
-DirectoryFiles::~DirectoryFiles()
-{
+DirectoryFiles::~DirectoryFiles() {
     if (my_pDir != NULL)
         closedir(my_pDir);
 }
 
 //-------------------------------------------------------------------------------------------------
 
-bool DirectoryFiles::more()
-{
-    if (my_is_file)
-    {
+bool DirectoryFiles::more() {
+    if (my_is_file) {
         my_is_file = false;
         return true;
     }
-    
-    if (my_is_more)
-    {
+
+    if (my_is_more) {
         my_pDirEnt = readdir(my_pDir);
         my_is_more = my_pDirEnt != NULL;
-        if (my_is_more)
-        {
-            if (my_pDirEnt->d_type == DT_DIR)
-            {
+        if (my_is_more) {
+            if (my_pDirEnt->d_type == DT_DIR) {
                 while (my_is_more &&
-                       (my_pDirEnt->d_name[0] == '.' && !isalnum(my_pDirEnt->d_name[1])))
-                {
+                (my_pDirEnt->d_name[0] == '.' && ! isalnum(my_pDirEnt->d_name[1]))) {
                     more();
                 }
             }
         }
     }
-    
+
     return my_is_more;
 }
 
 //-------------------------------------------------------------------------------------------------
 
-bool DirectoryFiles::is_directory() const
-{
+bool DirectoryFiles::is_directory() const {
     return my_pDirEnt != NULL && my_pDirEnt->d_type == DT_DIR;
 }
 
 //-------------------------------------------------------------------------------------------------
 
-string& DirectoryFiles::fullName(string& fname) const
-{
-    if (my_pDirEnt != NULL)
-    {
+string& DirectoryFiles::fullName(string& fname) const {
+    if (my_pDirEnt != NULL) {
         fname = my_baseDir + DIR_SLASH_STR + my_pDirEnt->d_name;
         // return realpath(fname.c_str(), my_fullname);
         return fname;
         // return GetFullPath(fname);
     }
-    
+
     fname = my_baseDir;
     return fname;;
 }

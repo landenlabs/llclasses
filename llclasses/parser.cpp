@@ -35,31 +35,30 @@
 
 #include <string>
 #include "llclasses.hpp"
-#include "DirectoryFiles.hpp"
+#include "directoryfiles.hpp"
 
-#include "Parser.hpp"
-#include "ParseJava.hpp"      // TODO - have parsers register
-#include "ParseCpp.hpp"       // TODO - have parsers register
+#include "parser.hpp"
+#include "parsejava.hpp"      // TODO - have parsers register
+#include "parsecpp.hpp"       // TODO - have parsers register
 #include "utils.hpp"
-#include "Log.hpp"
+#include "log.hpp"
 
 
 // ---------------------------------------------------------------------------
-size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presenter& presenter)
-{
+size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presenter& presenter) {
     DirectoryFiles directory(dirname);
     string fullname;
     string ext;
-    
+
     size_t fileCount = 0;
     while (directory.more())  {
         directory.fullName(fullname);
         if (directory.is_directory()) {
             fileCount += findClasses(fullname, clist, presenter);
-        } else if (fullname.length() > 0 && !matchesRE(fullname, ignorePathPatterns)) {
+        } else if (fullname.length() > 0 && ! matchesRE(fullname, ignorePathPatterns)) {
             if (getExtension(ext, fullname).length() > 1) {
                 toLower(ext, ext);
-                
+
                 if (DirectoryFiles::isFile(fullname)) {
                     // TODO - have file types register by extension
                     if (ext == ".java") {
@@ -76,9 +75,9 @@ size_t Parser::findClasses(const string& dirname, ClassList& clist, const Presen
                 }
             }
         } else {
-             Log::warning(LOG_IGNORE).out() << "Ignoring file:" << fullname;
+            Log::warning(LOG_IGNORE).out() << "Ignoring file:" << fullname;
         }
     }
-    
+
     return fileCount;
 }

@@ -34,19 +34,18 @@
 
 #pragma once
 
-#include "ParseCode.hpp"
+#include "parsecode.hpp"
 
 class Presenter;
 
 // Parse Java source code and extract class information.
-class ParseJava : public ParseCode
-{
+class ParseJava : public ParseCode {
 public:
     int parseCode(const string& inFilename, ClassList& outClist, const Presenter&);
 
     int parseJavaClasses(const string& inFilename, ClassList& outClist, const Presenter&);
     int parseJavaImports(const string& inFilename, ClassList& outClist, const Presenter&);
-    
+
 private:
     vector<string> classNames;
 };

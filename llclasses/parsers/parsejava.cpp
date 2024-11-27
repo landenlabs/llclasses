@@ -51,18 +51,17 @@
 #include <algorithm>
 #include <regex>
 
-#include "ParseJava.hpp"
-#include "Presenter.hpp"
+#include "parsejava.hpp"
+#include "presenter.hpp"
 #include "utils.hpp"
-#include "Log.hpp"
+#include "log.hpp"
 
 static string emptyStr;
 // eoc=end-of-code semicolon or { or }
 enum State { none, quote1, quote2, paren1, paren2, comment, eoc };
 
 //-------------------------------------------------------------------------------------------------
-static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
-{
+static unsigned findEnd(string &line, string& part, unsigned idx, State& state) {
     const char Q1 = '\'';
     const char Q2 = '"';
     const char AT = '@';
@@ -75,113 +74,113 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
 
     unsigned eol = (unsigned)part.length();
     State prevState = none;
-    
+
     switch (state) {
-        default:
-        case eoc:
-        case none:
-            for (; idx < part.length()-1; idx++) {
-                char chr1 = part[idx];
-                if (chr1 == Q1) {
-                    state = quote1;
-                    idx = findEnd(line, part, idx+1, state);
-                } else if (chr1 == Q2) {
-                    state = quote2;
-                    idx = findEnd(line, part, idx+1, state);
-                } else if (chr1 == AT && part.find(P1, idx+1) != string::npos) {
-                    // @meta({foo,bar})
-                    state = paren1;
-                    idx = findEnd(line, part, idx+1, state);
-                } else if (chr1 == C1) {
-                    char chr2 = part[idx+1];
-                    if (chr2 == C2B) {
-                        state = comment;
-                        idx = findEnd(line, part, idx+2, state);
-                    } else if (chr2 == C2L) {
-                        // if (state == comment || state == quote1 || state == quote2) {
-                            state = prevState;
-                        // }
-                        idx = eol;
-                        break;
-                    } else {
-                        line += (chr1);
-                        line += (chr2);
-                        idx++;
-                    }
-                } else if (chr1 == ';' || chr1 == '{' || chr1 == '}' ) {
-                    line += (chr1);
-                    prevState = state = eoc;
-                    return idx;
+    default:
+    case eoc:
+    case none:
+        for (; idx < part.length() - 1; idx++) {
+            char chr1 = part[idx];
+            if (chr1 == Q1) {
+                state = quote1;
+                idx = findEnd(line, part, idx + 1, state);
+            } else if (chr1 == Q2) {
+                state = quote2;
+                idx = findEnd(line, part, idx + 1, state);
+            } else if (chr1 == AT && part.find(P1, idx + 1) != string::npos) {
+                // @meta({foo,bar})
+                state = paren1;
+                idx = findEnd(line, part, idx + 1, state);
+            } else if (chr1 == C1) {
+                char chr2 = part[idx + 1];
+                if (chr2 == C2B) {
+                    state = comment;
+                    idx = findEnd(line, part, idx + 2, state);
+                } else if (chr2 == C2L) {
+                    // if (state == comment || state == quote1 || state == quote2) {
+                    state = prevState;
+                    // }
+                    idx = eol;
+                    break;
                 } else {
                     line += (chr1);
-                }
-            }
-            break;
-        case quote1:
-            for (; idx < part.length()-1; idx++) {
-                char chr1 = part[idx];
-                if (chr1 == Q1) {
-                    state = none;
-                    return idx;
-                } else if (chr1 == ESC && part[idx+1] == Q1) {
+                    line += (chr2);
                     idx++;
                 }
+            } else if (chr1 == ';' || chr1 == '{' || chr1 == '}' ) {
+                line += (chr1);
+                prevState = state = eoc;
+                return idx;
+            } else {
+                line += (chr1);
             }
-            if (part[idx] == Q1)
+        }
+        break;
+    case quote1:
+        for (; idx < part.length() - 1; idx++) {
+            char chr1 = part[idx];
+            if (chr1 == Q1) {
                 state = none;
-            break;
-            
-        case quote2:
-            for (; idx < part.length()-1; idx++) {
-                char chr1 = part[idx];
-                if (chr1 == Q2) {
-                    state = none;
-                    return idx;
-                } else if (chr1 == ESC && part[idx+1] == Q2) {
-                    idx++;
-                }
+                return idx;
+            } else if (chr1 == ESC && part[idx + 1] == Q1) {
+                idx++;
             }
-            if (part[idx] == Q2)
+        }
+        if (part[idx] == Q1)
+            state = none;
+        break;
+
+    case quote2:
+        for (; idx < part.length() - 1; idx++) {
+            char chr1 = part[idx];
+            if (chr1 == Q2) {
                 state = none;
-            break;
-            
-        case paren1: // Nested Paren ?
-            for (; idx < part.length()-1; idx++) {
-                char chr1 = part[idx];
-                if (chr1 == P1) {
-                    state = paren2;
-                    return findEnd(line, part, idx+1, state);
-                } else if (chr1 == ESC && part[idx+1] == P1) {
-                    idx++;
-                }
+                return idx;
+            } else if (chr1 == ESC && part[idx + 1] == Q2) {
+                idx++;
             }
-            if (part[idx] == P1)
+        }
+        if (part[idx] == Q2)
+            state = none;
+        break;
+
+    case paren1: // Nested Paren ?
+        for (; idx < part.length() - 1; idx++) {
+            char chr1 = part[idx];
+            if (chr1 == P1) {
                 state = paren2;
-            break;
-            
-        case paren2: // Nested Paren ?
-            for (; idx < part.length(); idx++) {
-                char chr1 = part[idx];
-                if (chr1 == P2) {
-                    state = none;
-                    return idx;
-                } else if (chr1 == ESC && part[idx+1] == P2) {
-                    idx++;
-                }
+                return findEnd(line, part, idx + 1, state);
+            } else if (chr1 == ESC && part[idx + 1] == P1) {
+                idx++;
             }
-            break;
-            
-        case comment:
-            for (; idx < part.length()-1; idx++) {
-                char chr1 = part[idx];
-                if (chr1 == '*' && part[idx+1] == '/') {
-                    state = prevState;
-                    return idx+1;
-                } 
+        }
+        if (part[idx] == P1)
+            state = paren2;
+        break;
+
+    case paren2: // Nested Paren ?
+        for (; idx < part.length(); idx++) {
+            char chr1 = part[idx];
+            if (chr1 == P2) {
+                state = none;
+                return idx;
+            } else if (chr1 == ESC && part[idx + 1] == P2) {
+                idx++;
             }
-            break;
+        }
+        break;
+
+    case comment:
+        for (; idx < part.length() - 1; idx++) {
+            char chr1 = part[idx];
+            if (chr1 == '*' && part[idx + 1] == '/') {
+                state = prevState;
+                return idx + 1;
+            }
+        }
+        break;
     }
-    
+
     if (idx < eol) {
         char chr1 = part[idx];
         if (state == none || state == eoc) {
@@ -195,26 +194,24 @@ static unsigned findEnd(string &line, string& part, unsigned idx, State& state)
 }
 
 //-------------------------------------------------------------------------------------------------
-static istream& getJavaLine(istream& in, string& line, string& buffer)
-{
+static istream& getJavaLine(istream& in, string& line, string& buffer) {
     State state = none;
 
     line.clear();
-    while (buffer.length()>0 || getline(in, buffer).good())
-    {
+    while (buffer.length() > 0 || getline(in, buffer).good()) {
         unsigned idx;
         for (idx = 0; idx < buffer.length() && state != eoc; idx++) {
             idx = findEnd(line, buffer, idx, state);
         }
-        
+
 #if 1
         if (buffer.size() > 1 && buffer[0] == '@')
             line.append(buffer);    // Keep Meta strings @foo({blah, blah})
 #endif
-        
+
         buffer.erase(0, idx);
-        
-        if (!line.empty() && (state == eoc) ) {
+
+        if (! line.empty() && (state == eoc) ) {
             trim(line);
             return in;
         }
@@ -227,53 +224,44 @@ static istream& getJavaLine(istream& in, string& line, string& buffer)
 // ===============================================================================================
 // Function used with Split object to perform custom split to handle nested
 // Java Generic (template) typing.   ex:  foo<bar<car>>>
-static size_t FindSplit(const string& str, const char* delimList, size_t begIdx)
-{
+static size_t FindSplit(const string& str, const char* delimList, size_t begIdx) {
     int depth = 0;
-    for (size_t idx = begIdx; idx < str.length(); idx++)
-    {
+    for (size_t idx = begIdx; idx < str.length(); idx++) {
         const char c = str[idx];
         if (c == '<')
             depth++;
         if (c == '>')
             depth--;
-        if (depth == 0)
-        {
-            for (const char* cptr = delimList; *cptr != '\0'; cptr++)
-            {
+        if (depth == 0) {
+            for (const char* cptr = delimList; *cptr != '\0'; cptr++) {
                 if (c == *cptr)
                     return idx;
             }
         }
     }
-    
+
     return string::npos;
 }
 
 //-------------------------------------------------------------------------------------------------
-static string& removeTemplate(string& inOut)
-{
+static string& removeTemplate(string& inOut) {
     return replaceRE(inOut, "<.*>", "");
 }
 
 //-------------------------------------------------------------------------------------------------
 // Parse java source code and extract class or import relationships
 int ParseJava::parseCode(const string& filename, ClassList& clist, const Presenter& presenter) {
-    
-    if (presenter.parseImports != 0)
-    {
+
+    if (presenter.parseImports != 0) {
         return parseJavaImports(filename, clist, presenter);
-    }
-    else
-    {
+    } else {
         return parseJavaClasses(filename, clist, presenter);
     }
 }
 
 //-------------------------------------------------------------------------------------------------
 // Parse java source code and extract class definitions
-int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const Presenter& presenter)
-{
+int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const Presenter& presenter) {
     // Java class definition syntax.
     //
     // [@MetaDescriptions]
@@ -295,7 +283,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
     //   transient
     //   volatile
     //   strictfp
-    
+
     // Examples:
     //
     // private static final class CacheKey extends Master.Inner1 implements Cloneable.Inner2 {
@@ -316,23 +304,24 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
     // @SuppressWarnings({"unused", "WeakerAccess", "FieldCanBeLocal"})
     // public abstract class WxNotify {
     //
-    
+
     string line;
     string buffer;
     static regex javePackageRE("package ([A-Za-z0-9_.]+);");
-    static regex javeClassRE("([^ ]*? |)([Aa-z][Aa-z ]*|)(class|interface) ([A-Za-z0-9_]+)( *<.*?>+|)( extends [A-Za-z0-9_.<>, ]+?|)( implements [A-Za-z0-9_.<>, ]+?|) *[{]");
+    static regex
+    javeClassRE("([^ ]*? |)([Aa-z][Aa-z ]*|)(class|interface) ([A-Za-z0-9_]+)( *<.*?>+|)( extends [A-Za-z0-9_.<>, ]+?|)( implements [A-Za-z0-9_.<>, ]+?|) *[{]");
     smatch match;
     string package = "none";
     ifstream in(filename);
 
     classNames.clear();
-    
+
     while (getJavaLine(in, line, buffer)) {
         replaceAll(line, ", ", ",");
         if (regex_match(line, match, javePackageRE, regex_constants::match_default)) {
             package = match[1];
         } else  if (regex_match(line, match, javeClassRE, regex_constants::match_default)) {
-            
+
             string outer = join(classNames, ".", ".");
             string meta = match[1];
             string modifiers =  match[2];           // "public" ... "abstract", etc
@@ -341,9 +330,8 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
             string generic = match[5];              //
             string extends = match[6];              // extends alpha
             string implements = match[7];           // implementa iname1, iname2
-   
-            if (meta.find("@") != 0)
-            {
+
+            if (meta.find("@") != 0) {
                 modifiers = meta + " " + modifiers;
                 meta.clear();
             }
@@ -354,7 +342,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
             if (crel_ptr != NULL) {
                 crel_ptr->meta = meta;
                 crel_ptr->generic = generic;
-                
+
                 // Add all parent (extend) classes
                 if (extends.length() > 0) {
                     extends = trim(replaceAll(extends, " extends ", emptyStr));
@@ -364,7 +352,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
                         clist.addParent(crel_ptr, extendItem, filename, package);
                     }
                 }
-                
+
                 // Add all interfaces
                 if (implements.length() > 0) {
                     implements = trim(replaceAll(implements, " implements ", emptyStr));
@@ -378,7 +366,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
                 }
 
                 classNames.push_back(name); // Used for nested (inner classes)
-                
+
                 if (presenter.logLevel >= LOG_ADDING_CLASSES) {
                     cout << line << endl;
                     cout << "  Modifiers       =" << modifiers << endl;
@@ -390,18 +378,16 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
                 }
             }
         } else {
-            
+
             // Count nesting of braces, used for nested inner classes
             regex bracesRE ("[{}]");
             regex_iterator<string::iterator> rit ( line.begin(), line.end(), bracesRE );
             regex_iterator<string::iterator> rend;
-            
+
             while (rit != rend) {
                 if ( rit->str() == "{") {
                     classNames.push_back("");
-                }
-                else if (classNames.size() > 0)
-                {
+                } else if (classNames.size() > 0) {
                     classNames.pop_back();
                 }
                 rit++;
@@ -410,17 +396,16 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
     }
 
     classNames.clear(); // Should be empty already.
-    
+
     return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
 // Remove trailing parts, return true if empty.
-static bool removeTailParts(string& inOutStr, int parts, const char* find=".")
-{
+static bool removeTailParts(string& inOutStr, int parts, const char* find = ".") {
     if (parts > 0) {
         size_t dotPos = inOutStr.length();
-        while (parts-- > 0 && (dotPos = inOutStr.rfind(find, dotPos-1)) != string::npos);
+        while (parts-- > 0 && (dotPos = inOutStr.rfind(find, dotPos - 1)) != string::npos);
         if (dotPos < inOutStr.length())
             inOutStr.erase(dotPos);
         return (dotPos == string::npos) || inOutStr.empty();
@@ -429,11 +414,10 @@ static bool removeTailParts(string& inOutStr, int parts, const char* find=".")
 }
 //--------------------------------------------------------------------------------------------------
 // Keep head parts, always return false
-static bool keepHeadarts(string& inOutStr, int parts, const char* find=".")
-{
+static bool keepHeadarts(string& inOutStr, int parts, const char* find = ".") {
     if (parts > 0) {
         size_t dotPos = -1;
-        while (parts-- > 0 && (dotPos = inOutStr.find(find, dotPos+1)) != string::npos);
+        while (parts-- > 0 && (dotPos = inOutStr.find(find, dotPos + 1)) != string::npos);
         if (dotPos < inOutStr.length())
             inOutStr.erase(dotPos);
     }
@@ -441,8 +425,7 @@ static bool keepHeadarts(string& inOutStr, int parts, const char* find=".")
 }
 //--------------------------------------------------------------------------------------------------
 // Keep head parts, return true if empty.
-static bool removeParts(string& inOutStr, int parts, const char* find=".")
-{
+static bool removeParts(string& inOutStr, int parts, const char* find = ".") {
     if (parts < 0) {
         return removeTailParts(inOutStr, -parts, find);
     }
@@ -451,9 +434,8 @@ static bool removeParts(string& inOutStr, int parts, const char* find=".")
 
 //--------------------------------------------------------------------------------------------------
 // Parse java source code and extract imported packages
-int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const Presenter& presenter)
-{
-    
+int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const Presenter& presenter) {
+
     // import static com.google.common.base.Preconditions.checkNotNull;
     // import static com.google.common.collect.ImmutableList.toImmutableList;
     // import static com.google.common.collect.ImmutableSet.toImmutableSet;
@@ -462,7 +444,7 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
     // import com.google.auto.value.AutoValue;
     // import com.google.common.base.Equivalence;
     // import com.google.common.base.Joiner;
-    
+
     string line;
     string buffer;
     static regex javePackageRE("package ([A-Za-z0-9_.]+);");
@@ -471,11 +453,10 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
     string package = "none";
     ifstream in(filename);
     RelationPtr crel_ptr = NULL;
-    
+
     while (getJavaLine(in, line, buffer)) {
         replaceAll(line, ", ", ",");
-        if (regex_match(line, match, javePackageRE, regex_constants::match_default))
-        {
+        if (regex_match(line, match, javePackageRE, regex_constants::match_default)) {
             assert(crel_ptr == NULL);
             package = match[1];
             if (removeParts(package, presenter.parseImports)) {
@@ -484,29 +465,27 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
             }
             crel_ptr =
                 clist.addClass("class", package, "", filename, package, true);
-        }
-        else if (regex_match(line, match, javeImportRE, regex_constants::match_default))
-        {
+        } else if (regex_match(line, match, javeImportRE, regex_constants::match_default)) {
             if (crel_ptr == NULL) {
                 Log::warning(LOG_IGNORE).out() << "Missing valid package in class file " << filename;
                 return 0;   // No valid package
             }
-            
+
             string modifiers = match[1];            // static
             string name = match[2];
 
             if (removeParts(name, presenter.parseImports)) {
                 continue;
             }
-            
+
             replaceAll(name, ".*", "");
-            if (false) {
+            if (/* DISABLES CODE */ (false)) {
                 clist.addParent(crel_ptr, name, filename, package);
             } else {
                 bool flip = false;
                 if (flip) {
                     RelationPtr child_ptr =
-                    clist.addClass("class", package, modifiers, filename, name, false);
+                        clist.addClass("class", package, modifiers, filename, name, false);
                     // child_ptr->addParent(crel_ptr);
                     // crel_ptr->addChild(child_ptr);
                     if (child_ptr != NULL) {
@@ -514,7 +493,7 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
                     }
                 } else {
                     RelationPtr child_ptr =
-                         clist.addClass("class", name, modifiers, filename, name, false);
+                        clist.addClass("class", name, modifiers, filename, name, false);
                     // child_ptr->addParent(crel_ptr);
                     // crel_ptr->addChild(child_ptr);
                     if (child_ptr != NULL) {
@@ -522,7 +501,7 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
                     }
                 }
             }
-            
+
             if (presenter.logLevel >= LOG_ADDING_CLASSES) {
                 cout << line;
                 cout << "\n  Modifiers =" << modifiers;
@@ -533,24 +512,23 @@ int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const 
             }
         }
     }
-    
-     if (presenter.logLevel >= LOG_CLASS_LIST) {
-         ClassList::const_iterator iter;
-         RelationPtr crel_ptr;
-         
-         cout << "\n ---- Class List ---- \n";
-         for (iter = clist.begin(); iter != clist.end(); iter++)
-         {
-             crel_ptr = iter->second;
-             cout << "\nname    =" << crel_ptr->name;
-             cout << "\nparents =" << crel_ptr->parents.size() << " " << crel_ptr->parents;
-             cout << "\nchildren=" << crel_ptr->children.size() << " " << crel_ptr->children;
-             cout << "\nfile    =" << crel_ptr->filename;
-             cout << "\ndefined =" << crel_ptr->definition;
-             cout << "\n";
-         }
-     }
-    
+
+    if (presenter.logLevel >= LOG_CLASS_LIST) {
+        ClassList::const_iterator iter;
+        RelationPtr crel_ptr;
+
+        cout << "\n ---- Class List ---- \n";
+        for (iter = clist.begin(); iter != clist.end(); iter++) {
+            crel_ptr = iter->second;
+            cout << "\nname    =" << crel_ptr->name;
+            cout << "\nparents =" << crel_ptr->parents.size() << " " << crel_ptr->parents;
+            cout << "\nchildren=" << crel_ptr->children.size() << " " << crel_ptr->children;
+            cout << "\nfile    =" << crel_ptr->filename;
+            cout << "\ndefined =" << crel_ptr->definition;
+            cout << "\n";
+        }
+    }
+
     return 0;
 }
 

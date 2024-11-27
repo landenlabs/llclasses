@@ -51,9 +51,8 @@ typedef set<RelationPtr> RelationList;
 // -------------------------------------------------------------------------------------------------
 // Manage class relations - parents, children, interfaces, etc.
 // @see ClassList
-class ClassRelations
-{
-  public:
+class ClassRelations {
+public:
     string          type;           // class or interface
     string          name;           // Class name  outer.inner[.inner]
     string          modifier;       // Modifiers public, static, abstract
@@ -62,49 +61,49 @@ class ClassRelations
     string          generic;        // Java optional generic modifier
     string          meta;           // Java meta tags, @api, @deprecated, etc.
     bool            definition;     // false if declaration (use but not defined)
-    
+
     mutable unsigned flags = 0;      // Used to prevent circular presentation.
-    
+
     RelationList    interfaces;     // List of interfaces
     RelationList    parents;        // List of super classes (base derived from)
     RelationList    children;       // List of children (derived from us)
-    
+
 
     ClassRelations(
-           const string& type,
-           const string& className,
-           const string& modifier,  // public private static final abstract
-           const string& filename,
-           const string& package,
-           bool definition) :
-      type(type), name(className), modifier(modifier),
-      filename(filename), package(package),
-      definition(definition)
-        { }
-    
-    
+        const string& type,
+        const string& className,
+        const string& modifier,  // public private static final abstract
+        const string& filename,
+        const string& package,
+        bool definition) :
+        type(type), name(className), modifier(modifier),
+        filename(filename), package(package),
+        definition(definition)
+    { }
+
+
     void  addInterface(const RelationPtr relPtr)
-        { addRelationTo(interfaces, relPtr); }
+    { addRelationTo(interfaces, relPtr); }
     void  addParent(const RelationPtr relPtr)
-        { addRelationTo(parents, relPtr); }
+    { addRelationTo(parents, relPtr); }
     void  addChild(const RelationPtr relPtr)
-        { addRelationTo(children, relPtr); }
-        
+    { addRelationTo(children, relPtr); }
+
     RelationPtr findInterface(const RelationPtr relPtr)
-        { return find(interfaces, relPtr); }
+    { return find(interfaces, relPtr); }
     RelationPtr findParent(const RelationPtr relPtr)
-        { return find(parents, relPtr); }
+    { return find(parents, relPtr); }
     RelationPtr findChild(const RelationPtr relPtr)
-        { return find(children, relPtr); }
-    
+    { return find(children, relPtr); }
+
     bool isCircular() {
         return find(parents, this) != NULL;
     }
     bool isSuper() {
         return parents.empty();
     }
-    
-  protected:    
+
+protected:
     void  addRelationTo(RelationList&, const RelationPtr);
 
     RelationPtr find(RelationList&, const RelationPtr);
@@ -112,29 +111,28 @@ class ClassRelations
 
 // -------------------------------------------------------------------------------------------------
 // Manager collection of Class Relation objects
-class ClassList : public multimap<string, RelationPtr>
-{
+class ClassList : public multimap<string, RelationPtr> {
 private:
     using multimap::find;
-    
+
 public:
     // Create and add ClassRelations to list (if not duplicate), key is className
     RelationPtr addClass(
-         const string& type,            // class or interface
-         const string& className,
-         const string& classModifier,   // public, abstract, static, ...
-         const string& filename,
-         const string& package,
-         bool definition);              // false if declaration (use but not definition)
-    
+        const string& type,            // class or interface
+        const string& className,
+        const string& classModifier,   // public, abstract, static, ...
+        const string& filename,
+        const string& package,
+        bool definition);              // false if declaration (use but not definition)
+
     void addParent(
         RelationPtr pChild,
         const string& parentsName,
         const string& filename,
         const string& package);
-    
+
     void release();
-    
+
     PatternList ignoreClassPatterns;        // -v <class_regex_pattern> [-v <>]...
     PatternList includeClassPatterns;       // -i <class_regex_pattern> [-i <>]...
 };

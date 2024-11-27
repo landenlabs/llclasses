@@ -34,7 +34,7 @@
 
 
 #include "Publish.hpp"
-#include "Presenter.hpp"
+#include "presenter.hpp"
 #include "SwapStream.hpp"
 #include "utils.hpp"
 
@@ -43,21 +43,19 @@ static const char sNL[] = "\\n";
 
 // -------------------------------------------------------------------------------------------------
 // Output GraphViz header.
-void PublishViz::outHeader() const
-{
+void PublishViz::outHeader() const {
     needHeader = false;
     cout << "digraph " << replaceAll(graphName, " ", "_") << " {\n"
-    "bgcolor=transparent\n"
-    "overlap=false;\n"
-    "label=\"" << title << " Class Hierarchy - Dennis Lang & GraphViz\";\n"
-    "fontsize=12;\n"
-    "node [shape=box,style=filled,fillcolor=white];\n";
+            "bgcolor=transparent\n"
+            "overlap=false;\n"
+            "label=\"" << title << " Class Hierarchy - Dennis Lang & GraphViz\";\n"
+            "fontsize=12;\n"
+            "node [shape=box,style=filled,fillcolor=white];\n";
 }
 
 // -------------------------------------------------------------------------------------------------
 // Complete GraphViz output file.
-void PublishViz::outTrailer() const
-{
+void PublishViz::outTrailer() const {
     cout << "}\n";
     needHeader = true;
 }
@@ -65,10 +63,9 @@ void PublishViz::outTrailer() const
 
 // -------------------------------------------------------------------------------------------------
 // Make title from code path, converting special characters to '_'
-static string getTitle(const string& codePath)
-{
+static string getTitle(const string& codePath) {
     //   d:\dir1\dir2\file.java  =>  _dir1_dir2_file
-    
+
     size_t extn = codePath.find_last_of('.');
     string title = codePath;
     if (extn != string::npos)
@@ -78,57 +75,51 @@ static string getTitle(const string& codePath)
         title.resize(dirPos);
     size_t colonPos = title.find_first_of(':');
     if (colonPos != string::npos)
-        title.erase(0, colonPos+1);
-    
+        title.erase(0, colonPos + 1);
+
     regex specialCharRe("[*?-]+");
     regex_constants::match_flag_type flags = regex_constants::match_default;
     title = regex_replace(title, specialCharRe, "_", flags);
     replace(title.begin(), title.end(), DIR_SLASH_CHR, '_');
-    
+
     // graphName = title;
     return title;
 }
 
 // -------------------------------------------------------------------------------------------------
-static size_t countInterfaces(const RelationPtr parentPtr)
-{
+static size_t countInterfaces(const RelationPtr parentPtr) {
     return (parentPtr != NULL) ? parentPtr->interfaces.size() : 0;
 }
 
 // -------------------------------------------------------------------------------------------------
-static size_t countChildren(const RelationPtr parentPtr, const RelationPtr pparent_ptr)
-{
+static size_t countChildren(const RelationPtr parentPtr, const RelationPtr pparent_ptr) {
     size_t nodeCnt = 0;
     const RelationList& children = parentPtr->children;
-    
+
 
     nodeCnt += countInterfaces(parentPtr);
-    
-    for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++)
-    {
+
+    for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++) {
         nodeCnt += 1 + countChildren(*iter, parentPtr);
     }
-    
+
     return nodeCnt;
 }
 
 // -------------------------------------------------------------------------------------------------
-size_t displayInterfaces(unsigned parentNum, size_t width, const RelationPtr relPtr)
-{
+size_t displayInterfaces(unsigned parentNum, size_t width, const RelationPtr relPtr) {
     size_t nodeCnt = 0;
-    if (relPtr != NULL)
-    {
+    if (relPtr != NULL) {
         // [color=red,penwidth=3.0]
         const RelationList& interfaces = relPtr->interfaces;
-        for (RelationList::const_iterator iter = interfaces.begin(); iter != interfaces.end(); iter++)
-        {
+        for (RelationList::const_iterator iter = interfaces.begin(); iter != interfaces.end(); iter++) {
             string name = (*iter)->name;
             cout << "\"" << name << "\"  [style=filled, fillcolor=yellow] \n";
             cout << "\"" << name << "\" -> \"" << relPtr->name << "\" [color=red,penwidth=3.0] \n";
             nodeCnt++;
         }
     }
-    
+
     return nodeCnt;
 }
 
@@ -137,70 +128,66 @@ size_t displayInterfaces(unsigned parentNum, size_t width, const RelationPtr rel
 //   * no output file
 //   * -Z split graphviz by subtree
 //   * -N split by nodes per file.
-bool PublishViz::nextFile(ostream& out, size_t& nodeCnt, size_t nextNodeCnt) const
-{
+bool PublishViz::nextFile(ostream& out, size_t& nodeCnt, size_t nextNodeCnt) const {
     bool next = false;
     if (presenter.outPath.empty())
         return false;
-    if (!out.good() || nodeCnt == -1)
+    if (! out.good() || nodeCnt == -1)
         next = true;
     if (presenter.vizSplit)
         next = true;
     if (presenter.nodesPerFile != 0
-        && nodeCnt * 2 > presenter.nodesPerFile
-        && nodeCnt + nextNodeCnt/2 > presenter.nodesPerFile)
+            && nodeCnt * 2 > presenter.nodesPerFile
+            && nodeCnt + nextNodeCnt / 2 > presenter.nodesPerFile)
         next = true;
-    
+
     if (next)
         nodeCnt = 0;
-    
+
     return next;
 }
 
 // -------------------------------------------------------------------------------------------------
 size_t PublishViz::displayChildren(
-      unsigned parentNum,
-      size_t width,
-      const RelationPtr parentPtr,
-      const RelationPtr pparentPtr) const
-{
+    unsigned parentNum,
+    size_t width,
+    const RelationPtr parentPtr,
+    const RelationPtr pparentPtr) const {
     size_t nodeCnt = 0;
     RelationPtr child_ptr;
     const char* parendModStr = "";
     const char* childModStr = "";
-    
+
     //  if (cset == VIZ_CHAR)
     {
         nodeCnt += displayInterfaces(parentNum, width, parentPtr);
-        
+
         if (parentPtr == NULL)
             parendModStr = " [fillcolor=cyan1]";
         else
             parendModStr = " [fillcolor=cyan4]";
     }
-    
+
     const RelationList& children =  parentPtr->children;
-    if (!children.empty()) {
-        for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++)
-        {
+    if (! children.empty()) {
+        for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++) {
             child_ptr = *iter;
-            
-            if (child_ptr != NULL)
-            {
+
+            if (child_ptr != NULL) {
                 string chilNname = child_ptr->name;
                 // if (cset == VIZ_CHAR)
                 {
                     replaceAll(chilNname, sDot, sNL);
                     string parentName = parentPtr->name;
                     replaceAll(parentName, sDot, sNL);
-                    
+
                     if (parentPtr->modifier.find("abstract") != -1)
                         parendModStr = (parentPtr == NULL) ? " [color=green] " : " [fillcolor=chartreuse] ";
                     if (child_ptr->modifier.find("abstract") != -1)
                         childModStr = (parentPtr == NULL) ? " [color=green] " : " [fillcolor=chartreuse] ";
                     if (child_ptr->modifier.find("public") == -1)
                         childModStr = " [color=red] ";
-                    
+
                     if (*parendModStr != 0)
                         cout << "\"" << parentName << "\" " << parendModStr << endl;
                     if (*childModStr != 0)
@@ -212,30 +199,25 @@ size_t PublishViz::displayChildren(
                 nodeCnt += displayChildren(presenter.sNodeNum++, width, child_ptr, parentPtr);
             }
         }
-    }
-    else
-    {
+    } else {
         // Single node - no children
         string name = parentPtr->name;
         // if (cset == VIZ_CHAR)
         {
-            if (presenter.importPackage)
-            {
+            if (presenter.importPackage) {
                 if (parentPtr->parents.empty())
                     cerr << "Isolated package " << name << endl;
-            }
-            else
-            {
+            } else {
                 replaceAll(name, sDot, sNL);
                 if (parentPtr->modifier.find("abstract") != -1)
                     childModStr = (parentPtr == NULL) ? " [color=green] " : " [fillcolor=chartreuse] ";
                 if (parentPtr->modifier.find("public") == -1)
                     childModStr = " [color=red] ";
-                
+
                 if (*childModStr != 0)
                     cout << "\"" << name << "\" " << childModStr << endl;
                 cout << "\"" << name << "\"\n";
-                
+
                 nodeCnt++;
             }
         }
@@ -245,19 +227,17 @@ size_t PublishViz::displayChildren(
 
 
 // -------------------------------------------------------------------------------------------------
-void PublishViz::displayDependencies() const
-{
+void PublishViz::displayDependencies() const {
     RelationPtr crel_ptr;
     ClassList::const_iterator iter;
-    
+
     size_t fileWidth = 14;
     size_t nameWidth = 14;
     size_t modWidth = 6;       // public
     string basepath;
-    
+
     // Compute maximum field sizes
-    for (iter = clist.begin(); iter != clist.end(); iter++)
-    {
+    for (iter = clist.begin(); iter != clist.end(); iter++) {
         crel_ptr = iter->second;
         fileWidth = max(fileWidth, crel_ptr->filename.length());
         nameWidth = max(nameWidth, crel_ptr->name.length());
@@ -266,24 +246,20 @@ void PublishViz::displayDependencies() const
     }
     size_t baseLen = basepath.rfind(DIR_SLASH_STR) + 1;
     fileWidth -= baseLen;
-    
+
     SwapStream swapStream(cout);
     title = graphName = getTitle(getIt(presenter.titles, 0, "Class Diagram"));
-    
+
     size_t nodeCnt = -1;
-    for (iter = clist.begin(); iter != clist.end(); iter++)
-    {
+    for (iter = clist.begin(); iter != clist.end(); iter++) {
         crel_ptr = iter->second;
-        if (crel_ptr->parents.empty())  // Find Super class (no parent)
-        {
+        if (crel_ptr->parents.empty()) { // Find Super class (no parent)
             // Have super class - now display subclasses.
-            
+
             // if (cset == VIZ_CHAR)
             {
-                if (nextFile(outStream, nodeCnt, countChildren(crel_ptr, NULL)))
-                {
-                    if (outStream.good())
-                    {
+                if (nextFile(outStream, nodeCnt, countChildren(crel_ptr, NULL))) {
+                    if (outStream.good()) {
                         outTrailer();
                         swapStream.restore();
                         outStream.close();
@@ -298,22 +274,21 @@ void PublishViz::displayDependencies() const
                     else
                         cerr << "Failed to open " << outFile << endl;
                 }
-                
+
                 if (needHeader)
                     outHeader(); // outVizHeader();
-                
+
                 // cout << crel_ptr->name() << " -> " <<   crel_ptr->file() << endl;
-                nodeCnt += displayChildren(presenter.sNodeNum , fileWidth, crel_ptr, NULL);
+                nodeCnt += displayChildren(presenter.sNodeNum, fileWidth, crel_ptr, NULL);
                 // display_interfaces(sNodeNum , fileWidth, crel_ptr);
                 presenter.sNodeNum++;
             }
         }
     }
-    
+
     // if (cset == VIZ_CHAR)
     {
-        if (outStream.good())
-        {
+        if (outStream.good()) {
             outTrailer();
             swapStream.restore();
             outStream.close();

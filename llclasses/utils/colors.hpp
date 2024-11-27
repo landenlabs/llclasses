@@ -40,33 +40,31 @@
 #include "utils.hpp"
 using namespace std;
 
-class Colors
-{
+class Colors {
 public:
 #ifdef HAVE_WIN
-	#define RED    "\033[01;31m"
-	#define GREEN  "\033[01;32m"
-	#define YELLOW "\033[01;33m"
-	#define BLUE   "\033[01;34m"
-	#define PINK   "\033[01;35m"
-	#define LBLUE  "\033[01;36m"
-	#define WHITE  "\033[01;37m"
-	#define OFF    "\033[00m"
+#define RED    "\033[01;31m"
+#define GREEN  "\033[01;32m"
+#define YELLOW "\033[01;33m"
+#define BLUE   "\033[01;34m"
+#define PINK   "\033[01;35m"
+#define LBLUE  "\033[01;36m"
+#define WHITE  "\033[01;37m"
+#define OFF    "\033[00m"
 #else
-    #define RED    "\033[01;31m"
-    #define GREEN  "\033[01;32m"
-    #define YELLOW "\033[01;33m"
-    #define BLUE   "\033[01;34m"
-    #define PINK   "\033[01;35m"
-    #define LBLUE  "\033[01;36m"
-    #define WHITE  "\033[01;37m"
-    #define OFF    "\033[00m"
+#define RED    "\033[01;31m"
+#define GREEN  "\033[01;32m"
+#define YELLOW "\033[01;33m"
+#define BLUE   "\033[01;34m"
+#define PINK   "\033[01;35m"
+#define LBLUE  "\033[01;36m"
+#define WHITE  "\033[01;37m"
+#define OFF    "\033[00m"
 #endif
-    
-    static string colorize(const char* inStr)
-    {
+
+    static string colorize(const char* inStr) {
         string str(inStr);
-        
+
         // _x_  where x lowercase, colorize following word
         replaceRE(str, "_y_([^ =]+)", YELLOW "$1" OFF);
         replaceRE(str, "_r_([^ =]+)",    RED "$1" OFF);
@@ -74,7 +72,7 @@ public:
         replaceRE(str, "_p_([^ =]+)",   PINK "$1" OFF);
         replaceRE(str, "_lb_([^ =]+)", LBLUE "$1" OFF);
         replaceRE(str, "_w_([^ =]+)",  WHITE "$1" OFF);
-        
+
         // _X_  where X uppercase, colorize until _X_
         replaceRE(str, "_Y_", YELLOW);
         replaceRE(str, "_R_", RED);

@@ -32,8 +32,8 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "Log.hpp"
-#include "Colors.hpp"
+#include "log.hpp"
+#include "colors.hpp"
 
 // const unsigned int OFF_LEVEL = 10;
 unsigned int Log::W_LEVEL = Log::OFF_LEVEL;

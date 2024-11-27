@@ -35,19 +35,18 @@
 #pragma once
 
 #include <string>
-#include "ParseCode.hpp"
+#include "parsecode.hpp"
 
 class Presenter;
 
 // Parse C++ source code and extract class information.
-class ParseCpp : public ParseCode
-{
+class ParseCpp : public ParseCode {
 public:
     int parseCode(const string& inFilename, ClassList& outClist, const Presenter&);
-    
+
     int parseCppClasses(const string& inFilename, ClassList& outClist, const Presenter&);
     int parseCppIncludes(const string& inFilename, ClassList& outClist, const Presenter&);
-    
+
 private:
     // vector<string> classNames;
 };

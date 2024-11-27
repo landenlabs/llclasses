@@ -42,22 +42,19 @@
 
 // =================================================================================================
 // Split string into parts.
-class Split : public vector<string>
-{
+class Split : public vector<string> {
 public:
     Split() {
     }
-    
+
     // Examples
     //   Split args(inString, ",", false, 2);
     //   Split args(inString, ",");
-    Split(const string& str, const char* delimList, bool keepEmpty=true, int maxSplit=numeric_limits<int>::max())
-    {
+    Split(const string& str, const char* delimList, bool keepEmpty = true, int maxSplit = numeric_limits<int>::max()) {
         size_t lastPos = 0;
         size_t pos = str.find_first_of(delimList);
-        
-        while (pos != string::npos && --maxSplit > 0)
-        {
+
+        while (pos != string::npos && --maxSplit > 0) {
             if (keepEmpty || pos != lastPos)
                 push_back(str.substr(lastPos, pos - lastPos));
             lastPos = pos + 1;
@@ -66,7 +63,7 @@ public:
         if (lastPos < str.length())
             push_back(str.substr(lastPos, (maxSplit == 0) ? str.length() : pos - lastPos));
     }
-    
+
     // Split string into parts.
     //
     // Example:
@@ -82,15 +79,13 @@ public:
     //
     //
     typedef size_t(*Find_of)(const string& str, const char* delimList, size_t begIdx);
-    
-    Split(const string& str, const char* delimList, Find_of find_of)
-    {
+
+    Split(const string& str, const char* delimList, Find_of find_of) {
         size_t lastPos = 0;
         // size_t pos = str.find_first_of(delimList);
         size_t pos = (*find_of)(str, delimList, 0);
-        
-        while (pos != string::npos)
-        {
+
+        while (pos != string::npos) {
             if (pos != lastPos)
                 push_back(str.substr(lastPos, pos - lastPos));
             lastPos = pos + 1;
@@ -127,10 +122,10 @@ inline string equalSubStr(const string& left, const string& right) {
     size_t len = min(left.length(), right.length());
     if (len == 0)
         return (left.length() > right.length()) ? left : right;
-    
+
     while (idx < len && left[idx] == right[idx])
         idx++;
-    
+
     return left.substr(0, idx);
 }
 
@@ -145,7 +140,7 @@ inline string trim(string& inOut) {
     while (iIdx < len && isspace(inOut[iIdx]) ) {
         iIdx++;
     }
-    while (len > iIdx && isspace(inOut[len-1])) {
+    while (len > iIdx && isspace(inOut[len - 1])) {
         len--;
     }
     while (iIdx < len) {
@@ -165,31 +160,27 @@ inline string trim(string& inOut) {
 //-------------------------------------------------------------------------------------------------
 // Join vector of strings:  aa, bb, cc, dd
 // join(vec, "-", "")  out = aa-bb-cc-dd
-// join(vec, "-", "-") out = aa-bb-cc-dd-  
+// join(vec, "-", "-") out = aa-bb-cc-dd-
 template<typename TT, typename STR>
-inline string join(TT list, STR separator, STR terminator)
-{
+inline string join(TT list, STR separator, STR terminator) {
     string result;
     string sep = "";
-    for (const auto & piece : list)
-    {
+    for (const auto & piece : list) {
         result += sep;
         result += piece;
         sep = separator;
     }
-    if (!result.empty())
+    if (! result.empty())
         result += terminator;
- 
+
     return result;
 }
 
 //-------------------------------------------------------------------------------------------------
 // Replace (modify inOut) all occurances of 'find' with 'replace'
-inline string& replaceAll(string& inOut, const string& find, const string& replace)
-{
+inline string& replaceAll(string& inOut, const string& find, const string& replace) {
     size_t pos = 0;
-    while ((pos = inOut.find(find, pos)) != string::npos)
-    {
+    while ((pos = inOut.find(find, pos)) != string::npos) {
         inOut.replace(pos, find.length(), replace);
         pos += replace.length();
     }
@@ -198,8 +189,7 @@ inline string& replaceAll(string& inOut, const string& find, const string& repla
 
 //-------------------------------------------------------------------------------------------------
 // Replace using regular expression
-inline string& replaceRE(string& inOut, const char* findRE, const char* replaceWith)
-{
+inline string& replaceRE(string& inOut, const char* findRE, const char* replaceWith) {
     regex pattern(findRE);
     regex_constants::match_flag_type flags = regex_constants::match_default;
     inOut = regex_replace(inOut, pattern, replaceWith, flags);
@@ -209,29 +199,26 @@ inline string& replaceRE(string& inOut, const char* findRE, const char* replaceW
 
 // ---------------------------------------------------------------------------
 // Return true if inStr  matches pattern in patternList
-inline bool matchesRE(const string& inStr, const PatternList& patternList)
-{
+inline bool matchesRE(const string& inStr, const PatternList& patternList) {
     // size_t nameStart = inStr(DIR_SLASH_CHR) + 1;
     if (patternList.empty() /* || nameStart == 0 || nameStart == inStr() */)
         return false;
-    
+
     for (size_t idx = 0; idx != patternList.size(); idx++)
         if (regex_match(inStr.begin() /* + nameStart*/, inStr.end(), patternList[idx]))
             return true;
-    
+
     return false;
 }
 
 //-------------------------------------------------------------------------------------------------
-inline bool hasExtension(const string& filepath, const char* extn)
-{
+inline bool hasExtension(const string& filepath, const char* extn) {
     size_t pos = filepath.rfind(extn);
     return (pos != string::npos) && (filepath.length() == pos + strlen(extn));
 }
 
 //-------------------------------------------------------------------------------------------------
-inline string& getExtension(string& outExt, const string& filename)
-{
+inline string& getExtension(string& outExt, const string& filename) {
     size_t pos = min(filename.rfind('.'), filename.length());
     outExt = filename.substr(pos);
     return outExt;
@@ -264,9 +251,9 @@ inline string dateTimeToString(const tm& t, const char* fmt) {
 inline tm now() {
     time_t now = time(0);
 #ifdef HAVE_WIN
-	tm now_tm;
-	localtime_s(&now_tm, &now);
-	return now_tm;
+    tm now_tm;
+    localtime_s(&now_tm, &now);
+    return now_tm;
 #else
     return *localtime(&now);
 #endif

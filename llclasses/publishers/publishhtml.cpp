@@ -46,7 +46,7 @@
 #include <algorithm>
 #include <regex>
 
-#include "Presenter.hpp"
+#include "presenter.hpp"
 #include "SwapStream.hpp"
 #include "utils.hpp"
 
@@ -54,55 +54,49 @@
 string dtree_css = "dtree.css";
 string dtree_js = "dtree.js";
 static char HTML_HEAD[] =
-"<head> \n"
-"<meta name=\"keywords\" content=\"Java,class,hierarchy,tree,diagram\"> \n"
-"<meta name=\"description\" content=\"Java class hierachy\">\n"
-"<meta name=\"author\" content=\"Dennis Lang\">\n"
-"\n"
-"<!-- Mobile -->\n"
-"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\n"
-"\n"
-"<link rel=\"icon\" type=\"image/ico\" href=\"favicon.ico\" > \n"
-"<link rel=\"shortcut icon\" href=\"/favicon.ico\" >\n"
-"\n"
-"<meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\" >\n"
-"<META http-equiv=\"Content-Style-Type\" content=\"text/css\">\n"
-"\n"
-"<!-- Google analytics tracking -->\n"
-"<script type=\"text/javascript\" src=\"~/scripts.js\"></script>\n"
-"\n"
-"<style> \n"
-"    body { \n"
-"    background: url(\"bg.jpg\");\n"
-"    }\n"
-"</style>\n";
+    "<head> \n"
+    "<meta name=\"keywords\" content=\"Java,class,hierarchy,tree,diagram\"> \n"
+    "<meta name=\"description\" content=\"Java class hierachy\">\n"
+    "<meta name=\"author\" content=\"Dennis Lang\">\n"
+    "\n"
+    "<!-- Mobile -->\n"
+    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\n"
+    "\n"
+    "<link rel=\"icon\" type=\"image/ico\" href=\"favicon.ico\" > \n"
+    "<link rel=\"shortcut icon\" href=\"/favicon.ico\" >\n"
+    "\n"
+    "<meta http-equiv=\"Content-type\" content=\"text/html;charset=UTF-8\" >\n"
+    "<META http-equiv=\"Content-Style-Type\" content=\"text/css\">\n"
+    "\n"
+    "<!-- Google analytics tracking -->\n"
+    "<script type=\"text/javascript\" src=\"~/scripts.js\"></script>\n"
+    "\n"
+    "<style> \n"
+    "    body { \n"
+    "    background: url(\"bg.jpg\");\n"
+    "    }\n"
+    "</style>\n";
 
 // -------------------------------------------------------------------------------------------------
-static void outputHtmlPrefix1()
-{
+static void outputHtmlPrefix1() {
     cout <<
     "<!DOCTYPE html>\n"
     "<html lang=\"en\">\n";
 }
 
 // -------------------------------------------------------------------------------------------------
-void PublishHtml::outputHtmlMetaHeader2(const char* auxStyle) const
-{
-    if  (htmlHead.empty())
-    {
+void PublishHtml::outputHtmlMetaHeader2(const char* auxStyle) const {
+    if  (htmlHead.empty()) {
         cout << HTML_HEAD;
         outputHtmlTitle3();
         cout <<
-            "    <link rel=StyleSheet href=" << dtree_css << " type=text/css /> \n"
-            "    <script type=text/javascript src=" << dtree_js << " ></script>  \n";
+        "    <link rel=StyleSheet href=" << dtree_css << " type=text/css /> \n"
+        "    <script type=text/javascript src=" << dtree_js << " ></script>  \n";
         cout << ((auxStyle != NULL) ? auxStyle : "");
         cout <<
-            "</head> \n";
-    }
-    else
-    {
-        if (auxStyle != NULL)
-        {
+        "</head> \n";
+    } else {
+        if (auxStyle != NULL) {
             size_t pos = htmlHead.rfind("</head>");
             if (pos != string::npos) {
                 htmlHead.insert(pos, auxStyle);
@@ -113,8 +107,7 @@ void PublishHtml::outputHtmlMetaHeader2(const char* auxStyle) const
 }
 
 // -------------------------------------------------------------------------------------------------
-void PublishHtml::outputHtmlTitle3() const
-{
+void PublishHtml::outputHtmlTitle3() const {
     const string& title1 = getIt(presenter.titles, 0, "Class List");
     const string& title2 = getIt(presenter.titles, 1, "");
     cout << "    <title>" << title1 << " " << title2 << "</title> \n";
@@ -212,109 +205,101 @@ static const char* outputHtmlTableStyle =
 
 
 // ------------------------------------------------------------------------------------------------
-static void outputHtmlTableList(const ClassList& clist, Presenter& presenter)
-{
+static void outputHtmlTableList(const ClassList& clist, Presenter& presenter) {
     time_t nowTime;
     time(&nowTime);
-    
+
     cout <<
-        "<table id='gradient-style' summary='display' ellspacing='0' width='100%'  >\n"
-        "<thead>\n"
-        "<tr>\n"
-        "<th scope='col'>Package</th> \n";
-    
+    "<table id='gradient-style' summary='display' ellspacing='0' width='100%'  >\n"
+    "<thead>\n"
+    "<tr>\n"
+    "<th scope='col'>Package</th> \n";
+
     if (presenter.showInterfaces)
-       cout << "<th scope='col'>Type</th> \n";
-    
+        cout << "<th scope='col'>Type</th> \n";
+
     cout <<
 //    "<th scope='col'>FullName</th> \n"
-        "<th scope='col'>Name</th> \n"
-        "<th scope='col'>Modifiers</th> \n"
-        "<th scope='col'>Filename</th> \n"
-        "</tr>\n"
-        "</thead>\n"
-        "<tfoot>\n"
-        "<tr>\n"
-        "<td colspan='5'><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a></td><td>"
+    "<th scope='col'>Name</th> \n"
+    "<th scope='col'>Modifiers</th> \n"
+    "<th scope='col'>Filename</th> \n"
+    "</tr>\n"
+    "</thead>\n"
+    "<tfoot>\n"
+    "<tr>\n"
+    "<td colspan='5'><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a></td><td>"
         << dateTimeToString(now(), "%d-%h-%Y")
         << "</td> \n"
-        "</tr> \n"
-        "</tfoot> \n"
-        "<tbody>\n";
-    
+    "</tr> \n"
+    "</tfoot> \n"
+    "<tbody>\n";
+
     ClassList::const_iterator iter;
     RelationPtr crel_ptr;
     string basepath;
-    
-    for (iter = clist.begin(); iter != clist.end(); iter++)
-    {
+
+    for (iter = clist.begin(); iter != clist.end(); iter++) {
         crel_ptr = iter->second;
         basepath = equalSubStr(basepath, crel_ptr->filename);
     }
-    
-    size_t pathOffset = basepath.rfind(DIR_SLASH_CHR)+1;
-    for (iter = clist.begin(); iter != clist.end(); iter++)
-    {
+
+    size_t pathOffset = basepath.rfind(DIR_SLASH_CHR) +1;
+    for (iter = clist.begin(); iter != clist.end(); iter++) {
         crel_ptr = iter->second;
-        
+
         if (presenter.canShow(crel_ptr)) {
             string name = crel_ptr->name;
             if (name.length() > 20)
                 replaceAll(name, ".", ".<br>");
-            
+
             cout << "<tr>"
                 << " <td>" << crel_ptr->package;
-            
+
             if (presenter.showInterfaces)
                 cout << " <td>" << crel_ptr->type;
-            
+
             cout
-       //         << " <td>" << crel_ptr->name    // fullClassName
-                << " <td>" << name
-                << " <td>" << crel_ptr->modifier
-                << " <td>" << (crel_ptr->filename.c_str() + pathOffset)
-                << endl;
+            //         << " <td>" << crel_ptr->name    // fullClassName
+                    << " <td>" << name
+                        << " <td>" << crel_ptr->modifier
+                        << " <td>" << (crel_ptr->filename.c_str() + pathOffset)
+                        << endl;
         }
     }
-    
+
     cout  <<
     "</tbody>\n"
     "</table>\n";
-    
+
 }
 
 // -------------------------------------------------------------------------------------------------
 size_t PublishHtml::displayChildren(
-        unsigned parentNum,
-        size_t width,
-        const RelationPtr parentPtr,
-        const string& basepath) const
-{
+    unsigned parentNum,
+    size_t width,
+    const RelationPtr parentPtr,
+    const string& basepath) const {
     size_t nodeCnt = 0;
     RelationPtr child_ptr;
-    
+
     const RelationList& children =  parentPtr->children;
-    if (!children.empty()) {
-        for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++)
-        {
+    if (! children.empty()) {
+        for (RelationList::const_iterator iter = children.begin(); iter != children.end(); iter++) {
             child_ptr = *iter;
-            
-            if (child_ptr != NULL)
-            {
+
+            if (child_ptr != NULL) {
                 string chilNname = child_ptr->name;
                 if ((child_ptr->definition && presenter.canShow(child_ptr))
-                    || presenter.canShowChildren(child_ptr))
-                {
+                    || presenter.canShowChildren(child_ptr)) {
                     presenter.hasShown(child_ptr);
-                    
+
                     cout << "d.add(" << presenter.sNodeNum;
                     cout << "," << parentNum << ",'" << replaceAll(chilNname, "<", "&lt;");
-                    if ( ! child_ptr->modifier.empty() && child_ptr->modifier != "public")
+                    if (! child_ptr->modifier.empty() && child_ptr->modifier != "public")
                         cout << " (" << child_ptr->modifier << ")";
                     if (child_ptr->type != "class")
                         cout << " [" << child_ptr->type << "]";
-                    if (child_ptr->definition)
-                    {
+                    if (child_ptr->definition) {
                         if (basepath.empty()) {
                             cout << "','" << child_ptr->filename;
                         } else {
@@ -341,16 +326,16 @@ size_t PublishHtml::displayChildren(
 
 // -------------------------------------------------------------------------------------------------
 void PublishHtml::present() const {
-    
+
     const string& title1 = getIt(presenter.titles, 0, "Class List");
     string dataStr = dateTimeToString(now(), "%d-%h-%Y");
     const string& title2 = getIt(presenter.titles, 1, dataStr);
     const string& title3 = getIt(presenter.titles, 2, "title1");
-    
+
     presenter.applyReplacements(htmlHead);
     presenter.applyReplacements(bodyBegin);
     presenter.applyReplacements(bodyEnd);
-    
+
     /*
     string basepath;
     ClassList::const_iterator iter;
@@ -363,12 +348,11 @@ void PublishHtml::present() const {
         basepath = equalSubStr(basepath, crel_ptr->filename);
     }
      */
-    
-    if (presenter.tabularList)
-    {
+
+    if (presenter.tabularList) {
         outputHtmlPrefix1();
         outputHtmlMetaHeader2(outputHtmlTableStyle);
-    
+
         // outputHtmlTitle3();
         cout <<
         "<body id='top'> \n"
@@ -377,7 +361,7 @@ void PublishHtml::present() const {
         " \n"
         "<p><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
         "  Created on:" << dateTimeToString(now(), "%d-%h-%Y ")
-        << "<p>\n"
+            << "<p>\n"
         "<h2>Tabular List of " << title1 << "</h2>"
         "<body>\n";
         outputHtmlTableList(clist, presenter);
@@ -385,14 +369,11 @@ void PublishHtml::present() const {
         "</body> \n"
         "</html> \n"
         "\n";
-    }
-    else if (presenter.cset == Presenter::JAVA_CHAR)
-    {
+    } else if (presenter.cset == Presenter::JAVA_CHAR) {
         outputHtmlPrefix1();
         outputHtmlMetaHeader2(NULL);
- 
-        if (bodyBegin.empty())
-        {
+
+        if (bodyBegin.empty()) {
             cout <<
             "<body id='top'> \n"
             "<a href=javascript:window.history.back();> Back </a> \n"
@@ -418,25 +399,24 @@ void PublishHtml::present() const {
         } else {
             cout << bodyBegin;
         }
-        
+
         displayDependencies();
-        
+
         cout <<
         "        document.write(d); \n"
         "       d.openAll();\n"
         "        //--> \n"
         "    </script> \n";
-        
-        if (bodyEnd.empty())
-        {
+
+        if (bodyEnd.empty()) {
             cout <<
             "</div>  \n"
             "<p><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
             "  Created on:" << dateTimeToString(now(), "%d-%h-%Y ")
-            << "\n"
+                << "\n"
             "</body> \n"
             "</html> \n"
-        "\n";
+            "\n";
         } else {
             cout << bodyEnd;
         }
@@ -446,63 +426,60 @@ void PublishHtml::present() const {
 }
 
 // -------------------------------------------------------------------------------------------------
-void PublishHtml::displayDependencies() const
-{
+void PublishHtml::displayDependencies() const {
     RelationPtr crel_ptr;
-    
+
     // fputs(doc_classes[cset], stdout);
     switch (presenter.cset) {
-        case Presenter::HTML_CHAR:
-            fputs(
-                "<html>\n"
-                "<head>\n"
-                "<style>\n"
-                ".table-fixed thead th {\n"
-                "position: sticky;\n"
-                "position: -webkit-sticky;\n"
-                "top: 0;\n"
-                "z-index: 999;\n"
-                "background-color: #ccc;\n"
-                "color: #fff;\n"
-                "}\n"
-                "</style>\n"
-                "</head>\n"
-                "<body>\n"
-                "<table class='table-fixed'>\n"
-                "<thead>\n"
-                "<tr>\n"
-                "<th>File Path</th>\n"
-                "<th>Scope</th>\n"
-                "<th>Class</th>\n"
-                "</tr>\n"
-                "</thead>\n"
-                "<tbody>\n"
-                , stdout);
-            break;
+    case Presenter::HTML_CHAR:
+        fputs(
+            "<html>\n"
+            "<head>\n"
+            "<style>\n"
+            ".table-fixed thead th {\n"
+            "position: sticky;\n"
+            "position: -webkit-sticky;\n"
+            "top: 0;\n"
+            "z-index: 999;\n"
+            "background-color: #ccc;\n"
+            "color: #fff;\n"
+            "}\n"
+            "</style>\n"
+            "</head>\n"
+            "<body>\n"
+            "<table class='table-fixed'>\n"
+            "<thead>\n"
+            "<tr>\n"
+            "<th>File Path</th>\n"
+            "<th>Scope</th>\n"
+            "<th>Class</th>\n"
+            "</tr>\n"
+            "</thead>\n"
+            "<tbody>\n"
+            , stdout);
+        break;
     }
-    
+
     ClassList::const_iterator iter;
-    
+
     size_t fileWidth = 14;
     size_t nameWidth = 14;
     size_t modWidth  = 6;   // public
     string basepath;
-    
-    for (iter = clist.begin(); iter != clist.end(); iter++)
-    {
+
+    for (iter = clist.begin(); iter != clist.end(); iter++) {
         crel_ptr = iter->second;
         // cprel_ptr= crel_ptr->parents().relations;
-        
+
         fileWidth = max(fileWidth, crel_ptr->filename.length());
         nameWidth = max(nameWidth, crel_ptr->name.length());
         modWidth = max(modWidth, crel_ptr->modifier.length());
         basepath = equalSubStr(basepath, crel_ptr->filename);
     }
-    
+
     SwapStream swapStream(cout);
 
-    if (basepath.length() > 10)
-    {
+    if (basepath.length() > 10) {
         if (presenter.cset == Presenter::JAVA_CHAR) {
             cout << "\np='" <<  basepath << "';"; // p=base path of file
             cout << "\ni='" <<  basepath << "';\n"; // i=imported (not part of this file)
@@ -511,30 +488,26 @@ void PublishHtml::displayDependencies() const
         basepath.clear();
     }
     fileWidth -= basepath.length();
-    
-    for (iter = clist.begin(); iter != clist.end(); iter++)
-    {
+
+    for (iter = clist.begin(); iter != clist.end(); iter++) {
         crel_ptr = iter->second;
         // if (crel_ptr->definition == false)
         //    continue;
-        
-        if (crel_ptr->isSuper() && presenter.canShowChildren(crel_ptr))
-        {
+
+        if (crel_ptr->isSuper() && presenter.canShowChildren(crel_ptr)) {
             presenter.hasShown(crel_ptr);
-            
+
             // Have super class - now display subclasses.
-            if (presenter.cset == Presenter::JAVA_CHAR)
-            {
+            if (presenter.cset == Presenter::JAVA_CHAR) {
                 cout << "d.add(" << presenter.sNodeNum;
                 string name = crel_ptr->name;
                 cout << "," << 0 << ",'" << replaceAll(name, "<", "&lt;");
-                if ( ! crel_ptr->modifier.empty() && crel_ptr->modifier != "public")
+                if (! crel_ptr->modifier.empty() && crel_ptr->modifier != "public")
                     cout << " (" << crel_ptr->modifier << ")";
                 if (crel_ptr->type != "class")
                     cout << " [" << crel_ptr->type << "]";
-                
-                if (crel_ptr->definition)
-                {
+
+                if (crel_ptr->definition) {
                     if (basepath.empty()) {
                         cout  << "','" << crel_ptr->filename;
                     } else {
@@ -550,17 +523,15 @@ void PublishHtml::displayDependencies() const
                 }
                 cout << "');\n";
                 displayChildren(presenter.sNodeNum++, fileWidth, crel_ptr, basepath);
-            }
-            else
-            {
+            } else {
                 string filename = crel_ptr->filename;
                 replaceAll(filename, basepath, "");
                 fputs("<tr><td>", stdout); // fputs(doc_classesBLine[presenter.cset], stdout);
                 printf("%s<td> %s <td> <b>%s</b> ",
-                       filename.c_str(),
-                       crel_ptr->modifier.c_str(),
-                       crel_ptr->name.c_str()
-                       );
+                    filename.c_str(),
+                    crel_ptr->modifier.c_str(),
+                    crel_ptr->name.c_str()
+                );
                 presenter.displayInterfaces(crel_ptr);
                 fputs("</tr>\n", stdout);   // fputs(doc_classesELine[presenter.cset], stdout);
                 Indent indent;
@@ -568,14 +539,14 @@ void PublishHtml::displayDependencies() const
             }
         }
     }
-    
+
     // fputs(doc_end[cset], stdout);
     switch (presenter.cset) {
-        case Presenter::HTML_CHAR:
-            fputs("</tbody></table>\n", stdout);
-            fprintf(stdout, "<p><a href=\"http://landenlabs.com\"> Generatedy by llclasses - Dennis Lang </a>");
-            fprintf(stdout, " on %s\n",  dateTimeToString(now(), "%Y-%m-%d %H:%M:%S").c_str());
-            fputs("</body>\n</html>\n", stdout);
-            break;
+    case Presenter::HTML_CHAR:
+        fputs("</tbody></table>\n", stdout);
+        fprintf(stdout, "<p><a href=\"http://landenlabs.com\"> Generatedy by llclasses - Dennis Lang </a>");
+        fprintf(stdout, " on %s\n",  dateTimeToString(now(), "%Y-%m-%d %H:%M:%S").c_str());
+        fputs("</body>\n</html>\n", stdout);
+        break;
     }
 }

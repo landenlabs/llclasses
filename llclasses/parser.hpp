@@ -35,12 +35,11 @@
 #pragma once
 
 #include "llclasses.hpp"
-#include "ClassRel.hpp"
+#include "classrel.hpp"
 
 class Presenter;
 
-class Parser
-{
+class Parser {
 public:
     PatternList ignorePathPatterns;         // -V <path_regex_pattern> [-V <>]...
     PatternList includePathPatterns;        // -I <path_regex_pattern> [-V <>]...
