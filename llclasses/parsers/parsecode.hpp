@@ -1,17 +1,15 @@
 //-------------------------------------------------------------------------------------------------
 //
-//  llclass      3-Feb-2019        Dennis Lang
+// File: ParseCode.h
+// Author: Dennis Lang
+// Desc: Parse code base class
 //
-//  Parse Java/Cpp files and generate class names and class dependence tree.
-//
-//  Created by Dennis Lang on 3-Feb-2019
-//  Copyright © 2019 Dennis Lang. All rights reserved.
 //-------------------------------------------------------------------------------------------------
 //
 // Author: Dennis Lang - 2019
-// http://landenlabs.com/
+// http://landenlabs.com
 //
-// This file is part of llclass project.
+// This file is part of llclasses project.
 //
 // ----- License ----
 //
@@ -34,51 +32,21 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// 4291 - No matching operator delete found
-#pragma warning( disable : 4291 )
+#pragma once
 
-//
-const char version[] = "v2.1";
+#include <string>
+#include <iostream>
 
-<<<<<<< HEAD
-#include "Presenter.h"
-=======
-#include "Presenter.hpp"
->>>>>>> main
+#include "llclasses.hpp"
+#include "ClassRel.hpp"
 
-#ifdef HAVE_WIN
-#include <windows.h>
-#endif
+class Presenter;
 
-// Forward declaration
-void init();
-
-int main(int argc, const char * argv[])
+// Parse source code and extract class information.
+class ParseCode
 {
-	init();
-    Presenter presenter;  // Parse files and present results.
-    return presenter.init(argc, argv, version);
-}
+public:
+    virtual int parseCode(const string& inFilename, ClassList& outClist, const Presenter&) = 0;
+};
 
-void init() {
-#ifdef HAVE_WIN
-	// Set output mode to handle virtual terminal sequences
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (hOut == INVALID_HANDLE_VALUE)
-	{
-		exit( GetLastError());
-	}
 
-	DWORD dwMode = 0;
-	if (!GetConsoleMode(hOut, &dwMode))
-	{
-		exit( GetLastError());
-	}
-
-	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-	if (!SetConsoleMode(hOut, dwMode))
-	{
-		exit( GetLastError());
-	}
-#endif
-}

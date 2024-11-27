@@ -1,17 +1,15 @@
 //-------------------------------------------------------------------------------------------------
 //
-//  llclass      3-Feb-2019        Dennis Lang
+// File: SwapStream.cpp
+// Author: Dennis Lang
+// Desc: Swap iostream, example cout with a file.
 //
-//  Parse Java/Cpp files and generate class names and class dependence tree.
-//
-//  Created by Dennis Lang on 3-Feb-2019
-//  Copyright © 2019 Dennis Lang. All rights reserved.
 //-------------------------------------------------------------------------------------------------
 //
 // Author: Dennis Lang - 2019
-// http://landenlabs.com/
+// http://landenlabs.com
 //
-// This file is part of llclass project.
+// This file is part of llclasses project.
 //
 // ----- License ----
 //
@@ -34,51 +32,39 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-// 4291 - No matching operator delete found
-#pragma warning( disable : 4291 )
+#include <iostream>
 
-//
-const char version[] = "v2.1";
-
-<<<<<<< HEAD
-#include "Presenter.h"
-=======
-#include "Presenter.hpp"
->>>>>>> main
-
-#ifdef HAVE_WIN
-#include <windows.h>
-#endif
-
-// Forward declaration
-void init();
-
-int main(int argc, const char * argv[])
+// -------------------------------------------------------------------------------------------------
+// Swap active iostream internal buffers so you can redirect output
+class SwapStream
 {
-	init();
-    Presenter presenter;  // Parse files and present results.
-    return presenter.init(argc, argv, version);
-}
+public:
+    SwapStream(ostream& inOriginal) :
+        mOriginal(inOriginal),
+        mOldBuffer(NULL)
+    { }
 
-void init() {
-#ifdef HAVE_WIN
-	// Set output mode to handle virtual terminal sequences
-	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (hOut == INVALID_HANDLE_VALUE)
-	{
-		exit( GetLastError());
-	}
+    ~SwapStream()
+    {
+        restore();
+    }
 
-	DWORD dwMode = 0;
-	if (!GetConsoleMode(hOut, &dwMode))
-	{
-		exit( GetLastError());
-	}
+    void restore()
+    {
+        if (mOldBuffer)
+            mOriginal.rdbuf(mOldBuffer);
+        mOldBuffer = NULL;
+    }
 
-	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-	if (!SetConsoleMode(hOut, dwMode))
-	{
-		exit( GetLastError());
-	}
-#endif
-}
+    void swap(ostream& inRedirect)
+    {
+        mOldBuffer = mOriginal.rdbuf(inRedirect.rdbuf());
+    }
+
+private:
+    SwapStream(const SwapStream&);
+    SwapStream& operator=(const SwapStream&);
+
+    ostream&   mOriginal;
+    streambuf* mOldBuffer;
+};
