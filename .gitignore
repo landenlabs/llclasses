@@ -1,0 +1,10 @@
+# Mac exclude
+.DS_Store
+git-notes.txt
+/DerivedData
+/*/project.xcworkspace/
+/*/xcuserdata/
+*.xcuserstate
+
+# Windows VisualStudio
+# TODO add excludes
