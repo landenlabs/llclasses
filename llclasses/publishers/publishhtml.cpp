@@ -7,7 +7,7 @@
 //-------------------------------------------------------------------------------------------------
 //
 // Author: Dennis Lang - 2019
-// http://landenlabs.com/
+// https://landenlabs.com/
 //
 // This file is part of llclasses project.
 //
@@ -227,7 +227,7 @@ static void outputHtmlTableList(const ClassList& clist, Presenter& presenter) {
     "</thead>\n"
     "<tfoot>\n"
     "<tr>\n"
-    "<td colspan='5'><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a></td><td>"
+    "<td colspan='5'><a href=\"https://landenlabs.com\"> LanDen Labs - Dennis Lang </a></td><td>"
         << dateTimeToString(now(), "%d-%h-%Y")
         << "</td> \n"
     "</tr> \n"
@@ -359,7 +359,7 @@ void PublishHtml::present() const {
         "<a href=javascript:window.history.back();> Back </a> \n"
         "<p> \n"
         " \n"
-        "<p><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
+        "<p><a href=\"https://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
         "  Created on:" << dateTimeToString(now(), "%d-%h-%Y ")
             << "<p>\n"
         "<h2>Tabular List of " << title1 << "</h2>"
@@ -411,7 +411,7 @@ void PublishHtml::present() const {
         if (bodyEnd.empty()) {
             cout <<
             "</div>  \n"
-            "<p><a href=\"http://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
+            "<p><a href=\"https://landenlabs.com\"> LanDen Labs - Dennis Lang </a>\n"
             "  Created on:" << dateTimeToString(now(), "%d-%h-%Y ")
                 << "\n"
             "</body> \n"
@@ -544,7 +544,7 @@ void PublishHtml::displayDependencies() const {
     switch (presenter.cset) {
     case Presenter::HTML_CHAR:
         fputs("</tbody></table>\n", stdout);
-        fprintf(stdout, "<p><a href=\"http://landenlabs.com\"> Generatedy by llclasses - Dennis Lang </a>");
+        fprintf(stdout, "<p><a href=\"https://landenlabs.com\"> Generatedy by llclasses - Dennis Lang </a>");
         fprintf(stdout, " on %s\n",  dateTimeToString(now(), "%Y-%m-%d %H:%M:%S").c_str());
         fputs("</body>\n</html>\n", stdout);
         break;
