@@ -400,7 +400,7 @@ int ParseJava::parseJavaClasses(const string& filename, ClassList& clist, const 
     return 0;
 }
 
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Remove trailing parts, return true if empty.
 static bool removeTailParts(string& inOutStr, int parts, const char* find = ".") {
     if (parts > 0) {
@@ -412,7 +412,7 @@ static bool removeTailParts(string& inOutStr, int parts, const char* find = ".")
     }
     return false;
 }
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Keep head parts, always return false
 static bool keepHeadarts(string& inOutStr, int parts, const char* find = ".") {
     if (parts > 0) {
@@ -423,7 +423,7 @@ static bool keepHeadarts(string& inOutStr, int parts, const char* find = ".") {
     }
     return false;
 }
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Keep head parts, return true if empty.
 static bool removeParts(string& inOutStr, int parts, const char* find = ".") {
     if (parts < 0) {
@@ -432,7 +432,7 @@ static bool removeParts(string& inOutStr, int parts, const char* find = ".") {
     return keepHeadarts(inOutStr, parts, find);
 }
 
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Parse java source code and extract imported packages
 int ParseJava::parseJavaImports(const string& filename, ClassList& clist, const Presenter& presenter) {
 

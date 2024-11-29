@@ -10,7 +10,7 @@ LLClasses supports parsing both **Java** and **C++**. The code is structured wit
 passing them to the **parsers** and **publishers**. 
 
 For further details visit home website which shows how llclasses can parse object oriented files.
-[http://landenlabs.com/code/llclasses/index.html]
+[https://landenlabs.com/code/llclasses/index.html]
 
 
 ## Source code files:
@@ -112,16 +112,16 @@ Examples (assumes java source code in directory src):
 ## Links
 
 Details on website
-[http://landenlabs.com/code/llclasses/index.html]
+[https://landenlabs.com/code/llclasses/index.html]
 
 Previous unsupported legacy program which only parsed Java
-[http://landenlabs.com/code/javatree/index.html]
+[https://landenlabs.com/code/javatree/index.html]
 
 Example diagrams of Android classes generated using llclasses
-[http://landenlabs.com/android/classtree/classtree.html]
+[https://landenlabs.com/android/classtree/classtree.html]
 
 Home website
-[http://landenlabs.com](http://landenlabs.com)
+[https://landenlabs.com](https://landenlabs.com)
 
 ## Sample reports
 

@@ -329,7 +329,7 @@ int ParseCpp::parseCppClasses(const string& filename, ClassList& clist, const Pr
     return 0;
 }
 
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Remove trailing parts, return true if empty.
 static bool removeParts(string& inOutStr, size_t parts, const char* find = ".") {
     if (parts > 0) {
@@ -343,7 +343,7 @@ static bool removeParts(string& inOutStr, size_t parts, const char* find = ".") 
     return false;
 }
 
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Parse java source code and extract imported packages
 int ParseCpp::parseCppIncludes(const string& filename, ClassList& clist, const Presenter& presenter) {
 
