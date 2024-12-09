@@ -18,39 +18,68 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\llclasses\classrel.cpp" />
+    <ClCompile Include="..\llclasses\llclasses.cpp" />
+    <ClCompile Include="..\llclasses\parser.cpp" />
+    <ClCompile Include="..\llclasses\parsers\parsecpp.cpp" />
+    <ClCompile Include="..\llclasses\parsers\parsejava.cpp" />
+    <ClCompile Include="..\llclasses\presenter.cpp" />
+    <ClCompile Include="..\llclasses\publishers\publishhtml.cpp" />
+    <ClCompile Include="..\llclasses\publishers\publishtext.cpp" />
+    <ClCompile Include="..\llclasses\publishers\publishviz.cpp" />
+    <ClCompile Include="..\llclasses\utils\directoryfiles.cpp" />
+    <ClCompile Include="..\llclasses\utils\log.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\llclasses\classrel.hpp" />
+    <ClInclude Include="..\llclasses\colors.hpp" />
+    <ClInclude Include="..\llclasses\llclasses.hpp" />
+    <ClInclude Include="..\llclasses\parser.hpp" />
+    <ClInclude Include="..\llclasses\parsers\parsecode.hpp" />
+    <ClInclude Include="..\llclasses\parsers\parsecpp.hpp" />
+    <ClInclude Include="..\llclasses\parsers\parsejava.hpp" />
+    <ClInclude Include="..\llclasses\presenter.hpp" />
+    <ClInclude Include="..\llclasses\utils\colors.hpp" />
+    <ClInclude Include="..\llclasses\utils\directoryfiles.hpp" />
+    <ClInclude Include="..\llclasses\utils\log.hpp" />
+    <ClInclude Include="..\llclasses\utils\publish.hpp" />
+    <ClInclude Include="..\llclasses\utils\swapstream.hpp" />
+    <ClInclude Include="..\llclasses\utils\utils.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{620BE4CD-804B-4E70-A9A6-786C4BC87919}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>LLClasses</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -100,13 +129,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\llclasses;$(ProjectDir)\..\llclasses\utils;$(ProjectDir)\..\llclasses\publishers;$(ProjectDir)\..\llclasses\presenters;$(ProjectDir)\..\llclasses\parsers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,7 +165,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -144,6 +174,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\llclasses;$(ProjectDir)\..\llclasses\utils;$(ProjectDir)\..\llclasses\publishers;$(ProjectDir)\..\llclasses\presenters;$(ProjectDir)\..\llclasses\parsers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,38 +183,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="src\ClassRel.h" />
-    <ClInclude Include="src\llclasses.h" />
-    <ClInclude Include="src\Parser.h" />
-    <ClInclude Include="src\parsers\ParseJava.h" />
-    <ClInclude Include="src\Presenter.h" />
-    <ClInclude Include="src\utils\Colors.h" />
-    <ClInclude Include="src\utils\DirectoryFiles.h" />
-    <ClInclude Include="src\utils\Log.h" />
-    <ClInclude Include="src\utils\Publish.h" />
-    <ClInclude Include="src\utils\SwapStream.h" />
-    <ClInclude Include="src\utils\utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="src\ClassRel.cpp" />
-    <ClCompile Include="src\llclasses.cpp" />
-    <ClCompile Include="src\Parser.cpp" />
-    <ClCompile Include="src\parsers\ParseJava.cpp" />
-    <ClCompile Include="src\Presenter.cpp" />
-    <ClCompile Include="src\publishers\PublishHtml.cpp" />
-    <ClCompile Include="src\publishers\PublishText.cpp" />
-    <ClCompile Include="src\publishers\PublishViz.cpp" />
-    <ClCompile Include="src\utils\DirectoryFiles.cpp" />
-    <ClCompile Include="src\utils\Log.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

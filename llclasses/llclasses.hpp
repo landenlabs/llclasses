@@ -10,6 +10,16 @@
 
 #pragma once
 
+
+#if defined(_WIN32) || defined(_WIN64)
+#define HAVE_WIN
+#define NOMINMAX
+#define _CRT_SECURE_NO_WARNINGS   // define before all includes
+typedef unsigned long DWORD;
+#else
+typedef unsigned int  DWORD;
+#endif
+
 #include <string>
 #include <vector>
 #include <regex>

@@ -35,17 +35,16 @@
 #include "directoryfiles.hpp"
 
 #include <iostream>
-
-#ifdef HAVE_WIN
-    #include <windows.h>
-#endif
-
 #include <stdio.h>
 #include <errno.h>
 
-#ifdef WIN32
+#ifdef HAVE_WIN
+    #include <windows.h>
 
 const string ANY("\\*");
+#if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
+#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // Return true if attribute is a Directory
@@ -158,6 +157,14 @@ string& DirectoryFiles::fullName(string& fname) const {
     return GetFullPath(fname);
 }
 
+//-------------------------------------------------------------------------------------------------
+
+bool DirectoryFiles::isFile(const string& filepath) {
+    struct stat filestat;
+    if (stat(filepath.c_str(), &filestat))
+        return false;
+    return ( S_ISREG(filestat.st_mode) );
+}
 
 #else
 

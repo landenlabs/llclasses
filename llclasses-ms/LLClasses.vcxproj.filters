@@ -9,97 +9,84 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\parsers">
-      <UniqueIdentifier>{446ca3de-c776-4b77-a268-63dc93b7704f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\publishers">
-      <UniqueIdentifier>{c8982e52-6a7b-41fa-b5ff-85db4bb3828a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{68bdc62a-2fa3-416e-b7ab-73f8eab8ce96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{7d76193e-e4ff-4bc5-b6f2-b3519ca169b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\parsers">
-      <UniqueIdentifier>{4898065d-95d8-4b5b-93a5-df568d5c3f3d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\utils\Colors.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils\DirectoryFiles.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils\Log.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils\Publish.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils\SwapStream.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils\utils.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\parsers\ParseJava.h">
-      <Filter>Source Files\parsers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Parser.h">
-      <Filter>Source Files\parsers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ClassRel.h">
+    <ClCompile Include="..\llclasses\classrel.cpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\llclasses.h">
+    </ClCompile>
+    <ClCompile Include="..\llclasses\llclasses.cpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
+    </ClCompile>
+    <ClCompile Include="..\llclasses\parser.cpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Presenter.h">
+    </ClCompile>
+    <ClCompile Include="..\llclasses\presenter.cpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\publishers\publishtext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\parsers\parsecpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\parsers\parsejava.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\utils\directoryfiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\utils\log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\publishers\publishhtml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\llclasses\publishers\publishviz.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ClassRel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\llclasses.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Presenter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\parsers\ParseJava.cpp">
-      <Filter>Source Files\parsers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\publishers\PublishHtml.cpp">
-      <Filter>Source Files\publishers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\publishers\PublishText.cpp">
-      <Filter>Source Files\publishers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\publishers\PublishViz.cpp">
-      <Filter>Source Files\publishers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\utils\DirectoryFiles.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Parser.cpp">
-      <Filter>Source Files\parsers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\utils\Log.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
+    <ClInclude Include="..\llclasses\classrel.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\colors.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\llclasses.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\parser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\presenter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\utils\directoryfiles.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\parsers\parsecode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\parsers\parsecpp.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\parsers\parsejava.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\utils\colors.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\utils\log.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\utils\publish.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\utils\swapstream.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\llclasses\utils\utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
