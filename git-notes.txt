@@ -1,0 +1,15 @@
+# llclasses
+git init
+git remote add origin https://landenlabs@github.com/landenlabs/llclasses.git
+
+git add .
+git commit -m "first commit"
+git push --set-upstream origin main
+
+
+# git cleanup
+git fetch --prune
+git prune
+git remote prune origin
+git clean -d -f -i
+git gc --auto
