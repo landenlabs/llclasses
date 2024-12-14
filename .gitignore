@@ -1,3 +1,5 @@
+# .gitignore
+
 # Mac exclude
 .DS_Store
 /DerivedData
@@ -6,11 +8,8 @@
 *.xcuserstate
 
 # Windows VisualStudio
-# windows
 .ipch/
 x64/
-
 .vs/
 .obj
 .exe
-
