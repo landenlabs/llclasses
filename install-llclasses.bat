@@ -2,7 +2,13 @@
 
 set prog=llclasses
 set devenv=F:\opt\VisualStudio\2022\Preview\Common7\IDE\devenv.exe 
+
+echo "msbuild=%msbuild%"
+if not exist "%msbuild%" (
+echo Fall back msbuild not found at "%msbuild%"
 set msbuild=F:\opt\VisualStudio\2022\Preview\MSBuild\Current\Bin\MSBuild.exe
+)
+echo "Msbuild=%msbuild%"
 
 cd %prog%-ms
 @echo Clean %proj% 
@@ -11,7 +17,8 @@ rmdir /s x64 2> nul
 @echo.
 @echo Build release target
 @rem %devenv%  %prog%.sln /Build  "Release|x64"
-%msbuild% %prog%.sln -p:Configuration="Release";Platform=x64 -verbosity:minimal  -detailedSummary:True
+echo "%msbuild%" %prog%.sln -p:Configuration="Release";Platform=x64 -verbosity:minimal  -detailedSummary:True
+"%msbuild%" %prog%.sln -p:Configuration="Release";Platform=x64 -verbosity:minimal  -detailedSummary:True 
 cd ..
 
 @echo.
@@ -29,6 +36,6 @@ copy %prog%-ms\x64\Release\%prog%.exe d:\opt\bin\%prog%.exe
 @echo.
 @echo Compare md5 hash
 cmp -h %prog%-ms\x64\Release\%prog%.exe d:\opt\bin\%prog%.exe
-ld -a d:\opt\bin\%prog%.exe
+ld -a -ph %prog%-ms\x64\Release\%prog%.exe d:\opt\bin\%prog%.exe
 
 :_end
