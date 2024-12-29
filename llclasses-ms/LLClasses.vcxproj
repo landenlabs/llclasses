@@ -46,6 +46,10 @@
     <ClInclude Include="..\llclasses\utils\publish.hpp" />
     <ClInclude Include="..\llclasses\utils\swapstream.hpp" />
     <ClInclude Include="..\llclasses\utils\utils.hpp" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="llclasses.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
