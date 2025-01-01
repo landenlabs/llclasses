@@ -331,7 +331,10 @@
 		B9A8A93F2203EB3D00F41B05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X7Z43FGG83;
+				PRODUCT_BUNDLE_IDENTIFIER = com.landenlabs.llclasses;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -339,7 +342,10 @@
 		B9A8A9402203EB3D00F41B05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X7Z43FGG83;
+				PRODUCT_BUNDLE_IDENTIFIER = com.landenlabs.llclasses;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
