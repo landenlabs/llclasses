@@ -38,7 +38,7 @@
 #pragma warning( disable : 4291 )
 
 //
-const char version[] = "v2.1";
+const char VERSION[] = "v2.2";
 
 #include "presenter.hpp"
 
@@ -52,7 +52,7 @@ void init();
 int main(int argc, const char* argv[]) {
     init();
     Presenter presenter;  // Parse files and present results.
-    return presenter.init(argc, argv, version);
+    return presenter.init(argc, argv, VERSION);
 }
 
 void init() {
