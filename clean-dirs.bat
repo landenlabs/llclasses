@@ -12,23 +12,18 @@ if "%1" == "" (
 )
 
 if "%1" == "show" (
-    echo --- show directories and files to clean ---
-	lr -n -P=.*\\build\\.* -r . 
+    p -C=green -p="--- show directories and files to clean ---\n"
+	lr -n -P=.*\\build\\.* -P=.*\\x64\\Debug\\.* -P=.*\\x64\\Release\\.* -r . 
+    lr -n -P=.*\\.vs\\.* -r . 
 	lr -n -F=*.class -r . 
-	lr -n -F=*.apk -r . 
-	lr -n -F=*.aar -r . 
-	lr -n -F=*.exe -r . 
-	lr -n -F=*.obj -r . 
+	lr -n -F=*.apk -F=*.aar -F=*.exe -F=*.obj -r . 
 )
 if "%1" == "clean" (
-	echo === show directories and files to DELETE ===
+	p -C=red -p="=== show directories and files to DELETE ===\n"
 	lr -q -P=.*\\build\\.* -r . 
-	lr -q -P=.*\\x64\\Debug\\.* -r . 
-	lr -q -P=.*\\x64\\Release\\.* -r . 
-	lr -q -F=*.aar -r . 
-	lr -q -F=*.exe -r . 
-	lr -q -F=*.obj -r .
-	lr -f -P=.*\\\.vs\\.* -r . 
+	lr -q -P=.*\\x64\\Debug\\.* -P=.*\\x64\\Release\\.* -r . 
+	lr -f -P=.*\\.vs\\.* -r . 
+	lr -q -F=*.aar -F=*.exe -F=*.obj -r .
 )
 
 :done
