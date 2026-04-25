@@ -1,0 +1,77 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project llclasses.xcodeproj \
+            -scheme llclasses \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            SYMROOT=$PWD/build \
+            build
+
+      - name: Package
+        run: zip llclasses-macos.zip build/Release/llclasses
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-binary
+          path: llclasses-macos.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build
+        run: msbuild llclasses-ms/LLClasses.sln /p:Configuration=Release /p:Platform=x64
+
+      - name: Stage artifact
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Recurse -Filter "LLClasses.exe" |
+                 Where-Object { $_.DirectoryName -match "Release" } |
+                 Select-Object -First 1
+          Copy-Item $exe.FullName "LLClasses.exe"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binary
+          path: LLClasses.exe
+
+  release:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest Build
+          prerelease: true
+          files: |
+            macos-binary/llclasses-macos.zip
+            windows-binary/LLClasses.exe
