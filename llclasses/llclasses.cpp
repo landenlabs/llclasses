@@ -38,7 +38,7 @@
 #pragma warning( disable : 4291 )
 
 //
-const char VERSION[] = "v2.2";
+#define VERSION "v6.05.01"
 
 #include "presenter.hpp"
 
