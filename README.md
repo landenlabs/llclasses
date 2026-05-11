@@ -125,20 +125,20 @@ Home website
 
 ## Sample reports
 
-[HTML report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-html.png)
+[HTML report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screens/report-html.png)
 
-[Simple list](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-list.png)
+[Simple list](https://raw.githubusercontent.com/landenlabs/llclasses/master/screens/report-list.png)
 
-[Tabular report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-tabular.jpg)
+[Tabular report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screens/report-tabular.jpg)
 
-[Text report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-text.png)
+[Text report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screens/report-text.png)
 
-[Html tree report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screenshots/report-tree.png)
+[Html tree report](https://raw.githubusercontent.com/landenlabs/llclasses/master/screens/report-tree.png)
 
 ## License
 
 ```  
-Copyright 2020 Dennis Lang  
+Copyright 2026 Dennis Lang  
   
 Licensed under the Apache License, Version 2.0 (the "License");  
 you may not use this file except in compliance with the License.  

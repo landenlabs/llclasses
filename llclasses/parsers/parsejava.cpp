@@ -5,7 +5,7 @@
 //  Parse Java files and generate class names and class dependence tree.
 //
 //  Created by Dennis Lang on 3-Feb-2019
-//  Copyright © 2019 Dennis Lang. All rights reserved.
+//  Copyright © 2026 Dennis Lang. All rights reserved.
 //-------------------------------------------------------------------------------------------------
 //
 // Author: Dennis Lang - 2019
