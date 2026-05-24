@@ -1,8 +1,8 @@
-<table border="0">
+﻿<table border="0">
   <tr>
     <td>
-      <!-- VERSION -->v6.05.11<br>
-      <!-- DATE -->11-May-2026<br>
+      <!-- VERSION -->v6.05.25<br>
+      <!-- DATE -->24-May-2026<br>
       macOS<br>
       <a href="https://landenlabs.com">Home</a>
     </td>
@@ -32,38 +32,38 @@ For further details visit home website which shows how llclasses can parse objec
 ## Source code files:
 <pre>
 .
-├── ClassRel.cpp
-├── ClassRel.h
-├── Makefile
-├── Parser.cpp
-├── Parser.h
-├── Presenter.cpp
-├── Presenter.h
-├── build.csh
-├── llclasses.cpp
-├── llclasses.h
-├── parsers
-│   ├── ParseCode.h
-│   ├── ParseCpp.cpp
-│   ├── ParseCpp.h
-│   ├── ParseJava.cpp
-│   ├── ParseJava.cpp.bak
-│   ├── ParseJava.h
-│   └── ParseJava.h.bak
-├── publishers
-│   ├── PublishHtml.cpp
-│   ├── PublishText.cpp
-│   ├── PublishText.cpp.bak
-│   └── PublishViz.cpp
-└── utils
-    ├── Colors.h
-    ├── DirectoryFiles.cpp
-    ├── DirectoryFiles.h
-    ├── Log.cpp
-    ├── Log.h
-    ├── Publish.h
-    ├── SwapStream.h
-    └── utils.h
+â”œâ”€â”€ ClassRel.cpp
+â”œâ”€â”€ ClassRel.h
+â”œâ”€â”€ Makefile
+â”œâ”€â”€ Parser.cpp
+â”œâ”€â”€ Parser.h
+â”œâ”€â”€ Presenter.cpp
+â”œâ”€â”€ Presenter.h
+â”œâ”€â”€ build.csh
+â”œâ”€â”€ llclasses.cpp
+â”œâ”€â”€ llclasses.h
+â”œâ”€â”€ parsers
+â”‚   â”œâ”€â”€ ParseCode.h
+â”‚   â”œâ”€â”€ ParseCpp.cpp
+â”‚   â”œâ”€â”€ ParseCpp.h
+â”‚   â”œâ”€â”€ ParseJava.cpp
+â”‚   â”œâ”€â”€ ParseJava.cpp.bak
+â”‚   â”œâ”€â”€ ParseJava.h
+â”‚   â””â”€â”€ ParseJava.h.bak
+â”œâ”€â”€ publishers
+â”‚   â”œâ”€â”€ PublishHtml.cpp
+â”‚   â”œâ”€â”€ PublishText.cpp
+â”‚   â”œâ”€â”€ PublishText.cpp.bak
+â”‚   â””â”€â”€ PublishViz.cpp
+â””â”€â”€ utils
+    â”œâ”€â”€ Colors.h
+    â”œâ”€â”€ DirectoryFiles.cpp
+    â”œâ”€â”€ DirectoryFiles.h
+    â”œâ”€â”€ Log.cpp
+    â”œâ”€â”€ Log.h
+    â”œâ”€â”€ Publish.h
+    â”œâ”€â”€ SwapStream.h
+    â””â”€â”€ utils.h
 
 3 directories, 29 files
 </pre>

@@ -38,7 +38,7 @@
 #pragma warning( disable : 4291 )
 
 //
-#define VERSION "v6.05.05"
+#define VERSION "v6.05.25"
 
 #include "presenter.hpp"
 
