@@ -21,6 +21,9 @@ Parse C++ or Java files and output class hierarchy relationship.
 
   [![Build status](https://travis-ci.org/landenlabs/llclasses.svg?branch=master)](https://travis-ci.org/landenlabs/llclasses)
   [![Known Vulnerabilities](https://snyk.io/test/github/landenlabs/llclasses/badge.svg)](https://snyk.io/test/github/landenlabs/llclasses)
+  [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt)
+  ![Language](https://img.shields.io/badge/language-C%2B%2B17-blue.svg)
+  ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey.svg)
 
 LLClasses supports parsing both **Java** and **C++**. The code is structured with a set of parsers and publishers.  The frontend handles the runtime switches and iterates over directory files
 passing them to the **parsers** and **publishers**. 
@@ -167,3 +170,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and  
 limitations under the License.  
 ```  
+See [LICENSE.txt](LICENSE.txt) for the full license text.
