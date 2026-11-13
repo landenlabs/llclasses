@@ -2,7 +2,7 @@
   <tr>
     <td>
       <!-- VERSION -->v6.05.25<br>
-      <!-- DATE -->24-May-2026<br>
+      <!-- DATE -->13-Jul-2026<br>
       macOS<br>
       <a href="https://landenlabs.com">Home</a>
     </td>
@@ -19,9 +19,9 @@ OSX / Linux / DOS  Object Oriented Code parser
 
 Parse C++ or Java files and output class hierarchy relationship. 
 
-  [![Build status](https://travis-ci.org/landenlabs/llclasses.svg?branch=master)](https://travis-ci.org/landenlabs/llclasses)
+  [![Build status](https://github.com/landenlabs/llclasses/actions/workflows/build.yml/badge.svg)](https://github.com/landenlabs/llclasses/actions/workflows/build.yml)
   [![Known Vulnerabilities](https://snyk.io/test/github/landenlabs/llclasses/badge.svg)](https://snyk.io/test/github/landenlabs/llclasses)
-  [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.txt)
+  [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
   ![Language](https://img.shields.io/badge/language-C%2B%2B17-blue.svg)
   ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey.svg)
 
@@ -35,48 +35,48 @@ For further details visit home website which shows how llclasses can parse objec
 ## Source code files:
 <pre>
 .
-â”œâ”€â”€ ClassRel.cpp
-â”œâ”€â”€ ClassRel.h
-â”œâ”€â”€ Makefile
-â”œâ”€â”€ Parser.cpp
-â”œâ”€â”€ Parser.h
-â”œâ”€â”€ Presenter.cpp
-â”œâ”€â”€ Presenter.h
-â”œâ”€â”€ build.csh
-â”œâ”€â”€ llclasses.cpp
-â”œâ”€â”€ llclasses.h
-â”œâ”€â”€ parsers
-â”‚   â”œâ”€â”€ ParseCode.h
-â”‚   â”œâ”€â”€ ParseCpp.cpp
-â”‚   â”œâ”€â”€ ParseCpp.h
-â”‚   â”œâ”€â”€ ParseJava.cpp
-â”‚   â”œâ”€â”€ ParseJava.cpp.bak
-â”‚   â”œâ”€â”€ ParseJava.h
-â”‚   â””â”€â”€ ParseJava.h.bak
-â”œâ”€â”€ publishers
-â”‚   â”œâ”€â”€ PublishHtml.cpp
-â”‚   â”œâ”€â”€ PublishText.cpp
-â”‚   â”œâ”€â”€ PublishText.cpp.bak
-â”‚   â””â”€â”€ PublishViz.cpp
-â””â”€â”€ utils
-    â”œâ”€â”€ Colors.h
-    â”œâ”€â”€ DirectoryFiles.cpp
-    â”œâ”€â”€ DirectoryFiles.h
-    â”œâ”€â”€ Log.cpp
-    â”œâ”€â”€ Log.h
-    â”œâ”€â”€ Publish.h
-    â”œâ”€â”€ SwapStream.h
-    â””â”€â”€ utils.h
-
-3 directories, 29 files
+├── .github/workflows/build.yml
+├── llclasses.xcodeproj
+├── llclasses-ms/              (Visual Studio project)
+└── llclasses/                 (C++ source)
+    ├── build.csh
+    ├── classrel.cpp
+    ├── classrel.hpp
+    ├── colors.hpp
+    ├── llclasses.cpp
+    ├── llclasses.hpp
+    ├── makefile
+    ├── parser.cpp
+    ├── parser.hpp
+    ├── presenter.cpp
+    ├── presenter.hpp
+    ├── parsers
+    │   ├── parsecode.hpp
+    │   ├── parsecpp.cpp
+    │   ├── parsecpp.hpp
+    │   ├── parsejava.cpp
+    │   └── parsejava.hpp
+    ├── publishers
+    │   ├── publishhtml.cpp
+    │   ├── publishtext.cpp
+    │   └── publishviz.cpp
+    └── utils
+        ├── colors.hpp
+        ├── directoryfiles.cpp
+        ├── directoryfiles.hpp
+        ├── log.cpp
+        ├── log.hpp
+        ├── publish.hpp
+        ├── swapstream.hpp
+        └── utils.hpp
 </pre>
  
 ##  Help screen
 
 <pre>
-llclasses (v2.1)
+llclasses (v6.05.25)
 
-Des: Generate class dependence tree (May  9 2019)
+Des: Generate class dependence tree (Aug 13 2026)
 By:  LanDen Labs  www.landenlabs.com
 Use: llclasses [-+ntgxshjz] header_files...
 
@@ -170,4 +170,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and  
 limitations under the License.  
 ```  
-See [LICENSE.txt](LICENSE.txt) for the full license text.
+See [LICENSE](LICENSE) for the full license text.
